@@ -1,0 +1,109 @@
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1607860108855-64acf2078ed9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+  }
+  
+  .nav-link {
+    position: relative;
+  }
+  
+  .nav-link:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #3b82f6;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link:hover:after {
+    width: 100%;
+  }
+
+/* styles.css */
+
+/* Smooth Hover Link Underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #3b82f6; /* Tailwind Blue */
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+.active-nav::after {
+  width: 100%;
+}
+
+/* Package Card Hover Effect */
+.package-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Gallery Item Hover Zoom */
+.gallery-item {
+  transition: all 0.3s ease;
+}
+.gallery-item:hover {
+  transform: scale(1.05);
+}
+
+/* Page Fade In Animation */
+.page {
+  display: none;
+  animation: fadeIn 0.5s ease-in-out;
+}
+.page.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Mobile Menu button hover/focus */
+#mobile-menu-button:hover, 
+#mobile-menu-button:focus {
+  color: #3b82f6;
+}
+
+/* FAQ Arrow Rotate Smooth */
+.faq-toggle i {
+  transition: transform 0.3s ease;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Success Message Textarea and Inputs Default Fixes */
+input[type="text"],
+input[type="tel"],
+select,
+textarea {
+  transition: all 0.3s ease;
+}
+
+/* Hide scrollbars on gallery filter overflow */
+.gallery-filter::-webkit-scrollbar {
+  display: none;
+}
+
+#carouselTrack img {
+  min-width: 100%;
+  object-fit: cover;
+  height: 100%;
+}

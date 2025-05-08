@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio | Buffer Bros Detailing Work</title>
+  <meta name="description" content="See Buffer Bros' detailing transformations: exterior details, interior details, paint correction, ceramic coatings.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="font-sans bg-gray-50">
+
+<!-- NAVIGATION -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
+    <a href="index.html" class="flex items-center">
+      <img src="images/black-logo.png" alt="Buffer Bros Logo" class="h-12">
+    </a>
+    <div class="hidden md:flex space-x-8">
+      <a href="about.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">About Us</a>
+      <a href="packages.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Packages</a>
+      <a href="portfolio.html" class="nav-link active-nav text-gray-900 px-3 py-2 text-sm font-medium">Portfolio</a>
+      <a href="quote.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Get a Quote</a>
+    </div>
+    <div class="md:hidden flex items-center">
+      <button id="mobile-menu-button" class="text-gray-900">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-40 transform transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top">
+  <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+    <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Home</a>
+    <a href="about.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">About Us</a>
+    <a href="packages.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Packages</a>
+    <a href="portfolio.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Portfolio</a>
+    <a href="quote.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Get a Quote</a>
+  </div>
+</div>
+
+<!-- PORTFOLIO PAGE -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl font-bold mb-4">Our Work</h1>
+    <p class="text-xl text-gray-600 mb-12">See the transformations created by Buffer Bros Detailing</p>
+
+    <!-- Gallery Filters -->
+    <div class="flex flex-wrap justify-center mb-12 gap-2">
+      <button class="gallery-filter px-4 py-2 rounded-full bg-blue-600 text-white" data-filter="all">All</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="exterior">Exterior</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="interior">Interior</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="correction">Paint Correction</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="coating">Ceramic Coating</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
+          data-index="0"
+          data-category="exterior"
+          data-title="Lexus 2025 Exterior Detail"
+          data-package="The Works Package"
+          data-description="Full decontamination, polish, and ceramic coat."
+          data-images='["images/lexus2025/exterior1.jpeg", "images/lexus2025/exterior2.jpeg"]'
+          data-link="https://www.instagram.com/p/example">
+
+        <!-- Image -->
+        <img src="images/lexus2025/exterior1.jpeg" alt="Exterior Detail"
+            class="w-full h-64 object-cover transition-transform duration-300 ease-out group-hover:scale-105">
+
+        <!-- Dim Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+        <!-- Title -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
+            2025 Lexus RX – Exterior Detail
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="interior">
+        <span class="text-gray-500">Interior Detail</span>
+      </div>
+      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="correction">
+        <span class="text-gray-500">Paint Correction</span>
+      </div>
+      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="coating">
+        <span class="text-gray-500">Ceramic Coating</span>
+      </div>
+      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="exterior">
+        <span class="text-gray-500">Exterior Refresh</span>
+      </div>
+      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="interior">
+        <span class="text-gray-500">Pet Hair Removal</span>
+      </div>
+    </div>
+
+    <!-- Before & After Section (NEW) -->
+    <div class="mt-20">
+      <h2 class="text-3xl font-bold mb-8">Before & After Transformations</h2>
+      <div class="relative overflow-hidden rounded-lg shadow-lg w-full max-w-5xl mx-auto aspect-[5/3] group">
+        <img src="images/detail_dirty.png" alt="Before" class="absolute inset-0 w-full h-full object-cover">
+        <img src="images/detail_clean.png" alt="After" id="after-image" class="absolute inset-0 w-full h-full object-cover" style="clip-path: inset(0 50% 0 0);">
+        <input type="range" id="slider" min="0" max="100" value="50" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 z-10">
+      </div>
+    </div>
+
+    <!-- See Us in Action -->
+    <div class="mt-16">
+      <h2 class="text-3xl font-bold mb-8">See Us in Action</h2>
+      <div class="bg-gray-200 aspect-w-16 aspect-h-9 rounded-lg overflow-hidden flex items-center justify-center">
+        <div class="text-center p-8">
+          <i class="fas fa-play-circle text-5xl text-blue-600 mb-4"></i>
+          <p class="text-gray-600">Video demonstration of our detailing process</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Transformations -->
+    <div class="mt-16">
+      <h2 class="text-3xl font-bold text-center mb-8">Customer Transformations</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex mb-4">
+            <div class="w-1/2 pr-2 bg-gray-300 h-48 flex items-center justify-center">
+              <span class="text-gray-500">Before</span>
+            </div>
+            <div class="w-1/2 pl-2 bg-gray-300 h-48 flex items-center justify-center">
+              <span class="text-gray-500">After</span>
+            </div>
+          </div>
+          <div class="flex items-center mb-4 text-yellow-400">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="text-gray-600 mb-4">"Amazing transformation! The paint correction brought back the shine on my car like brand new."</p>
+          <div class="font-semibold">- James L., Audi A4</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex mb-4">
+            <div class="w-1/2 pr-2 bg-gray-300 h-48 flex items-center justify-center">
+              <span class="text-gray-500">Before</span>
+            </div>
+            <div class="w-1/2 pl-2 bg-gray-300 h-48 flex items-center justify-center">
+              <span class="text-gray-500">After</span>
+            </div>
+          </div>
+          <div class="flex items-center mb-4 text-yellow-400">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="text-gray-600 mb-4">"After years of stains and kids, my minivan looks showroom new. Couldn't be happier!"</p>
+          <div class="font-semibold">- Maria G., Honda Odyssey</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-12 pb-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <!-- Logo/About -->
+      <div>
+        <a href="index.html" class="flex items-center">
+            <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="h-12">
+          </a>
+        <p class="text-gray-400">Premium mobile detailing services at your convenience.</p>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Packages</a></li>
+          <li><a href="portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a></li>
+          <li><a href="quote.html" class="text-gray-400 hover:text-white">Get a Quote</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Services</h3>
+        <ul class="space-y-2">
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Basic Clean</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Premium Detail</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Showroom Ready</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Ceramic Coating</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Paint Correction</a></li>
+        </ul>
+      </div>
+      <!-- Contact Info -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+        <ul class="space-y-2 text-gray-400">
+          <li class="flex items-center">
+            <i class="fas fa-phone-alt mr-2"></i>
+            <a href="tel:2392938511" class="hover:text-white"> (239) 293-8511</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-instagram mr-2"></i>
+            <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="hover:text-white">@bufferbros.fl</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-facebook-f mr-2"></i>
+            <a href="https://www.facebook.com/profile.php?id=61560055724078" target="_blank" class="hover:text-white">Buffer Bros</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-clock mr-2"></i>
+            <span>Mon-Sat: 8am-6pm</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-6 text-center text-gray-400 text-sm">
+      © 2025 Buffer Bros. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  const slider = document.getElementById('slider');
+  const afterImage = document.getElementById('after-image');
+  
+  slider.addEventListener('input', function() {
+    const percentage = 100 - this.value;
+    afterImage.style.clipPath = `inset(0 ${percentage}% 0 0)`;
+  });
+</script>
+
+<!-- Popup Modal Template (hidden by default) -->
+<div id="popupModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg overflow-hidden relative">
+    <!-- Close Button -->
+    <button id="closeModal" class="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl">&times;</button>
+
+    <div class="grid md:grid-cols-2">
+      <!-- Image Carousel -->
+      <div class="bg-black h-80 relative overflow-hidden">
+        <div id="carouselTrack" class="flex h-full transition-transform duration-500 ease-in-out">
+          <!-- Images will be dynamically inserted here -->
+        </div>
+        <button id="prevImage" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl z-10">&#10094;</button>
+        <button id="nextImage" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl z-10">&#10095;</button>
+      </div>
+
+      <!-- Info Section -->
+      <div class="p-6 space-y-4">
+        <h3 class="text-2xl font-bold text-gray-900" id="popupTitle">Vehicle Title</h3>
+        <p class="text-gray-600" id="popupDescription">Package and details about what was done to the car.</p>
+        <div id="popupLinks" class="space-x-4">
+          <!-- Example link placeholders -->
+          <a href="#" target="_blank" class="text-blue-600 hover:underline">Instagram</a>
+          <a href="#" target="_blank" class="text-blue-600 hover:underline">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Popup Modal -->
+
+<script>
+  const galleryData = {
+    0: {
+      title: "2025 Lexus RX",
+      description: "The Works Package: Full decontamination, polish, and ceramic coating.",
+      images: [
+        "images/lexus2025/exterior1.jpeg",
+        "images/lexus2025/interior1.jpeg"
+      ],
+      links: [
+        { label: "Instagram", url: "https://www.instagram.com/p/example" },
+        { label: "YouTube", url: "https://youtube.com" }
+      ]
+    },
+    // Add more entries as needed...
+  };
+
+  const modal = document.getElementById('popupModal');
+  const track = document.getElementById('carouselTrack');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupDescription = document.getElementById('popupDescription');
+  const popupLinks = document.getElementById('popupLinks');
+
+  let currentImageSet = [];
+  let currentIndex = 0;
+
+  function showModal(index) {
+    const data = galleryData[index];
+    if (!data) return;
+
+    popupTitle.textContent = data.title;
+    popupDescription.textContent = data.description;
+
+    // Clear and add links
+    popupLinks.innerHTML = '';
+    data.links.forEach(link => {
+      const a = document.createElement('a');
+      a.href = link.url;
+      a.textContent = link.label;
+      a.className = 'text-blue-600 hover:underline';
+      a.target = '_blank';
+      popupLinks.appendChild(a);
+    });
+
+    // Reset carousel
+    track.innerHTML = '';
+    currentImageSet = data.images;
+    currentIndex = 0;
+
+    data.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = 'min-w-full object-cover h-full';
+      track.appendChild(img);
+    });
+
+    updateCarousel();
+    modal.classList.remove('hidden');
+  }
+
+  function updateCarousel() {
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
+
+  document.getElementById('closeModal').addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  document.getElementById('prevImage').addEventListener('click', () => {
+    if (currentImageSet.length > 1) {
+      currentIndex = (currentIndex - 1 + currentImageSet.length) % currentImageSet.length;
+      updateCarousel();
+    }
+  });
+
+  document.getElementById('nextImage').addEventListener('click', () => {
+    if (currentImageSet.length > 1) {
+      currentIndex = (currentIndex + 1) % currentImageSet.length;
+      updateCarousel();
+    }
+  });
+
+  // Add click listeners to gallery items
+  document.querySelectorAll('.gallery-item').forEach((item, index) => {
+    item.dataset.index = index; // tag each with its index
+    item.addEventListener('click', () => {
+      const link = item.getAttribute('data-link');
+      const idx = item.dataset.index;
+
+      if (window.innerWidth <= 768 && link) {
+        // Mobile: open Instagram or external link
+        window.open(link, '_blank');
+      } else {
+        // Desktop: open the modal
+        showModal(idx);
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Buffer Bros | Premium Mobile Detailing</title>
+  <meta name="description" content="Learn more about Buffer Bros: Our story, philosophy, and commitment to excellence in mobile detailing.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="font-sans bg-gray-50">
+
+<!-- NAVIGATION -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
+    <a href="index.html" class="flex items-center">
+      <img src="images/black-logo.png" alt="Buffer Bros Logo" class="h-12">
+    </a>
+    <div class="hidden md:flex space-x-8">
+      <a href="about.html" class="nav-link active-nav text-gray-900 px-3 py-2 text-sm font-medium">About Us</a>
+      <a href="packages.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Packages</a>
+      <a href="portfolio.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Portfolio</a>
+      <a href="quote.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Get a Quote</a>
+    </div>
+    <div class="md:hidden flex items-center">
+      <button id="mobile-menu-button" class="text-gray-900">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-40 transform transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top">
+  <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+    <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Home</a>
+    <a href="about.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">About Us</a>
+    <a href="packages.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Packages</a>
+    <a href="portfolio.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Portfolio</a>
+    <a href="quote.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Get a Quote</a>
+  </div>
+</div>
+
+<!-- ABOUT US PAGE -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-center mb-12">About Buffer Bros</h1>
+
+    <!-- Our Story -->
+    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+      <div>
+        <h2 class="text-3xl font-bold mb-6">Our Story</h2>
+        <p class="text-gray-600 mb-4">Founded in 2023 by two friends with a passion for cars and perfection, Buffer Bros started as a small mobile detailing service with just a hose and a dream.</p>
+        <p class="text-gray-600 mb-4">What began as a side hustle quickly grew into a thriving business as word spread about our meticulous attention to detail and commitment to customer satisfaction.</p>
+        <p class="text-gray-600">Today, we operate a fully-equipped mobile detailing rig serving the entire Marco / Naples area, but we've never lost sight of the personal touch that made us successful in the first place.</p>
+      </div>
+      <img src="images/team-photo.jpg" alt="Our Team at Buffer Bros" class="w-full h-96 object-cover rounded-lg shadow-lg">
+    </div>
+
+    <!-- Our Philosophy -->
+    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+      <div class="order-1 md:order-2">
+        <h2 class="text-3xl font-bold mb-6">Our Philosophy</h2>
+        <p class="text-gray-600 mb-4">At Buffer Bros, we believe that detailing isn't just about cleaning a car—it's about restoring pride of ownership and preserving your vehicle's value.</p>
+        <p class="text-gray-600 mb-4">We approach every vehicle with the same care we would give our own, using only premium products and techniques that deliver exceptional results without compromising your car's finish.</p>
+        <p class="text-gray-600">Our team undergoes continuous training to stay at the forefront of detailing technology and techniques, ensuring your vehicle receives the best possible care.</p>
+      </div>
+      <img src="images/philosophy.jpg" alt="Our Team at Buffer Bros" class="w-full h-96 object-cover rounded-lg shadow-lg">
+    </div>
+
+    <!-- Commitment to Excellence -->
+    <div class="bg-gray-100 p-8 rounded-lg">
+      <h2 class="text-3xl font-bold text-center mb-6">Our Commitment to Excellence</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="bg-blue-100 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-check-circle text-blue-600 text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">100% Satisfaction</h3>
+          <p class="text-gray-600">We stand behind our work with a satisfaction guarantee. If you're not happy, we'll make it right.</p>
+        </div>
+        <div class="text-center">
+          <div class="bg-blue-100 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-leaf text-blue-600 text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Eco-Friendly</h3>
+          <p class="text-gray-600">We use water-saving techniques and environmentally friendly products whenever possible.</p>
+        </div>
+        <div class="text-center">
+          <div class="bg-blue-100 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-shield-alt text-blue-600 text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Fully Insured</h3>
+          <p class="text-gray-600">Your vehicle is protected with our comprehensive liability insurance while in our care.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEET THE TEAM -->
+<section class="py-16 bg-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center mb-12">Meet the Team</h2>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      
+      <div class="bg-white p-6 rounded-lg shadow text-center">
+        <img src="images/tyler-photo.jpg" alt="Tyler Mastrangelo" class="h-48 w-48 mx-auto rounded-full mb-4 object-cover shadow-lg">
+        <h3 class="text-xl font-semibold">Tyler Mastrangelo</h3>
+        <p class="text-blue-600 mb-2">Co-Founder</p>
+        <p class="text-gray-600">placeholder bio...</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow text-center">
+        <div class="bg-gray-300 h-48 w-48 mx-auto rounded-full mb-4 flex items-center justify-center">
+          <span class="text-gray-500">Gabriel Photo</span>
+        </div>
+        <h3 class="text-xl font-semibold">Gabriel Tschida</h3>
+        <p class="text-blue-600 mb-2">Co-Founder</p>
+        <p class="text-gray-600">placeholder bio...</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-12 pb-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <!-- Logo/About -->
+      <div>
+        <a href="index.html" class="flex items-center">
+            <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="h-12">
+          </a>
+        <p class="text-gray-400">Premium mobile detailing services at your convenience.</p>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Packages</a></li>
+          <li><a href="portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a></li>
+          <li><a href="quote.html" class="text-gray-400 hover:text-white">Get a Quote</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Services</h3>
+        <ul class="space-y-2">
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Basic Clean</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Premium Detail</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Showroom Ready</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Ceramic Coating</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Paint Correction</a></li>
+        </ul>
+      </div>
+      <!-- Contact Info -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+        <ul class="space-y-2 text-gray-400">
+          <li class="flex items-center">
+            <i class="fas fa-phone-alt mr-2"></i>
+            <a href="tel:2392938511" class="hover:text-white"> (239) 293-8511</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-instagram mr-2"></i>
+            <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="hover:text-white">@bufferbros.fl</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-facebook-f mr-2"></i>
+            <a href="https://www.facebook.com/profile.php?id=61560055724078" target="_blank" class="hover:text-white">Buffer Bros</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-clock mr-2"></i>
+            <span>Mon-Sat: 8am-6pm</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-6 text-center text-gray-400 text-sm">
+      © 2025 Buffer Bros. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

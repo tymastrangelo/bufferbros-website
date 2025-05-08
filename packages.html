@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Packages | Buffer Bros Mobile Detailing</title>
+  <meta name="description" content="Choose from Buffer Bros' detailing packages: Basic Clean, Premium Detail, Showroom Ready. Add-ons available!">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="font-sans bg-gray-50">
+
+<!-- NAVIGATION -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
+    <a href="index.html" class="flex items-center">
+      <img src="images/black-logo.png" alt="Buffer Bros Logo" class="h-12">
+    </a>
+    <div class="hidden md:flex space-x-8">
+      <a href="about.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">About Us</a>
+      <a href="packages.html" class="nav-link active-nav text-gray-900 px-3 py-2 text-sm font-medium">Packages</a>
+      <a href="portfolio.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Portfolio</a>
+      <a href="quote.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Get a Quote</a>
+    </div>
+    <div class="md:hidden flex items-center">
+      <button id="mobile-menu-button" class="text-gray-900">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-40 transform transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top">
+  <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+    <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Home</a>
+    <a href="about.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">About Us</a>
+    <a href="packages.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Packages</a>
+    <a href="portfolio.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Portfolio</a>
+    <a href="quote.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Get a Quote</a>
+  </div>
+</div>
+
+<!-- PACKAGES PAGE -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- HEADER -->
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Our Detailing Packages</h1>
+      <p class="text-xl text-gray-600">Simple, transparent pricing. No hidden fees, ever.</p>
+    </div>
+
+    <!-- PACKAGES -->
+    <div class="grid md:grid-cols-3 gap-10">
+
+      <!-- Package 1 -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
+        <div class="bg-gradient-to-b from-blue-600 to-blue-500 text-white py-8 px-6 text-center">
+          <h2 class="text-3xl font-bold mb-2">The Base</h2>
+          <p class="text-sm opacity-90 mb-4">Perfect for well-maintained vehicles</p>
+          <div class="text-4xl font-extrabold">$149+</div>
+          <div class="text-sm mt-2 text-gray-100">~1.5 hours</div>
+        </div>
+        <div class="p-8 space-y-6 text-gray-700">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Interior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>Wipe & clean all surfaces</li>
+              <li>Vacuum interior</li>
+              <li>Clean windows & mirrors</li>
+              <li>Detail floor mats</li>
+              <li>Air freshener treatment</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>Professional hand wash</li>
+              <li>Wheel wells & tires cleaned</li>
+              <li>Rim faces detailed</li>
+              <li>Door jambs cleaned</li>
+            </ul>
+          </div>
+          <div class="text-center mt-6">
+            <a href="quote.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package 2 (MOST POPULAR) -->
+      <div class="bg-white border-2 border-blue-600 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform scale-105 transition-all duration-300 relative">
+        <div class="absolute top-4 right-4 bg-yellow-400 text-blue-900 font-bold text-xs px-3 py-1 rounded-full shadow-md">
+          MOST POPULAR
+        </div>
+        <div class="bg-gradient-to-b from-blue-800 to-blue-700 text-white py-8 px-6 text-center">
+          <h2 class="text-3xl font-bold mb-2">The Standard</h2>
+          <p class="text-sm opacity-90 mb-4">Full deep clean interior & exterior</p>
+          <div class="text-4xl font-extrabold">$249+</div>
+          <div class="text-sm mt-2 text-gray-100">~3 hours</div>
+        </div>
+        <div class="p-8 space-y-6 text-gray-700">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Interior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>Everything in The Base</li>
+              <li>Deep clean plastics & vents</li>
+              <li>Leather conditioner treatment</li>
+              <li>Carpet shampoo</li>
+              <li>Steam clean interior</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>Clay bar treatment</li>
+              <li>Hand wax protection</li>
+              <li>Exterior trim & tires dressed</li>
+            </ul>
+          </div>
+          <div class="text-center mt-6">
+            <a href="quote.html" class="inline-block bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package 3 -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
+        <div class="bg-gradient-to-b from-gray-800 to-gray-700 text-white py-8 px-6 text-center">
+          <h2 class="text-3xl font-bold mb-2">The Works</h2>
+          <p class="text-sm opacity-90 mb-4">The ultimate restoration package</p>
+          <div class="text-4xl font-extrabold">$399+</div>
+          <div class="text-sm mt-2 text-gray-100">~5 hours</div>
+        </div>
+        <div class="p-8 space-y-6 text-gray-700">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Interior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>Everything in The Standard</li>
+              <li>Full stain removal</li>
+              <li>Seats and carpets shampooed</li>
+              <li>Headliner cleaning</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+              <li>1-step paint enhancement</li>
+              <li>Ceramic wax (6+ months)</li>
+              <li>Engine bay detail</li>
+              <li>Headlight restoration</li>
+            </ul>
+          </div>
+          <div class="text-center mt-6">
+            <a href="quote.html" class="inline-block bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ADD-ONS -->
+    <div class="mt-20 bg-white border border-gray-200 rounded-2xl p-8 shadow-md">
+      <h2 class="text-3xl font-bold text-center mb-6">Popular Add-Ons</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-700 max-w-5xl mx-auto">
+        <div><span class="font-bold">Shampoo Seats</span> — +$50</div>
+        <div><span class="font-bold">Shampoo Carpets</span> — +$50</div>
+        <div><span class="font-bold">Pet Hair Removal (Light)</span> — +$29</div>
+        <div><span class="font-bold">Pet Hair Removal (Heavy)</span> — +$69</div>
+        <div><span class="font-bold">Clay Bar Treatment</span> — +$50</div>
+        <div><span class="font-bold">Engine Bay Detail</span> — +$60</div>
+        <div><span class="font-bold">Headlight Restoration</span> — +$100</div>
+        <div><span class="font-bold">Ozone Odor Treatment</span> — +$50</div>
+        <div><span class="font-bold">Water Spot Removal</span> — +$100</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-12 pb-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <!-- Logo/About -->
+      <div>
+        <a href="index.html" class="flex items-center">
+            <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="h-12">
+          </a>
+        <p class="text-gray-400">Premium mobile detailing services at your convenience.</p>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Packages</a></li>
+          <li><a href="portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a></li>
+          <li><a href="quote.html" class="text-gray-400 hover:text-white">Get a Quote</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Services</h3>
+        <ul class="space-y-2">
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Basic Clean</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Premium Detail</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Showroom Ready</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Ceramic Coating</a></li>
+          <li><a href="packages.html" class="text-gray-400 hover:text-white">Paint Correction</a></li>
+        </ul>
+      </div>
+      <!-- Contact Info -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+        <ul class="space-y-2 text-gray-400">
+          <li class="flex items-center">
+            <i class="fas fa-phone-alt mr-2"></i>
+            <a href="tel:2392938511" class="hover:text-white"> (239) 293-8511</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-instagram mr-2"></i>
+            <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="hover:text-white">@bufferbros.fl</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fab fa-facebook-f mr-2"></i>
+            <a href="https://www.facebook.com/profile.php?id=61560055724078" target="_blank" class="hover:text-white">Buffer Bros</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-clock mr-2"></i>
+            <span>Mon-Sat: 8am-6pm</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-6 text-center text-gray-400 text-sm">
+      © 2025 Buffer Bros. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
