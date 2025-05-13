@@ -64,52 +64,12 @@
     </div>
 
     <!-- Gallery Grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
-          data-index="0"
-          data-category="sedan"
-          data-title="Lexus GX 460"
-          data-package="The Works Package"
-          data-description="Full decontamination, polish, and ceramic coat."
-          data-images='["images/lexus2025/exterior1.jpeg", "images/lexus2025/exterior2.jpeg"]'
-          data-link="https://www.instagram.com/p/example">
+    <div id="gallery-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <!-- Image -->
-        <img src="images/lexus2025/exterior1.jpeg" alt="Exterior Detail"
-            class="w-full h-64 object-cover transition-transform duration-300 ease-out group-hover:scale-105">
-
-        <!-- Dim Overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-        <!-- Title -->
-        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
-            Lexus GX 460
-          </div>
-        </div>
-      </div>
-      <div class="gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
-          data-category="truck"
-          data-title="GMC Canyon"
-          data-package="The Works Package"
-          data-description="Full decontamination, polish, and ceramic coat."
-          data-images='["images/tschida/exterior1.jpeg", "images/tschida/interior1.jpeg"]'
-          data-link="https://www.instagram.com/p/example">
-
-        <!-- Image -->
-        <img src="images/tschida/exterior1.jpeg" alt="Full Detail"
-            class="w-full h-64 object-cover transition-transform duration-300 ease-out group-hover:scale-105">
-
-        <!-- Dim Overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-        <!-- Title -->
-        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
-            GMC Canyon
-          </div>
-        </div>
-      </div>
+    <div class="flex justify-center mt-10">
+      <button id="loadMore" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700">
+        Load More
+      </button>
     </div>
 
     <!-- Before & After Section (NEW) -->
@@ -280,119 +240,173 @@
 <!-- End of Popup Modal -->
 
 <script>
-  const galleryData = {
-    0: {
-      title: "Lexus GX 460",
-      description: "The Works Package: Full decontamination, polish, and ceramic coating.",
-      images: [
-        "images/lexus2025/exterior1.jpeg",
-        "images/lexus2025/interior1.jpeg"
-      ],
-      links: [
-        { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
-        { label: "YouTube", url: "https://youtube.com" }
-      ]
-    },
-    1: {
-      title: "GMC Canyon",
-      description: "The Works Package: Full decontamination, polish, and ceramic coating.",
-      images: [
-        "images/tschida/exterior1.jpeg",
-        "images/tschida/interior1.jpeg",
-        "images/tschida/interior2.jpeg",
-        "images/tschida/interior3.jpeg",
-      ],
-      links: [
-        { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
-        { label: "YouTube", url: "https://youtube.com" }
-      ]
-    },
-    // Add more entries as needed...
-  };
-
-  const modal = document.getElementById('popupModal');
-  const track = document.getElementById('carouselTrack');
-  const popupTitle = document.getElementById('popupTitle');
-  const popupDescription = document.getElementById('popupDescription');
-  const popupLinks = document.getElementById('popupLinks');
-
-  let currentImageSet = [];
+  const modal = document.getElementById("popupModal");
+  const track = document.getElementById("carouselTrack");
+  const popupTitle = document.getElementById("popupTitle");
+  const popupDescription = document.getElementById("popupDescription");
+  const popupLinks = document.getElementById("popupLinks");
+  const closeModalBtn = document.getElementById("closeModal");
   let currentIndex = 0;
+  let currentImages = [];
 
   function showModal(index) {
     const data = galleryData[index];
-    if (!data) return;
-
     popupTitle.textContent = data.title;
-    popupDescription.textContent = data.description;
-
-    // Clear and add links
-    popupLinks.innerHTML = '';
-    data.links.forEach(link => {
-      const a = document.createElement('a');
+    popupDescription.textContent = data.description || "";
+    popupLinks.innerHTML = "";
+    (data.links || []).forEach(link => {
+      const a = document.createElement("a");
       a.href = link.url;
+      a.target = "_blank";
+      a.className = "text-blue-600 hover:underline";
       a.textContent = link.label;
-      a.className = 'text-blue-600 hover:underline';
-      a.target = '_blank';
       popupLinks.appendChild(a);
     });
-
-    // Reset carousel
-    track.innerHTML = '';
-    currentImageSet = data.images;
-    currentIndex = 0;
-
-    data.images.forEach(src => {
-      const img = document.createElement('img');
+    currentImages = data.images || [];
+    track.innerHTML = "";
+    currentImages.forEach(src => {
+      const img = document.createElement("img");
       img.src = src;
-      img.className = 'min-w-full object-cover h-full';
+      img.className = "min-w-full object-cover h-full";
       track.appendChild(img);
     });
-
+    currentIndex = 0;
     updateCarousel();
-    modal.classList.remove('hidden');
+    modal.classList.remove("hidden");
   }
 
   function updateCarousel() {
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
   }
 
-  document.getElementById('closeModal').addEventListener('click', () => {
-    modal.classList.add('hidden');
+  document.getElementById("prevImage").addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+    updateCarousel();
   });
 
-  document.getElementById('prevImage').addEventListener('click', () => {
-    if (currentImageSet.length > 1) {
-      currentIndex = (currentIndex - 1 + currentImageSet.length) % currentImageSet.length;
-      updateCarousel();
+  document.getElementById("nextImage").addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % currentImages.length;
+    updateCarousel();
+  });
+
+  closeModalBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+</script>
+<script>
+  const galleryData = [
+  {
+    title: "Lexus GX 460",
+    date: "2025-05-10",
+    category: "suv",
+    description: "Full decontamination, polish, and ceramic coating.",
+    images: [
+      "images/lexus2025/exterior1.jpeg",
+      "images/lexus2025/interior1.jpeg"
+    ],
+    links: [
+      { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" } // this is profile link
+    ]
+  },
+  {
+    title: "GMC Canyon",
+    date: "2025-05-09",
+    category: "truck",
+    description: "Interior & Exterior deep clean with polish.",
+    images: [
+      "images/tschida/exterior1.jpeg",
+      "images/tschida/interior1.jpeg",
+      "images/tschida/interior2.jpeg",
+      "images/tschida/interior3.jpeg"
+    ],
+    links: [
+      { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" } // this is profile link
+    ]
+  },
+  {
+    title: "Ford F-150",
+    date: "2025-05-08",
+    category: "truck",
+    description: "Wash & Wax with interior vacuum.",
+    images: ["images/sample1.jpeg"],
+    links: [{ label: "Instagram", url: "#" }]
+  },
+  {
+    title: "Chevy Camaro",
+    date: "2025-05-06",
+    category: "luxury",
+    description: "Paint correction and ceramic coating.",
+    images: ["images/sample2.jpeg"],
+    links: [{ label: "Instagram", url: "#" }]
+  }
+];
+
+const galleryGrid = document.getElementById("gallery-grid");
+const loadMoreBtn = document.getElementById("loadMore");
+
+let visibleCount = 0;
+const batchSize = 3;
+let activeFilter = "all";
+
+function bindGalleryItemClick(div, index) {
+  div.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+      window.open(galleryData[index].links?.[0]?.url || "#", "_blank");
+    } else {
+      showModal(index);
     }
   });
+}
 
-  document.getElementById('nextImage').addEventListener('click', () => {
-    if (currentImageSet.length > 1) {
-      currentIndex = (currentIndex + 1) % currentImageSet.length;
-      updateCarousel();
-    }
+function renderGalleryItems() {
+  galleryGrid.innerHTML = "";
+  const sorted = [...galleryData].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const filtered = activeFilter === "all" ? sorted : sorted.filter(item => item.category === activeFilter);
+  const toShow = filtered.slice(0, visibleCount);
+
+  toShow.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer";
+    div.dataset.category = item.category;
+    div.dataset.index = index;
+
+    div.innerHTML = `
+      <img src="${item.images[0]}" alt="${item.title}" class="w-full h-64 object-cover transition-transform duration-300 ease-out group-hover:scale-105">
+      <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
+          ${item.title}
+        </div>
+      </div>
+    `;
+    bindGalleryItemClick(div, index);
+    galleryGrid.appendChild(div);
   });
 
-  // Add click listeners to gallery items
-  document.querySelectorAll('.gallery-item').forEach((item, index) => {
-    item.dataset.index = index; // tag each with its index
-    item.addEventListener('click', () => {
-      const link = item.getAttribute('data-link');
-      const idx = item.dataset.index;
+  if (visibleCount >= filtered.length) {
+    loadMoreBtn.classList.add("hidden");
+  } else {
+    loadMoreBtn.classList.remove("hidden");
+  }
+}
 
-      if (window.innerWidth <= 768 && link) {
-        const a = document.createElement('a');
-        a.href = link;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.click();
-      } else {
-        showModal(idx);
-      }
-    });
+document.querySelectorAll(".gallery-filter").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".gallery-filter").forEach(btn => btn.classList.remove("bg-blue-600", "text-white"));
+    button.classList.add("bg-blue-600", "text-white");
+    activeFilter = button.dataset.filter;
+    visibleCount = batchSize;
+    renderGalleryItems();
   });
+});
+
+loadMoreBtn.addEventListener("click", () => {
+  visibleCount += batchSize;
+  renderGalleryItems();
+});
+
+visibleCount = batchSize;
+renderGalleryItems();
 </script>
 </body>
 </html>
