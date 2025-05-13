@@ -55,18 +55,20 @@
     <!-- Gallery Filters -->
     <div class="flex flex-wrap justify-center mb-12 gap-2">
       <button class="gallery-filter px-4 py-2 rounded-full bg-blue-600 text-white" data-filter="all">All</button>
-      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="exterior">Exterior</button>
-      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="interior">Interior</button>
-      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="correction">Paint Correction</button>
-      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="coating">Ceramic Coating</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="sedan">Sedans</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="suv">SUVs</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="truck">Trucks</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="van">Vans</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="luxury">Sports & Luxury</button>
+      <button class="gallery-filter px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="classic">Antiques & Classics</button>
     </div>
 
     <!-- Gallery Grid -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
           data-index="0"
-          data-category="exterior"
-          data-title="Lexus 2025 Exterior Detail"
+          data-category="sedan"
+          data-title="Lexus GX 460"
           data-package="The Works Package"
           data-description="Full decontamination, polish, and ceramic coat."
           data-images='["images/lexus2025/exterior1.jpeg", "images/lexus2025/exterior2.jpeg"]'
@@ -82,13 +84,13 @@
         <!-- Title -->
         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
-            2025 Lexus RX – Exterior Detail
+            Lexus GX 460
           </div>
         </div>
       </div>
       <div class="gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
-          data-category="exterior interior"
-          data-title="tschida truck – Full Detail"
+          data-category="truck"
+          data-title="GMC Canyon"
           data-package="The Works Package"
           data-description="Full decontamination, polish, and ceramic coat."
           data-images='["images/tschida/exterior1.jpeg", "images/tschida/interior1.jpeg"]'
@@ -104,24 +106,9 @@
         <!-- Title -->
         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
-            tschida truck – Full Detail
+            GMC Canyon
           </div>
         </div>
-      </div>
-      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="interior">
-        <span class="text-gray-500">Interior Detail</span>
-      </div>
-      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="correction">
-        <span class="text-gray-500">Paint Correction</span>
-      </div>
-      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="coating">
-        <span class="text-gray-500">Ceramic Coating</span>
-      </div>
-      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="exterior">
-        <span class="text-gray-500">Exterior Refresh</span>
-      </div>
-      <div class="gallery-item rounded-lg overflow-hidden shadow-lg bg-gray-300 h-64 flex items-center justify-center" data-category="interior">
-        <span class="text-gray-500">Pet Hair Removal</span>
       </div>
     </div>
 
@@ -295,19 +282,19 @@
 <script>
   const galleryData = {
     0: {
-      title: "2025 Lexus RX",
+      title: "Lexus GX 460",
       description: "The Works Package: Full decontamination, polish, and ceramic coating.",
       images: [
         "images/lexus2025/exterior1.jpeg",
         "images/lexus2025/interior1.jpeg"
       ],
       links: [
-        { label: "Instagram", url: "https://www.instagram.com/p/example" },
+        { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
         { label: "YouTube", url: "https://youtube.com" }
       ]
     },
     1: {
-      title: "gabes truck",
+      title: "GMC Canyon",
       description: "The Works Package: Full decontamination, polish, and ceramic coating.",
       images: [
         "images/tschida/exterior1.jpeg",
@@ -316,7 +303,7 @@
         "images/tschida/interior3.jpeg",
       ],
       links: [
-        { label: "Instagram", url: "https://www.instagram.com/p/DEvGnaZyp6K/?igsh=MW9nazc4N3RpdWVpaQ==" },
+        { label: "Instagram", url: "https://www.instagram.com/bufferbros.fl?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
         { label: "YouTube", url: "https://youtube.com" }
       ]
     },
