@@ -83,7 +83,7 @@
     </div> -->
 
     <!-- See Us in Action -->
-    <div class="mt-16">
+    <!-- <div class="mt-16">
       <h2 class="text-3xl font-bold mb-8">See Us in Action</h2>
       <div class="bg-gray-200 aspect-w-16 aspect-h-9 rounded-lg overflow-hidden flex items-center justify-center">
         <div class="text-center p-8">
@@ -91,7 +91,7 @@
           <p class="text-gray-600">Video demonstration of our detailing process</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Customer Transformations -->
     <!-- <div class="mt-16">
@@ -282,21 +282,13 @@
         ],
         links: [{ label: "Instagram", url: "#" }]
       },
-      {
-        title: "Chevy Camaro",
-        date: "2025-05-06",
-        category: "luxury",
-        description: "Paint correction and ceramic coating.",
-        images: ["images/sample2.jpeg"],
-        links: [{ label: "Instagram", url: "#" }]
-      }
     ];
 
     const galleryGrid = document.getElementById("gallery-grid");
     const loadMoreBtn = document.getElementById("loadMore");
 
     let visibleCount = 0;
-    const batchSize = 3;
+    const batchSize = 6;
     let activeFilter = "all";
 
     function bindGalleryItemClick(div, item) {
