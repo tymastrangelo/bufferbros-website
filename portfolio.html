@@ -282,13 +282,25 @@
         ],
         links: [{ label: "Instagram", url: "#" }]
       },
+      {
+        title: "Honda Odyssey",
+        date: "2025-06-03",
+        category: "van",
+        description: "Full interior and exterior coverage.",
+        images: [
+          "images/hobbshonda/outside.png",
+          "images/hobbshonda/inside.png",
+          "images/hobbshonda/trunk.png"
+        ],
+        links: [{ label: "Instagram", url: "https://www.instagram.com/p/DKpkTXEyK_s/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }]
+      },
     ];
 
     const galleryGrid = document.getElementById("gallery-grid");
     const loadMoreBtn = document.getElementById("loadMore");
 
     let visibleCount = 0;
-    const batchSize = 6;
+    const batchSize = 3;
     let activeFilter = "all";
 
     function bindGalleryItemClick(div, item) {
