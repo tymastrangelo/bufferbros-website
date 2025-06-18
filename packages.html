@@ -56,6 +56,15 @@
       <p class="text-xl text-gray-600">Simple, transparent pricing. No hidden fees, ever.</p>
     </div>
 
+    <!-- Tabs Selector -->
+    <div class="w-full flex justify-center mb-10">
+      <div class="inline-flex rounded-full shadow-md overflow-hidden bg-white border border-gray-200">
+        <button id="tab-full" class="tab-button px-4 py-2 text-sm font-medium text-white bg-blue-600">Interior & Exterior</button>
+        <button id="tab-interior" class="tab-button px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Interior Only</button>
+        <button id="tab-exterior" class="tab-button px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Exterior Only</button>
+      </div>
+    </div>
+
     <!-- XL Vehicle Toggle Switch Section -->
     <div class="w-full flex flex-col items-center mb-10 -mt-2">
       <div class="flex items-center space-x-4">
@@ -68,9 +77,10 @@
       </div>
     </div>
 
-    <!-- PACKAGES GRID -->
-    <div class="grid md:grid-cols-3 gap-10" id="packages">
+    <!-- PACKAGES GRIDS -->
 
+    <!-- Full Packages -->
+    <div id="packages-full" class="grid md:grid-cols-3 gap-10">
       <!-- Base -->
       <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
         <h2 class="text-3xl font-bold text-blue-600 mb-2">The Base</h2>
@@ -155,6 +165,144 @@
         </div>
       </div>
     </div>
+
+    <!-- Interior Only Packages -->
+    <div id="packages-interior" class="hidden grid md:grid-cols-2 gap-10">
+      <!-- Classic Interior -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+        <h2 class="text-3xl font-bold text-blue-600 mb-2">Classic Interior</h2>
+        <p class="text-gray-600 mb-2">Our professional basic interior detail — best for well-maintained vehicles.</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$168">$168</div>
+        <div class="text-sm text-gray-500 mb-4">~1.5 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mt-4 mb-2">Interior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Wipe & Clean All Surfaces</li>
+          <li>Double Vacuum Interior</li>
+          <li>Clean Carpets, Seats & Floor Mats</li>
+          <li>Clean Crevices, Vents, Cup Holders, Etc.</li>
+          <li>Clean & Protect Plastic</li>
+          <li>Leather Conditioner Treatment</li>
+          <li>High Pressure Air Blowout</li>
+          <li>Clean Windows & Mirrors</li>
+          <li>Air Freshener Treatment</li>
+          <li>Detail Trunk</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700">Schedule Online</a>
+        </div>
+      </div>
+
+      <!-- Shampoo & Deep Clean -->
+      <div class="bg-white border-2 border-blue-600 rounded-2xl shadow-xl p-8 transform scale-105">
+        <div class="bg-yellow-400 text-blue-900 font-bold text-xs px-3 py-1 rounded-full mb-4 w-max mx-auto">POPULAR</div>
+        <h2 class="text-3xl font-bold text-blue-800 mb-2">Shampoo & Deep Clean</h2>
+        <p class="text-gray-600 mb-2">Our interior deep clean package. Includes seats and carpets shampooed and conditioned.</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$248">$248</div>
+        <div class="text-sm text-gray-500 mb-4">~3 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mt-4 mb-2">Interior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Deep Clean All Surfaces</li>
+          <li>Double Vacuum Interior</li>
+          <li>Shampoo Carpets & Seats</li>
+          <li>Steam Clean Full Interior</li>
+          <li>Deep Clean Carpets & Floor Mats</li>
+          <li>Clean Crevices, Vents, Cup Holders, Etc.</li>
+          <li>Clean & Protect Plastic</li>
+          <li>Leather Conditioner Treatment</li>
+          <li>High Pressure Air Blowout</li>
+          <li>Clean Windows & Mirrors</li>
+          <li>Air Freshener Treatment</li>
+          <li>Detail Trunk</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-800 text-white py-2 px-6 rounded-full hover:bg-blue-900">Schedule Online</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exterior Packages -->
+    <div id="packages-exterior" class="hidden grid md:grid-cols-2 gap-10">
+      <!-- Classic Exterior -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+        <h2 class="text-3xl font-bold text-blue-600 mb-2">Classic Exterior</h2>
+        <p class="text-gray-600 mb-2">Our professional exterior detail. The perfect hand wash and clean for your vehicle.</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$168">$168</div>
+        <div class="text-sm text-gray-500 mb-4">~1.5 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mb-2">Exterior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Professional Hand Wash</li>
+          <li>Paint Decontamination (Clay Bar)</li>
+          <li>Clean & Wash Wheel Wells</li>
+          <li>Detail Rim Faces & Tires</li>
+          <li>Dress Exterior Trim & Tires</li>
+          <li>Detail Windows</li>
+          <li>Clean Door Jambs</li>
+          <li>Hand Wax (Gloss & Protection)</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700">Schedule Online</a>
+        </div>
+      </div>
+
+      <!-- Wax & Buff -->
+      <div class="bg-white border-2 border-blue-600 rounded-2xl shadow-xl p-8 transform scale-105">
+        <div class="bg-yellow-400 text-blue-900 font-bold text-xs px-3 py-1 rounded-full mb-4 w-max mx-auto">POPULAR</div>
+        <h2 class="text-3xl font-bold text-blue-800 mb-2">Wax & Buff</h2>
+        <p class="text-gray-600 mb-2">Restore your vehicle’s shine and protect your paint! Give it a showroom finish that lasts.</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$298">$298</div>
+        <div class="text-sm text-gray-500 mb-4">~3 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mb-2">Exterior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Professional Hand Wash</li>
+          <li>Paint Decontamination (Clay Bar)</li>
+          <li>1-Step Paint Enhancement (Gloss & Shine)</li>
+          <li>Light Swirl Removal (Spot Polish)</li>
+          <li>Clean & Wash Wheel Wells</li>
+          <li>Detail Rim Faces & Tires</li>
+          <li>Dress Exterior Trim & Tires</li>
+          <li>Clean Door Jambs</li>
+          <li>Detail Windows</li>
+          <li>Machine Wax (Paint Protection)</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-800 text-white py-2 px-6 rounded-full hover:bg-blue-900">Schedule Online</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabs = {
+        full: document.getElementById('packages-full'),
+        interior: document.getElementById('packages-interior'),
+        exterior: document.getElementById('packages-exterior'),
+      };
+
+      function setActiveTab(selected) {
+        tabButtons.forEach(btn => {
+          btn.classList.remove('bg-blue-600', 'text-white');
+          btn.classList.add('text-gray-700');
+        });
+        document.getElementById('tab-' + selected).classList.add('bg-blue-600', 'text-white');
+
+        Object.keys(tabs).forEach(key => {
+          tabs[key].classList.add('hidden');
+        });
+        tabs[selected].classList.remove('hidden');
+      }
+
+      document.getElementById('tab-full').addEventListener('click', () => setActiveTab('full'));
+      document.getElementById('tab-interior').addEventListener('click', () => setActiveTab('interior'));
+      document.getElementById('tab-exterior').addEventListener('click', () => setActiveTab('exterior'));
+    </script>
 
     <!-- Add-Ons -->
     <div class="mt-20 bg-white border border-gray-200 rounded-2xl p-8 shadow-md">
