@@ -46,124 +46,117 @@
   </div>
 </div>
 
-<!-- PACKAGES PAGE -->
+<!-- Updated Detailing Packages Section with XL Toggle -->
 <section class="py-20 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- HEADER -->
-    <div class="text-center mb-16">
+    <div class="text-center mb-6">
       <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Our Detailing Packages</h1>
       <p class="text-xl text-gray-600">Simple, transparent pricing. No hidden fees, ever.</p>
     </div>
 
-    <!-- PACKAGES -->
-    <div class="grid md:grid-cols-3 gap-10">
-
-      <!-- Package 1 -->
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-        <div class="bg-gradient-to-b from-blue-600 to-blue-500 text-white py-8 px-6 text-center">
-          <h2 class="text-3xl font-bold mb-2">The Base</h2>
-          <p class="text-sm opacity-90 mb-4">Perfect for well-maintained vehicles</p>
-          <div class="text-4xl font-extrabold">$149+</div>
-          <div class="text-sm mt-2 text-gray-100">~1.5 hours</div>
-        </div>
-        <div class="p-8 space-y-6 text-gray-700">
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Interior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>Wipe & clean all surfaces</li>
-              <li>Vacuum interior</li>
-              <li>Clean windows & mirrors</li>
-              <li>Detail floor mats</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>Professional hand wash</li>
-              <li>Wheel wells & tires cleaned</li>
-              <li>Rim faces detailed</li>
-              <li>Door jambs cleaned</li>
-            </ul>
-          </div>
-          <div class="text-center mt-6">
-            <a href="quote.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
-          </div>
-        </div>
+    <!-- XL Vehicle Toggle Switch Section -->
+    <div class="w-full flex flex-col items-center mb-10 -mt-2">
+      <div class="flex items-center space-x-4">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="xlToggle" class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-300"></div>
+          <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-full"></div>
+        </label>
+        <span class="text-sm text-gray-600">Upgrade to XL vehicle (+$30)</span>
       </div>
-
-      <!-- Package 2 (MOST POPULAR) -->
-      <div class="bg-white border-2 border-blue-600 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform scale-105 transition-all duration-300 relative">
-        <div class="absolute top-4 right-4 bg-yellow-400 text-blue-900 font-bold text-xs px-3 py-1 rounded-full shadow-md">
-          MOST POPULAR
-        </div>
-        <div class="bg-gradient-to-b from-blue-800 to-blue-700 text-white py-8 px-6 text-center">
-          <h2 class="text-3xl font-bold mb-2">The Standard</h2>
-          <p class="text-sm opacity-90 mb-4">Full deep clean interior & exterior</p>
-          <div class="text-4xl font-extrabold">$249+</div>
-          <div class="text-sm mt-2 text-gray-100">~3 hours</div>
-        </div>
-        <div class="p-8 space-y-6 text-gray-700">
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Interior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>Everything in The Base</li>
-              <li>Deep clean plastics & vents</li>
-              <li>Leather conditioner treatment</li>
-              <li>Carpet shampoo</li>
-              <li>Steam clean interior</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>Clay bar treatment</li>
-              <li>Hand wax protection</li>
-              <li>Exterior trim & tires dressed</li>
-            </ul>
-          </div>
-          <div class="text-center mt-6">
-            <a href="quote.html" class="inline-block bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Package 3 -->
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-        <div class="bg-gradient-to-b from-gray-800 to-gray-700 text-white py-8 px-6 text-center">
-          <h2 class="text-3xl font-bold mb-2">The Works</h2>
-          <p class="text-sm opacity-90 mb-4">The ultimate restoration package</p>
-          <div class="text-4xl font-extrabold">$399+</div>
-          <div class="text-sm mt-2 text-gray-100">~5 hours</div>
-        </div>
-        <div class="p-8 space-y-6 text-gray-700">
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Interior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>Everything in The Standard</li>
-              <li>Full stain removal</li>
-              <li>Seats and carpets shampooed</li>
-              <li>Headliner cleaning</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Exterior</h3>
-            <ul class="list-disc list-inside space-y-1 text-gray-600">
-              <li>1-step paint enhancement</li>
-              <li>Ceramic wax (6+ months)</li>
-              <li>Engine bay detail</li>
-              <li>Headlight restoration</li>
-            </ul>
-          </div>
-          <div class="text-center mt-6">
-            <a href="quote.html" class="inline-block bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full transition duration-300">Get a Quote</a>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- ADD-ONS -->
+    <!-- PACKAGES GRID -->
+    <div class="grid md:grid-cols-3 gap-10" id="packages">
+
+      <!-- Base -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+        <h2 class="text-3xl font-bold text-blue-600 mb-2">The Base</h2>
+        <p class="text-gray-600 mb-2">Perfect for well-maintained vehicles</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$149">$149</div>
+        <div class="text-sm text-gray-500 mb-4">~1.5 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mb-2">Interior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Wipe & Clean All Surfaces</li>
+          <li>Vacuum Interior</li>
+          <li>Clean Windows & Mirrors</li>
+          <li>Detail Floor Mats</li>
+        </ul>
+
+        <h3 class="text-lg font-semibold mt-4 mb-2">Exterior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Professional Hand Wash</li>
+          <li>Clean Wheel Wells</li>
+          <li>Detail Rim Faces</li>
+          <li>Dress Exterior Trim & Tires</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700">Schedule Online</a>
+        </div>
+      </div>
+
+      <!-- Standard -->
+      <div class="bg-white border-2 border-blue-600 rounded-2xl shadow-xl p-8 transform scale-105">
+        <div class="bg-yellow-400 text-blue-900 font-bold text-xs px-3 py-1 rounded-full mb-4 w-max mx-auto">MOST POPULAR</div>
+        <h2 class="text-3xl font-bold text-blue-800 mb-2">The Standard</h2>
+        <p class="text-gray-600 mb-2">A deep clean for interior & exterior</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$249">$249</div>
+        <div class="text-sm text-gray-500 mb-4">~3 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mb-2">Interior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li><strong>Everything in The Base</strong></li>
+          <li>Deep Clean Plastics & Vents</li>
+          <li>Leather Conditioner Treatment</li>
+          <li>Carpet Shampoo</li>
+          <li>Steam Clean Interior</li>
+        </ul>
+
+        <h3 class="text-lg font-semibold mt-4 mb-2">Exterior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>Clay Bar Treatment</li>
+          <li>High Gloss Hand Wax</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-blue-800 text-white py-2 px-6 rounded-full hover:bg-blue-900">Schedule Online</a>
+        </div>
+      </div>
+
+      <!-- Works -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">The Works</h2>
+        <p class="text-gray-600 mb-2">Full restoration for your vehicle</p>
+        <div class="text-4xl font-extrabold text-gray-900" data-base="$399">$399</div>
+        <div class="text-sm text-gray-500 mb-4">~5 Hour Duration</div>
+
+        <h3 class="text-lg font-semibold mb-2">Interior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li><strong>Everything in The Standard</strong></li>
+          <li>Full Stain Removal</li>
+          <li>Shampoo Seats & Carpets</li>
+          <li>Headliner Cleaning</li>
+        </ul>
+
+        <h3 class="text-lg font-semibold mt-4 mb-2">Exterior</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>1-Step Paint Enhancement</li>
+          <li>Machine Wax</li>
+          <li>Light Swirl Removal</li>
+          <li>Engine Bay Detail</li>
+        </ul>
+
+        <div class="mt-6 text-center">
+          <a href="quote.html" class="inline-block bg-gray-800 text-white py-2 px-6 rounded-full hover:bg-gray-900">Schedule Online</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add-Ons -->
     <div class="mt-20 bg-white border border-gray-200 rounded-2xl p-8 shadow-md">
       <h2 class="text-3xl font-bold text-center mb-6">Popular Add-Ons</h2>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-700 max-w-5xl mx-auto">
@@ -171,16 +164,25 @@
         <div><span class="font-bold">Shampoo Carpets</span> — +$50</div>
         <div><span class="font-bold">Pet Hair Removal (Light)</span> — +$29</div>
         <div><span class="font-bold">Pet Hair Removal (Heavy)</span> — +$69</div>
-        <div><span class="font-bold">Clay Bar Treatment</span> — +$50</div>
+        <div><span class="font-bold">Clay Bar Treatment</span> — +$75</div>
         <div><span class="font-bold">Engine Bay Detail</span> — +$60</div>
         <div><span class="font-bold">Headlight Restoration</span> — +$100</div>
-        <div><span class="font-bold">Ozone Odor Treatment</span> — +$50</div>
         <div><span class="font-bold">Water Spot Removal</span> — +$100</div>
+        <div><span class="font-bold">Ozone Odor Treatment</span> — +$50</div>
       </div>
     </div>
-
   </div>
 </section>
+
+<script>
+  const toggle = document.getElementById('xlToggle');
+  toggle.addEventListener('change', () => {
+    document.querySelectorAll('[data-base]').forEach(el => {
+      const basePrice = parseInt(el.getAttribute('data-base').replace('$',''));
+      el.textContent = toggle.checked ? `$${basePrice + 30}` : `$${basePrice}`;
+    });
+  });
+</script>
 
 <!-- FOOTER -->
 <footer class="bg-gray-900 text-white pt-12 pb-6">
