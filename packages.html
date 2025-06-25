@@ -73,7 +73,7 @@
           <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-300"></div>
           <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-full"></div>
         </label>
-        <span class="text-sm text-gray-600">Upgrade to XL vehicle (+$30)</span>
+        <span class="text-sm text-gray-600">Upgrade to XL vehicle (+$60)</span>
       </div>
     </div>
 
@@ -327,7 +327,7 @@
   toggle.addEventListener('change', () => {
     document.querySelectorAll('[data-base]').forEach(el => {
       const basePrice = parseInt(el.getAttribute('data-base').replace('$',''));
-      el.textContent = toggle.checked ? `$${basePrice + 30}` : `$${basePrice}`;
+      el.textContent = toggle.checked ? `$${basePrice + 60}` : `$${basePrice}`;
     });
   });
 </script>
