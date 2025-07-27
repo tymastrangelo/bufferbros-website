@@ -239,6 +239,22 @@
   </div>
 </footer>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="spinner"></div>
+  <p class="text-white ml-4 text-lg font-semibold">Processing your request...</p>
+</div>
+
+<script>
+  const form = document.querySelector('form');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
+  form.addEventListener('submit', function (e) {
+    // Show the loading overlay
+    loadingOverlay.classList.remove('hidden');
+  });
+</script>
+
 <script src="js/main.js"></script>
 </body>
 </html>
