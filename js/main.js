@@ -1,4 +1,4 @@
-// Mobile Menu Toggle with Animation
+// Mobile Menu Toggle
 const mobileMenuButton = document.getElementById('mobile-menu-button');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -18,64 +18,44 @@ mobileMenuButton.addEventListener('click', () => {
   }
 });
 
-// Gallery Filters
-const filterButtons = document.querySelectorAll('.gallery-filter');
-const galleryItems = document.querySelectorAll('.gallery-item');
+// Instagram Portfolio Loader
+const galleryGrid = document.getElementById("gallery-grid");
+const loadMoreBtn = document.getElementById("loadMore");
 
-filterButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const filter = button.getAttribute('data-filter');
+let allPosts = [];
+let visibleCount = 0;
+const batchSize = 6;
 
-    // Remove active styles from all buttons
-    filterButtons.forEach(btn => {
-      btn.classList.remove('bg-blue-600', 'text-white');
-      btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
-    });
+function renderGalleryItems() {
+  const toShow = allPosts.slice(0, visibleCount);
+  galleryGrid.innerHTML = '';
 
-    // Add active styles to the clicked button
-    button.classList.remove('bg-gray-200', 'hover:bg-gray-300');
-    button.classList.add('bg-blue-600', 'text-white');
+  toShow.forEach(post => {
+    const div = document.createElement("div");
+    div.className = "gallery-item relative rounded-xl overflow-hidden shadow-lg group cursor-pointer";
 
-    // Show/hide gallery items
-    galleryItems.forEach(item => {
-      const itemCategory = item.getAttribute('data-category');
-      if (filter === 'all' || itemCategory === filter) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
+    div.innerHTML = `
+      <a href="${post.permalink}" target="_blank">
+        <img src="${post.media_url}" alt="${post.caption}" class="w-full h-64 object-cover transition-transform duration-300 ease-out group-hover:scale-105">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div class="pointer-events-auto bg-white bg-opacity-90 text-gray-800 text-base md:text-lg font-semibold px-5 py-2 rounded-full shadow-md">
+            View on Instagram
+          </div>
+        </div>
+      </a>
+    `;
+    galleryGrid.appendChild(div);
   });
-});
 
-// FAQ Toggles
-document.querySelectorAll('.faq-toggle').forEach(button => {
-  button.addEventListener('click', function() {
-    const content = this.nextElementSibling;
-    const icon = this.querySelector('i');
-
-    content.classList.toggle('hidden');
-    icon.classList.toggle('rotate-180');
-  });
-});
-
-// Form Submission Fake Handler (Quote Form)
-const quoteForm = document.getElementById('quoteForm');
-if (quoteForm) {
-  quoteForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Hide form
-    this.style.display = 'none';
-
-    // Show success message
-    document.getElementById('successMessage').classList.remove('hidden');
-
-    // Reset form after 5 seconds (demo purposes)
-    setTimeout(() => {
-      this.style.display = 'block';
-      document.getElementById('successMessage').classList.add('hidden');
-      this.reset();
-    }, 5000);
-  });
+  if (visibleCount >= allPosts.length) {
+    loadMoreBtn.classList.add("hidden");
+  } else {
+    loadMoreBtn.classList.remove("hidden");
+  }
 }
+
+loadMoreBtn.addEventListener("click", () => {
+  visibleCount += batchSize;
+  renderGalleryItems();
+});
