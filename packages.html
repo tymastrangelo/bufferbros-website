@@ -7,7 +7,7 @@
   <meta name="description" content="Choose from Buffer Bros' detailing packages: Basic Clean, Premium Detail, Showroom Ready. Add-ons available!">
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260209">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Google tag (gtag.js) -->
@@ -63,15 +63,27 @@
       <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">Book Your Detail</h1>
       <p class="text-gray-600">Secure your appointment online — fast and easy.</p>
     </header>
-    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div id="booking-embed" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden">
       <iframe
-        src="https://clienthub.getjobber.com/booking/2faa9837-1cb6-4672-9b75-b6e4dbe2ad57/"
+        id="booking-frame"
+        data-src="https://clienthub.getjobber.com/booking/2faa9837-1cb6-4672-9b75-b6e4dbe2ad57/"
         title="Online Booking"
         class="w-full h-[75vh] sm:h-[80vh]"
         frameborder="0"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
       ></iframe>
+    </div>
+    <div id="booking-fallback" class="bg-white rounded-2xl shadow-xl p-8 text-center">
+      <p class="text-gray-700 text-lg mb-6">Tap below to open booking in a new tab.</p>
+      <a
+        href="https://clienthub.getjobber.com/booking/2faa9837-1cb6-4672-9b75-b6e4dbe2ad57/"
+        target="_blank"
+        rel="noopener"
+        class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+      >
+        Open Booking
+      </a>
     </div>
   </div>
 </section>
@@ -143,6 +155,6 @@
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=20260209"></script>
 </body>
 </html>
