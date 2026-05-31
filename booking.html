@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book an Appointment | Buffer Bros Mobile Detailing</title>
+  <meta name="description" content="Book your mobile detailing appointment with Buffer Bros. Pick your vehicle, choose a time, and we come to you.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: { brand: { DEFAULT: '#2563eb', dark: '#1d4ed8' }, ink: '#0a0e14' },
+      fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+    } } };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WG9M9W3RL8');
+    gtag('config', 'AW-17448688864');
+  </script>
+</head>
+
+<body>
+<header id="site-header"></header>
+
+<section class="section" style="background:var(--surface-2)">
+  <div class="container max-w-6xl">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="eyebrow">Book online</span>
+      <h1 class="text-4xl sm:text-5xl font-extrabold mt-2 mb-3">Book your detail</h1>
+      <p style="color:var(--slate-soft)">Every booking is our complete Standard Detail, a full showroom finish inside and out. Just tell us about your car and pick a time.</p>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="confirmation" class="hidden max-w-xl mx-auto card p-8 sm:p-10 text-center">
+      <div class="h-16 w-16 mx-auto rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mb-4"><i class="fas fa-check"></i></div>
+      <h2 class="text-2xl font-bold mb-2">You are booked!</h2>
+      <p id="confirm-text" class="mb-6" style="color:var(--slate)"></p>
+      <p class="text-sm mb-6" style="color:var(--slate-soft)">We sent a confirmation to your email. The time may be an arrival window, and final pricing is confirmed on site. Need to change something? Call or text (239) 293-8511.</p>
+      <a href="index.html" class="btn btn-outline">Back to home</a>
+    </div>
+
+    <form id="booking-form" class="grid lg:grid-cols-3 gap-8 items-start">
+      <!-- MAIN -->
+      <div class="lg:col-span-2 space-y-8">
+
+        <!-- 1. Vehicle size -->
+        <div class="card p-6 sm:p-7">
+          <h2 class="text-lg font-bold mb-4"><span class="text-brand">1.</span> Your vehicle size</h2>
+          <div id="size-list" class="grid sm:grid-cols-3 gap-3"></div>
+        </div>
+
+        <!-- 2. Frequency / plan -->
+        <div class="card p-6 sm:p-7">
+          <h2 class="text-lg font-bold mb-1"><span class="text-brand">2.</span> How often?</h2>
+          <p class="text-sm mb-4" style="color:var(--slate-soft)">Book a one-time detail, or save with a maintenance plan (the same detail on a schedule).</p>
+          <div id="freq-list" class="grid sm:grid-cols-2 gap-3"></div>
+          <div id="freq-note" class="hidden mt-4 text-sm rounded-xl p-3" style="background:var(--brand-soft);color:var(--brand-dark)">
+            <i class="fas fa-circle-info mr-1"></i> We will book your first visit now and set up your recurring schedule with you when we arrive.
+          </div>
+        </div>
+
+        <!-- 3. Add-ons -->
+        <div class="card p-6 sm:p-7">
+          <h2 class="text-lg font-bold mb-1"><span class="text-brand">3.</span> Add-ons <span class="font-normal text-sm" style="color:var(--slate-soft)">(optional)</span></h2>
+          <p class="text-sm mb-4" style="color:var(--slate-soft)">Everything else is already included. These add a little time to your appointment.</p>
+          <div id="addon-list" class="grid sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- 4. Date & time -->
+        <div class="card p-6 sm:p-7">
+          <h2 class="text-lg font-bold mb-4"><span class="text-brand">4.</span> Pick a date and time</h2>
+          <label class="label" for="date-input">Date</label>
+          <input type="date" id="date-input" class="field mb-5" required>
+          <div id="slots-area">
+            <p class="text-sm" style="color:var(--slate-soft)">Choose your vehicle size and a date to see open times.</p>
+          </div>
+        </div>
+
+        <!-- 5. Details -->
+        <div class="card p-6 sm:p-7">
+          <h2 class="text-lg font-bold mb-4"><span class="text-brand">5.</span> Your details</h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="label" for="f-name">Full name</label><input id="f-name" class="field" required></div>
+            <div><label class="label" for="f-phone">Phone</label><input id="f-phone" type="tel" class="field" required></div>
+            <div class="sm:col-span-2"><label class="label" for="f-email">Email</label><input id="f-email" type="email" class="field" required></div>
+            <div class="sm:col-span-2"><label class="label" for="f-address">Service address</label><input id="f-address" class="field" placeholder="Where should we meet your vehicle?" required></div>
+            <div class="sm:col-span-2"><label class="label" for="f-notes">Notes <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><textarea id="f-notes" class="field" rows="3" placeholder="Vehicle make/model, gate codes, anything we should know"></textarea></div>
+          </div>
+        </div>
+
+        <!-- 6. Terms -->
+        <div class="card p-6 sm:p-7">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f-terms" class="mt-1 h-5 w-5 accent-blue-600 shrink-0" required>
+            <span class="text-sm" style="color:var(--slate)">I agree to the Buffer Bros <a href="terms.html" target="_blank" class="text-brand font-semibold hover:underline">Terms &amp; Conditions</a>. I understand pre and post service inspections are performed, that Buffer Bros is not liable for pre-existing conditions or damage not caused by their work, and that the final price may change if my vehicle needs more work than its package covers.</span>
+          </label>
+        </div>
+
+        <div id="form-error" class="hidden text-sm text-red-600 font-medium"></div>
+      </div>
+
+      <!-- SUMMARY -->
+      <aside class="lg:sticky lg:top-24">
+        <div class="card p-6">
+          <h3 class="font-bold text-lg mb-4">Your appointment</h3>
+          <dl id="summary" class="space-y-3 text-sm"></dl>
+          <div class="border-t border-gray-100 mt-4 pt-4">
+            <div class="flex items-baseline justify-between">
+              <span class="font-semibold" id="price-label">Estimated total</span>
+              <span id="sum-price" class="text-2xl font-extrabold text-ink">--</span>
+            </div>
+            <p class="text-xs mt-1" style="color:var(--slate-soft)">Confirmed on site. May vary by condition.</p>
+          </div>
+          <button type="submit" id="submit-btn" class="btn btn-primary btn-block mt-5">Confirm booking</button>
+        </div>
+      </aside>
+    </form>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<!-- Loading overlay -->
+<div id="overlay" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[60]">
+  <div class="bg-white rounded-2xl px-8 py-7 flex items-center gap-4 shadow-xl">
+    <div class="spinner spinner-dark"></div>
+    <p class="font-semibold text-ink">Booking your appointment...</p>
+  </div>
+</div>
+
+<script src="js/services.js?v=20260531"></script>
+<script src="js/components.js?v=20260531"></script>
+<script>
+(function () {
+  const S = window.BB_SERVICES;
+  const API_BASE = ''; // same origin (Cloudflare Pages Functions at /api/*)
+  const cur = S.currency;
+
+  // Plans: one-time + each maintenance cadence.
+  const FREQS = [{ id: 'onetime', name: 'One-time', desc: 'Just this once', recurring: false }]
+    .concat(S.maintenance.map((m) => ({ id: m.id, name: m.name, desc: m.cadence, note: m.note, recurring: true })));
+
+  const state = { sizeId: null, freq: 'onetime', addons: new Set(), date: null, startMin: null };
+
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+
+  const fmtDur = (min) => {
+    const h = Math.floor(min / 60), m = min % 60;
+    if (h && m) return `${h} hr ${m} min`;
+    if (h) return `${h} hr${h > 1 ? 's' : ''}`;
+    return `${m} min`;
+  };
+  const fmtTime = (min) => { let h = Math.floor(min / 60); const m = min % 60; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+
+  // Base price for the chosen size + plan.
+  function basePrice() {
+    if (!state.sizeId) return 0;
+    if (state.freq === 'onetime') return (S.detail.pricing[state.sizeId] || {}).price || 0;
+    const m = S.maintenance.find((x) => x.id === state.freq);
+    return m ? ((m.pricing[state.sizeId] || {}).price || 0) : 0;
+  }
+  function baseMinutes() {
+    if (!state.sizeId) return 0;
+    return (S.detail.pricing[state.sizeId] || {}).minutes || 0;
+  }
+  function totals() {
+    let price = basePrice(), minutes = baseMinutes();
+    state.addons.forEach((id) => { const a = S.addons.find((x) => x.id === id); if (a) { price += a.price || 0; minutes += a.minutes || 0; } });
+    return { price, minutes };
+  }
+  const planName = () => { const f = FREQS.find((x) => x.id === state.freq); return f ? f.name : 'One-time'; };
+  const isRecurring = () => state.freq !== 'onetime';
+
+  /* ---------- renderers ---------- */
+  function renderSizes() {
+    $('size-list').innerHTML = S.sizes.map((s) => `
+      <label class="choice ${s.id === state.sizeId ? 'is-selected' : ''}" data-size="${s.id}">
+        <input type="radio" name="size" value="${s.id}" ${s.id === state.sizeId ? 'checked' : ''}>
+        <span class="font-semibold text-ink text-sm">${s.label}</span>
+        <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${s.note}</span>
+      </label>`).join('');
+    bindRadio('size-list', 'size', (v) => { state.sizeId = v; renderFreq(); refresh(); });
+  }
+
+  function renderFreq() {
+    const priceFor = (id) => {
+      if (!state.sizeId) return '';
+      const p = id === 'onetime' ? (S.detail.pricing[state.sizeId] || {}).price
+              : ((S.maintenance.find((m) => m.id === id) || {}).pricing || {})[state.sizeId]?.price;
+      if (!p || p <= 0) return '<span class="text-xs" style="color:var(--slate-soft)">TBD</span>';
+      return `<span class="font-bold text-brand">${cur}${p}</span><span class="text-xs" style="color:var(--slate-soft)">${id === 'onetime' ? '' : '/visit'}</span>`;
+    };
+    $('freq-list').innerHTML = FREQS.map((f) => `
+      <label class="choice ${f.id === state.freq ? 'is-selected' : ''}" data-freq="${f.id}">
+        <input type="radio" name="freq" value="${f.id}" ${f.id === state.freq ? 'checked' : ''}>
+        <div class="flex items-center justify-between gap-2">
+          <span class="font-semibold text-ink text-sm">${f.name}</span>
+          <span class="shrink-0 text-right">${priceFor(f.id)}</span>
+        </div>
+        <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${f.desc}${f.note ? ' &middot; ' + f.note : ''}</span>
+      </label>`).join('');
+    bindRadio('freq-list', 'freq', (v) => { state.freq = v; $('freq-note').classList.toggle('hidden', v === 'onetime'); refresh(); });
+  }
+
+  function renderAddons() {
+    $('addon-list').innerHTML = S.addons.map((a) => `
+      <label class="choice ${state.addons.has(a.id) ? 'is-selected' : ''}" data-addon="${a.id}">
+        <input type="checkbox" value="${a.id}" ${state.addons.has(a.id) ? 'checked' : ''}>
+        <div class="flex items-center justify-between gap-2">
+          <span class="font-semibold text-ink text-sm">${a.name}</span>
+          <span class="text-sm font-bold text-brand shrink-0">${a.price && a.price > 0 ? '+' + cur + a.price : ''}</span>
+        </div>
+        <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${a.note || ''}</span>
+      </label>`).join('');
+    $('addon-list').querySelectorAll('[data-addon]').forEach((el) => {
+      const input = el.querySelector('input');
+      el.addEventListener('click', (e) => {
+        if (e.target !== input) input.checked = !input.checked;
+        input.checked ? state.addons.add(el.dataset.addon) : state.addons.delete(el.dataset.addon);
+        el.classList.toggle('is-selected', input.checked);
+        refresh();
+      });
+    });
+  }
+
+  function bindRadio(containerId, name, onPick) {
+    $(containerId).querySelectorAll(`[data-${name}]`).forEach((el) => {
+      el.addEventListener('click', () => {
+        $(containerId).querySelectorAll('.choice').forEach((c) => c.classList.remove('is-selected'));
+        el.classList.add('is-selected');
+        el.querySelector('input').checked = true;
+        onPick(el.dataset[name]);
+      });
+    });
+  }
+
+  function renderSummary() {
+    const t = totals();
+    const size = S.sizes.find((s) => s.id === state.sizeId);
+    const rows = [];
+    rows.push(row('Service', S.detail.name));
+    rows.push(row('Vehicle', size ? size.label : '--'));
+    rows.push(row('Plan', planName()));
+    const addonNames = [...state.addons].map((id) => (S.addons.find((a) => a.id === id) || {}).name).filter(Boolean);
+    if (addonNames.length) rows.push(row('Add-ons', addonNames.join(', ')));
+    if (t.minutes) rows.push(row('Time', 'About ' + fmtDur(t.minutes)));
+    if (state.date) rows.push(row('Date', state.date));
+    if (state.startMin != null) rows.push(row('Start', fmtTime(state.startMin)));
+    $('summary').innerHTML = rows.join('');
+    $('price-label').textContent = isRecurring() ? 'Per visit' : 'Estimated total';
+    $('sum-price').textContent = (t.price && t.price > 0) ? cur + t.price : (t.minutes ? 'Confirmed on site' : '--');
+  }
+  const row = (k, v) => `<div class="flex justify-between gap-3"><dt style="color:var(--slate-soft)">${k}</dt><dd class="font-semibold text-ink text-right">${v}</dd></div>`;
+
+  /* ---------- availability ---------- */
+  let slotLoadId = 0;
+  async function loadSlots() {
+    const area = $('slots-area');
+    const t = totals();
+    if (!state.date || !state.sizeId) {
+      area.innerHTML = `<p class="text-sm" style="color:var(--slate-soft)">Choose your vehicle size and a date to see open times.</p>`;
+      return;
+    }
+    const myId = ++slotLoadId;
+    area.innerHTML = `<div class="flex items-center gap-3 text-sm" style="color:var(--slate-soft)"><div class="spinner spinner-dark" style="width:24px;height:24px;border-width:3px"></div> Loading open times...</div>`;
+    try {
+      const res = await fetch(`${API_BASE}/api/availability?date=${state.date}&duration=${t.minutes}`);
+      const data = await res.json();
+      if (myId !== slotLoadId) return;
+      if (!data.ok) throw new Error(data.error || 'Could not load times');
+      if (!data.slots.length) {
+        area.innerHTML = `<p class="text-sm" style="color:var(--slate-soft)">No open times that day. Try another date, or call us at <a href="tel:2392938511" class="text-brand font-semibold">(239) 293-8511</a>.</p>`;
+        state.startMin = null; renderSummary();
+        return;
+      }
+      area.innerHTML = `<div class="grid grid-cols-3 sm:grid-cols-4 gap-2" id="slot-grid"></div>`;
+      $('slot-grid').innerHTML = data.slots.map((s) =>
+        `<button type="button" class="slot ${state.startMin === s.min ? 'is-selected' : ''}" data-min="${s.min}">${s.label}</button>`).join('');
+      $('slot-grid').querySelectorAll('.slot').forEach((b) => b.addEventListener('click', () => {
+        $('slot-grid').querySelectorAll('.slot').forEach((x) => x.classList.remove('is-selected'));
+        b.classList.add('is-selected');
+        state.startMin = parseInt(b.dataset.min, 10);
+        renderSummary();
+      }));
+    } catch (e) {
+      if (myId !== slotLoadId) return;
+      area.innerHTML = `<p class="text-sm text-red-600">We could not load open times right now. Please call or text <a href="tel:2392938511" class="font-semibold underline">(239) 293-8511</a> to book.</p>`;
+    }
+  }
+
+  function refresh() { state.startMin = null; renderSummary(); loadSlots(); }
+
+  /* ---------- submit ---------- */
+  function showError(msg) {
+    const el = $('form-error'); el.textContent = msg; el.classList.remove('hidden');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  $('booking-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('form-error').classList.add('hidden');
+    const t = totals();
+    if (!state.sizeId) return showError('Please choose your vehicle size.');
+    if (!state.date || state.startMin == null) return showError('Please pick a date and time.');
+    if (!$('f-terms').checked) return showError('Please agree to the terms and conditions.');
+
+    const size = S.sizes.find((s) => s.id === state.sizeId);
+    const pkgName = S.detail.name + (isRecurring() ? ` (${planName()} plan)` : '');
+    const payload = {
+      name: $('f-name').value.trim(),
+      email: $('f-email').value.trim(),
+      phone: $('f-phone').value.trim(),
+      address: $('f-address').value.trim(),
+      notes: $('f-notes').value.trim(),
+      packageId: S.detail.id, packageName: pkgName,
+      sizeId: size.id, sizeLabel: size.label,
+      addons: [...state.addons].map((id) => { const a = S.addons.find((x) => x.id === id); return { id: a.id, name: a.name, price: a.price || 0 }; }),
+      date: state.date, startMin: state.startMin,
+      durationMin: t.minutes, price: t.price || 0,
+      agreedTerms: true,
+    };
+    if (!payload.name || !payload.email || !payload.phone || !payload.address) return showError('Please fill in your name, phone, email and address.');
+
+    $('overlay').classList.remove('hidden'); $('overlay').classList.add('flex');
+    $('submit-btn').disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}/api/book`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Something went wrong');
+      gtag && gtag('event', 'conversion', { event_category: 'booking' });
+      $('booking-form').classList.add('hidden');
+      $('confirm-text').textContent = `${pkgName} for your ${size.label.toLowerCase()} on ${data.when}.`;
+      $('confirmation').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showError(err.message || 'We could not complete the booking. Please call (239) 293-8511.');
+    } finally {
+      $('overlay').classList.add('hidden'); $('overlay').classList.remove('flex');
+      $('submit-btn').disabled = false;
+    }
+  });
+
+  /* ---------- init ---------- */
+  document.addEventListener('DOMContentLoaded', () => {
+    const sz = params.get('size'); const fq = params.get('freq');
+    if (sz && S.sizes.some((s) => s.id === sz)) state.sizeId = sz;
+    if (fq && FREQS.some((f) => f.id === fq)) state.freq = fq;
+
+    const di = $('date-input');
+    const today = new Date().toISOString().slice(0, 10);
+    di.min = today;
+    di.addEventListener('change', () => { state.date = di.value; refresh(); });
+
+    renderSizes(); renderFreq(); renderAddons(); renderSummary();
+    if (state.freq !== 'onetime') $('freq-note').classList.remove('hidden');
+  });
+})();
+</script>
+</body>
+</html>

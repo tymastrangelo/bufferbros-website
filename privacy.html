@@ -4,131 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy | Buffer Bros Detailing</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css?v=20260209">
 
-  <!-- Google tag (gtag.js) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brand: { DEFAULT: '#2563eb', dark: '#1d4ed8' }, ink: '#0a0e14' }, fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] } } } };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
-    // GA4 (Analytics)
     gtag('config', 'G-WG9M9W3RL8');
-
-    // Google Ads (keep this if you run ads)
     gtag('config', 'AW-17448688864');
   </script>
 </head>
-<body class="font-sans bg-gray-50 text-gray-800">
 
-<!-- NAVIGATION -->
-<nav class="bg-white shadow-lg sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
-    <a href="index.html" class="flex items-center">
-      <img src="images/black-logo.png" alt="Buffer Bros Logo" class="h-12">
-    </a>
-    <div class="hidden md:flex space-x-8">
-      <a href="about.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">About Us</a>
-      <a href="packages.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Packages</a>
-      <a href="portfolio.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Portfolio</a>
-      <a href="quote.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Get a Quote</a>
-    </div>
-    <div class="md:hidden flex items-center">
-      <button id="mobile-menu-button" class="text-gray-900">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-  </div>
-</nav>
+<body>
+<header id="site-header"></header>
 
-<section class="py-20">
-  <div class="max-w-3xl mx-auto px-6">
-    <h1 class="text-4xl font-bold mb-6">Buffer Bros Privacy Policy</h1>
+<section class="section bg-white">
+  <div class="container max-w-3xl prose-legal">
+    <span class="eyebrow">Legal</span>
+    <h1 class="text-4xl font-extrabold mt-2 mb-6">Privacy Policy</h1>
 
-    <p class="mb-4">At Buffer Bros Mobile Detailing, we value your privacy. When you submit your contact information through our ads or forms, we collect details such as your name, phone number, email, and information about your vehicle and requested services.</p>
+    <p>At Buffer Bros Mobile Detailing, we value your privacy. When you book an appointment or submit your contact information through our forms or ads, we collect details such as your name, phone number, email, service address, and information about your vehicle and requested services.</p>
 
-    <p class="mb-4">We only use this information to:</p>
-    <ul class="list-disc list-inside mb-4">
-      <li>Contact you regarding your appointment or quote request</li>
-      <li>Schedule and confirm your services</li>
-      <li>Send follow-up messages, such as appointment reminders or review requests</li>
+    <h2>How we use your information</h2>
+    <ul>
+      <li>To contact you about your appointment or request</li>
+      <li>To schedule, confirm, and carry out your services</li>
+      <li>To send follow-up messages such as appointment reminders or review requests</li>
     </ul>
 
-    <p class="mb-4">We will never sell, share, or distribute your information to third parties for marketing purposes. Your data stays secure and only used for business communication between you and Buffer Bros.</p>
+    <p>We will never sell, share, or distribute your information to third parties for marketing purposes. Your data stays secure and is only used for business communication between you and Buffer Bros.</p>
 
-    <p>If you would like your information deleted from our records at any time, just contact us at:</p>
-    <p class="mt-2 font-semibold">📱 (239) 293-8511</p>
+    <h2>Deleting your information</h2>
+    <p>If you would like your information removed from our records at any time, just contact us at <a href="tel:2392938511" class="text-brand font-semibold">(239) 293-8511</a>.</p>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-white pt-12 pb-6">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-4 gap-8 mb-8">
-      <!-- Logo/About -->
-      <div>
-        <a href="index.html" class="flex items-center">
-            <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="h-12">
-          </a>
-        <p class="text-gray-400">Premium mobile detailing services at your convenience.</p>
-      </div>
-      <!-- Quick Links -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-        <ul class="space-y-2">
-          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
-          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Packages</a></li>
-          <li><a href="portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a></li>
-          <li><a href="quote.html" class="text-gray-400 hover:text-white">Get a Quote</a></li>
-        </ul>
-      </div>
-      <!-- Services -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Services</h3>
-        <ul class="space-y-2">
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Basic Clean</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Premium Detail</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Showroom Ready</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Ceramic Coating</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Paint Correction</a></li>
-        </ul>
-      </div>
-      <!-- Contact Info -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-        <ul class="space-y-2 text-gray-400">
-          <li class="flex items-center">
-            <i class="fas fa-phone-alt mr-2"></i>
-            <a href="tel:2392938511" class="hover:text-white"> (239) 293-8511</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fab fa-instagram mr-2"></i>
-            <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="hover:text-white">@bufferbros.fl</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fab fa-facebook-f mr-2"></i>
-            <a href="https://www.facebook.com/profile.php?id=61560055724078" target="_blank" class="hover:text-white">Buffer Bros</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fas fa-clock mr-2"></i>
-            <span>Mon-Sat: 8am-6pm</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="border-t border-gray-800 pt-6 text-center text-gray-400 text-sm">
-      © 2025 Buffer Bros. All rights reserved.
-      <br>
-      <a href="privacy.html" class="text-gray-400 hover:text-white underline">Privacy Policy</a>
-    </div>
-  </div>
-</footer>
-
+<footer id="site-footer"></footer>
+<script src="js/components.js?v=20260531"></script>
 </body>
 </html>

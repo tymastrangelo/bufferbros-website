@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Buffer Bros Admin</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: { brand: { DEFAULT: '#2563eb', dark: '#1d4ed8' }, ink: '#0a0e14' },
+      fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+    } } };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+<nav class="site-nav">
+  <div class="container flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center"><img src="images/black-logo.png" alt="Buffer Bros" class="h-9"></a>
+    <span class="text-sm font-semibold" style="color:var(--slate-soft)">Admin</span>
+    <button id="logout-btn" class="hidden btn btn-outline py-2 px-4 text-sm">Log out</button>
+  </div>
+</nav>
+
+<!-- LOGIN -->
+<section id="login-view" class="section hidden">
+  <div class="container max-w-sm">
+    <div class="card p-8">
+      <h1 class="text-2xl font-bold mb-1">Admin login</h1>
+      <p class="text-sm mb-6" style="color:var(--slate-soft)">Enter your admin password to manage availability.</p>
+      <form id="login-form">
+        <label class="label" for="pw">Password</label>
+        <input id="pw" type="password" class="field mb-4" required autocomplete="current-password">
+        <div id="login-error" class="hidden text-sm text-red-600 mb-3"></div>
+        <button class="btn btn-primary btn-block">Log in</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dash-view" class="section hidden">
+  <div class="container max-w-5xl space-y-8">
+
+    <!-- WEEKLY HOURS -->
+    <div class="card p-6 sm:p-7">
+      <h2 class="text-xl font-bold mb-1">Weekly hours</h2>
+      <p class="text-sm mb-5" style="color:var(--slate-soft)">Set the times you are open each day. Uncheck a day to close it.</p>
+      <div id="hours-list" class="space-y-2"></div>
+      <button id="save-hours" class="btn btn-dark mt-5">Save hours</button>
+      <span id="hours-saved" class="hidden text-sm text-green-600 ml-3"><i class="fas fa-check"></i> Saved</span>
+    </div>
+
+    <!-- BLOCK OFF -->
+    <div class="card p-6 sm:p-7">
+      <h2 class="text-xl font-bold mb-1">Block off time</h2>
+      <p class="text-sm mb-5" style="color:var(--slate-soft)">Block a single day or a range (vacation, personal time, already booked elsewhere).</p>
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="label" for="b-from">From date</label><input id="b-from" type="date" class="field"></div>
+        <div><label class="label" for="b-to">To date <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="b-to" type="date" class="field"></div>
+      </div>
+      <label class="flex items-center gap-2 mb-4 text-sm font-medium">
+        <input type="checkbox" id="b-allday" class="h-4 w-4 accent-blue-600" checked> Block the entire day
+      </label>
+      <div id="b-times" class="grid sm:grid-cols-2 gap-4 mb-4 hidden">
+        <div><label class="label" for="b-start">Start time</label><input id="b-start" type="time" class="field" value="08:00"></div>
+        <div><label class="label" for="b-end">End time</label><input id="b-end" type="time" class="field" value="18:00"></div>
+      </div>
+      <div class="mb-4"><label class="label" for="b-reason">Reason <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="b-reason" class="field" placeholder="e.g. Vacation"></div>
+      <button id="add-block" class="btn btn-primary">Add block</button>
+
+      <div class="mt-6">
+        <h3 class="font-semibold mb-3">Current blocks</h3>
+        <div id="block-list" class="space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="card p-6 sm:p-7">
+      <h2 class="text-xl font-bold mb-1">Upcoming bookings</h2>
+      <p class="text-sm mb-5" style="color:var(--slate-soft)">Confirmed appointments from today forward.</p>
+      <div id="bookings-list" class="space-y-3"></div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  const toHHMM = (min) => `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
+  const toMin = (hhmm) => { const [h, m] = (hhmm || '0:0').split(':').map(Number); return h * 60 + m; };
+  const fmtTime = (min) => { let h = Math.floor(min / 60); const m = min % 60; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+
+  async function api(path, opts = {}) {
+    const res = await fetch(`/api/admin/${path}`, { credentials: 'same-origin', headers: { 'content-type': 'application/json' }, ...opts });
+    if (res.status === 401) { showLogin(); throw new Error('unauthorized'); }
+    return res.json();
+  }
+
+  function showLogin() { $('login-view').classList.remove('hidden'); $('dash-view').classList.add('hidden'); $('logout-btn').classList.add('hidden'); }
+  function showDash() { $('login-view').classList.add('hidden'); $('dash-view').classList.remove('hidden'); $('logout-btn').classList.remove('hidden'); }
+
+  /* ---- login ---- */
+  $('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('login-error').classList.add('hidden');
+    try {
+      const res = await fetch('/api/admin/login', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ password: $('pw').value }) });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Login failed');
+      await boot();
+    } catch (err) {
+      $('login-error').textContent = err.message || 'Login failed'; $('login-error').classList.remove('hidden');
+    }
+  });
+
+  $('logout-btn').addEventListener('click', async () => {
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+    showLogin();
+  });
+
+  /* ---- hours ---- */
+  function renderHours(hours) {
+    const byDay = {}; hours.forEach((h) => (byDay[h.weekday] = h));
+    $('hours-list').innerHTML = DOW.map((name, wd) => {
+      const h = byDay[wd] || { enabled: 0, open_min: 480, close_min: 1080 };
+      return `
+      <div class="flex flex-wrap items-center gap-3 py-2 border-b border-gray-100" data-wd="${wd}">
+        <label class="flex items-center gap-2 w-32 font-medium">
+          <input type="checkbox" class="h-4 w-4 accent-blue-600 wd-on" ${h.enabled ? 'checked' : ''}> ${name}
+        </label>
+        <input type="time" class="field wd-open" style="width:auto" value="${toHHMM(h.open_min)}">
+        <span style="color:var(--slate-soft)">to</span>
+        <input type="time" class="field wd-close" style="width:auto" value="${toHHMM(h.close_min)}">
+      </div>`;
+    }).join('');
+  }
+
+  $('save-hours').addEventListener('click', async () => {
+    const rows = [...$('hours-list').children].map((el) => ({
+      weekday: parseInt(el.dataset.wd, 10),
+      enabled: el.querySelector('.wd-on').checked,
+      open_min: toMin(el.querySelector('.wd-open').value),
+      close_min: toMin(el.querySelector('.wd-close').value),
+    }));
+    const data = await api('hours', { method: 'POST', body: JSON.stringify({ hours: rows }) });
+    if (data.ok) { $('hours-saved').classList.remove('hidden'); setTimeout(() => $('hours-saved').classList.add('hidden'), 2000); }
+  });
+
+  /* ---- blocks ---- */
+  $('b-allday').addEventListener('change', (e) => $('b-times').classList.toggle('hidden', e.target.checked));
+
+  function datesBetween(from, to) {
+    const out = []; const d = new Date(from + 'T12:00:00'); const end = new Date((to || from) + 'T12:00:00');
+    while (d <= end) { out.push(d.toISOString().slice(0, 10)); d.setDate(d.getDate() + 1); }
+    return out;
+  }
+
+  $('add-block').addEventListener('click', async () => {
+    const from = $('b-from').value;
+    if (!from) return;
+    const dates = datesBetween(from, $('b-to').value);
+    const allday = $('b-allday').checked;
+    const body = {
+      dates,
+      start_min: allday ? 0 : toMin($('b-start').value),
+      end_min: allday ? 1440 : toMin($('b-end').value),
+      reason: $('b-reason').value,
+    };
+    const data = await api('block', { method: 'POST', body: JSON.stringify(body) });
+    if (data.ok) { $('b-reason').value = ''; loadConfig(); }
+  });
+
+  function renderBlocks(blocks) {
+    if (!blocks.length) { $('block-list').innerHTML = `<p style="color:var(--slate-soft)">No blocks set.</p>`; return; }
+    $('block-list').innerHTML = blocks.map((b) => {
+      const allday = b.start_min === 0 && b.end_min >= 1440;
+      const range = allday ? 'All day' : `${fmtTime(b.start_min)} - ${fmtTime(b.end_min)}`;
+      return `<div class="flex items-center justify-between gap-3 card px-4 py-2">
+        <span><strong>${b.date}</strong> &middot; ${range}${b.reason ? ` &middot; <span style="color:var(--slate-soft)">${b.reason}</span>` : ''}</span>
+        <button class="text-red-600 hover:text-red-700 del-block" data-id="${b.id}" aria-label="Delete"><i class="fas fa-trash"></i></button>
+      </div>`;
+    }).join('');
+    $('block-list').querySelectorAll('.del-block').forEach((btn) => btn.addEventListener('click', async () => {
+      await api(`block?id=${btn.dataset.id}`, { method: 'DELETE' });
+      loadConfig();
+    }));
+  }
+
+  /* ---- bookings ---- */
+  function renderBookings(bookings) {
+    if (!bookings.length) { $('bookings-list').innerHTML = `<p style="color:var(--slate-soft)">No upcoming bookings.</p>`; return; }
+    $('bookings-list').innerHTML = bookings.map((b) => {
+      let addons = []; try { addons = JSON.parse(b.addons || '[]'); } catch (_) {}
+      const addonStr = addons.map((a) => a.name).join(', ');
+      return `<div class="card p-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="font-bold">${b.date} at ${fmtTime(b.start_min)} <span class="font-normal" style="color:var(--slate-soft)">(${b.duration_min} min)</span></div>
+            <div class="text-sm mt-1">${b.package_name} &middot; ${b.size_label}${b.price ? ' &middot; $' + b.price : ''}</div>
+            ${addonStr ? `<div class="text-xs mt-0.5" style="color:var(--slate-soft)">Add-ons: ${addonStr}</div>` : ''}
+            <div class="text-sm mt-2">${b.name} &middot; <a href="tel:${b.phone}" class="text-brand">${b.phone}</a> &middot; <a href="mailto:${b.email}" class="text-brand">${b.email}</a></div>
+            <div class="text-sm" style="color:var(--slate-soft)">${b.address}</div>
+            ${b.notes ? `<div class="text-sm mt-1"><em>${b.notes}</em></div>` : ''}
+          </div>
+          <button class="text-red-600 hover:text-red-700 text-sm font-medium cancel-bk shrink-0" data-id="${b.id}">Cancel</button>
+        </div>
+      </div>`;
+    }).join('');
+    $('bookings-list').querySelectorAll('.cancel-bk').forEach((btn) => btn.addEventListener('click', async () => {
+      if (!confirm('Cancel this booking? This frees up the time slot.')) return;
+      await api('cancel', { method: 'POST', body: JSON.stringify({ id: parseInt(btn.dataset.id, 10) }) });
+      loadBookings();
+    }));
+  }
+
+  async function loadConfig() {
+    const data = await api('config');
+    if (data.ok) { renderHours(data.hours); renderBlocks(data.blocks); }
+  }
+  async function loadBookings() {
+    const today = new Date().toISOString().slice(0, 10);
+    const data = await api(`bookings?from=${today}`);
+    if (data.ok) renderBookings(data.bookings);
+  }
+
+  async function boot() {
+    try {
+      showDash();
+      await loadConfig();
+      await loadBookings();
+    } catch (_) { /* showLogin already triggered on 401 */ }
+  }
+
+  // On load, try to fetch config; 401 falls back to the login view.
+  boot();
+})();
+</script>
+</body>
+</html>

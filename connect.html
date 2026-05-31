@@ -5,56 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Connect with Buffer Bros</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css?v=20260209">
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brand: { DEFAULT: '#2563eb', dark: '#1d4ed8' }, ink: '#0a0e14' }, fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] } } } };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260531">
 
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
-    // GA4 (Analytics)
     gtag('config', 'G-WG9M9W3RL8');
-
-    // Google Ads (keep this if you run ads)
     gtag('config', 'AW-17448688864');
   </script>
 </head>
-<body class="bg-gray-900 text-white font-sans">
+<body class="text-white font-sans" style="background:var(--ink)">
 
 <section class="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+  <a href="index.html"><img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="w-56 mb-5"></a>
+  <h1 class="text-3xl font-bold mb-2">Buffer Bros Detailing</h1>
+  <p class="text-gray-400 mb-8">Mobile detailing in Marco Island and Naples</p>
 
-<!-- Logo -->
-  <a href="index.html">
-    <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="w-60 mb-4">
-  </a>
-
-  <!-- Name or Title -->
-  <h1 class="text-3xl font-bold mb-2">Tyler – Buffer Bros</h1>
-  <p class="text-gray-400 mb-6">Your Mobile Detailing Pro 🚗✨</p>
-
-  <!-- Buttons -->
-  <div class="flex flex-col space-y-4 w-full max-w-sm">
-
-    <a href="tel:2392938511" class="block w-full py-3 bg-blue-600 rounded-full font-semibold hover:bg-blue-700 transition">📞 Call Me</a>
-
-    <a href="sms:2392938511" class="block w-full py-3 bg-green-500 rounded-full font-semibold hover:bg-green-600 transition">💬 Text Me</a>
-
-    <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="block w-full py-3 bg-pink-500 rounded-full font-semibold hover:bg-pink-600 transition">📸 Instagram</a>
-
-    <a href="https://g.page/r/CXiiEGVufNEdEAE/review" target="_blank" class="block w-full py-3 bg-yellow-500 text-gray-900 rounded-full font-semibold hover:bg-yellow-400 transition">⭐ Leave a Google Review</a>
-
-    <a href="quote.html" class="block w-full py-3 bg-purple-600 rounded-full font-semibold hover:bg-purple-700 transition">📝 Get a Quote</a>
-
-    <a href="index.html" class="block w-full py-3 bg-gray-700 rounded-full font-semibold hover:bg-gray-800 transition">🌐 Visit Our Website</a>
-
+  <div class="flex flex-col gap-3 w-full max-w-sm">
+    <a href="booking.html" class="btn btn-primary btn-block"><i class="fas fa-calendar-check"></i> Book an Appointment</a>
+    <a href="tel:2392938511" class="btn btn-block" style="background:#16a34a;color:#fff">Call Us</a>
+    <a href="sms:2392938511" class="btn btn-block" style="background:#0ea5e9;color:#fff">Text Us</a>
+    <a href="https://www.instagram.com/bufferbros.fl" target="_blank" rel="noopener" class="btn btn-block" style="background:linear-gradient(135deg,#feda75,#d62976 45%,#962fbf 75%,#4f5bd5);color:#fff"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="https://g.page/r/CXiiEGVufNEdEAE/review" target="_blank" rel="noopener" class="btn btn-block" style="background:#eab308;color:#0a0e14">Leave a Google Review</a>
+    <a href="packages.html" class="btn btn-block" style="background:rgba(255,255,255,.12);color:#fff">View Packages &amp; Pricing</a>
   </div>
 
-  <!-- Footer -->
-  <p class="text-gray-500 text-xs mt-10">© 2025 Buffer Bros Detailing</p>
-
+  <p class="text-gray-500 text-xs mt-10">&copy; 2026 Buffer Bros Detailing</p>
 </section>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </body>
 </html>

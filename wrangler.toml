@@ -1,0 +1,17 @@
+# Cloudflare Pages + Functions config for the Buffer Bros site.
+# The booking API lives in /functions/api/* and talks to a D1 database.
+
+name = "bufferbros-website"
+pages_build_output_dir = "."
+compatibility_date = "2024-09-01"
+
+# D1 database binding. Create the DB first (see DEPLOY.md), then paste its id here.
+[[d1_databases]]
+binding = "DB"
+database_name = "bufferbros"
+database_id = "af0315e9-272e-4c3f-8794-37f854f6b22d"
+
+# Non-secret defaults. Secrets (ADMIN_PASSWORD, ADMIN_SECRET, RESEND_API_KEY,
+# OWNER_EMAIL, FROM_EMAIL) are set with `wrangler pages secret put` — see DEPLOY.md.
+[vars]
+TIMEZONE = "America/New_York"

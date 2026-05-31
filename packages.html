@@ -3,158 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Packages | Buffer Bros Mobile Detailing</title>
-  <meta name="description" content="Choose from Buffer Bros' detailing packages: Basic Clean, Premium Detail, Showroom Ready. Add-ons available!">
-  
+  <title>The Detail &amp; Pricing | Buffer Bros Mobile Detailing</title>
+  <meta name="description" content="One detail, done right every time. Showroom finish inside and out, priced up front. Keep it that way with a maintenance plan.">
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css?v=20260209">
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: { brand: { DEFAULT: '#2563eb', dark: '#1d4ed8' }, ink: '#0a0e14' },
+      fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+    } } };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260531">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17448688864"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    // Base Ads tag
+    gtag('config', 'G-WG9M9W3RL8');
     gtag('config', 'AW-17448688864');
   </script>
 </head>
 
-<body class="font-sans bg-gray-50">
+<body>
+<header id="site-header"></header>
 
-<!-- NAVIGATION -->
-<nav class="bg-white shadow-lg sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
-    <a href="index.html" class="flex items-center">
-      <img src="images/black-logo.png" alt="Buffer Bros Logo" class="h-12">
-    </a>
-    <div class="hidden md:flex space-x-8">
-      <a href="about.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">About Us</a>
-      <a href="packages.html" class="nav-link active-nav text-gray-900 px-3 py-2 text-sm font-medium">Packages</a>
-      <a href="portfolio.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Portfolio</a>
-      <a href="quote.html" class="nav-link text-gray-900 px-3 py-2 text-sm font-medium">Get a Quote</a>
-    </div>
-    <div class="md:hidden flex items-center">
-      <button id="mobile-menu-button" class="text-gray-900">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-  </div>
-</nav>
+<!-- HEADER + SIZE SELECTOR -->
+<section class="section bg-white">
+  <div class="container max-w-3xl text-center">
+    <span class="eyebrow">The detail</span>
+    <h1 class="text-4xl sm:text-5xl font-extrabold mt-2 mb-4">One detail. Done right.</h1>
+    <p class="text-lg" style="color:var(--slate-soft)">We don't do bronze, silver and gold. Clean doesn't have tiers. Every car we touch gets the same complete detail and the same showroom finish. The only thing that changes is your vehicle size and any extras you want.</p>
 
-<!-- MOBILE MENU -->
-<div id="mobile-menu" class="hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-40 transform transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top">
-  <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-    <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Home</a>
-    <a href="about.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">About Us</a>
-    <a href="packages.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Packages</a>
-    <a href="portfolio.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Portfolio</a>
-    <a href="quote.html" class="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">Get a Quote</a>
-  </div>
-</div>
-
-<!-- Booking Embed -->
-<section class="py-16 bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <header class="text-center mb-8">
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">Book Your Detail</h1>
-      <p class="text-gray-600">Secure your appointment online — fast and easy.</p>
-    </header>
-    <div id="booking-embed" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden">
-      <iframe
-        id="booking-frame"
-        data-src="https://clienthub.getjobber.com/booking/2faa9837-1cb6-4672-9b75-b6e4dbe2ad57/"
-        title="Online Booking"
-        class="w-full h-[75vh] sm:h-[80vh]"
-        frameborder="0"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </div>
-    <div id="booking-fallback" class="bg-white rounded-2xl shadow-xl p-8 text-center">
-      <p class="text-gray-700 text-lg mb-6">Tap below to open booking in a new tab.</p>
-      <a
-        href="https://clienthub.getjobber.com/booking/2faa9837-1cb6-4672-9b75-b6e4dbe2ad57/"
-        target="_blank"
-        rel="noopener"
-        class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
-      >
-        Open Booking
-      </a>
+    <div class="mt-10 text-left">
+      <p class="label text-center mb-3">Choose your vehicle size to see pricing</p>
+      <div id="size-toggle" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
     </div>
   </div>
 </section>
 
-
-
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-white pt-12 pb-6">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-4 gap-8 mb-8">
-      <!-- Logo/About -->
-      <div>
-        <a href="index.html" class="flex items-center">
-            <img src="images/transparent-logo.png" alt="Buffer Bros Logo" class="h-12">
-          </a>
-        <p class="text-gray-400">Premium mobile detailing services at your convenience.</p>
-      </div>
-      <!-- Quick Links -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-        <ul class="space-y-2">
-          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
-          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Packages</a></li>
-          <li><a href="portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a></li>
-          <li><a href="quote.html" class="text-gray-400 hover:text-white">Get a Quote</a></li>
-        </ul>
-      </div>
-      <!-- Services -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Services</h3>
-        <ul class="space-y-2">
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Basic Clean</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Premium Detail</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Showroom Ready</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Ceramic Coating</a></li>
-          <li><a href="packages.html" class="text-gray-400 hover:text-white">Paint Correction</a></li>
-        </ul>
-      </div>
-      <!-- Contact Info -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-        <ul class="space-y-2 text-gray-400">
-          <li class="flex items-center">
-            <i class="fas fa-phone-alt mr-2"></i>
-            <a href="tel:2392938511" class="hover:text-white"> (239) 293-8511</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fab fa-instagram mr-2"></i>
-            <a href="https://www.instagram.com/bufferbros.fl" target="_blank" class="hover:text-white">@bufferbros.fl</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fab fa-facebook-f mr-2"></i>
-            <a href="https://www.facebook.com/profile.php?id=61560055724078" target="_blank" class="hover:text-white">Buffer Bros</a>
-          </li>
-          <li class="flex items-center">
-            <i class="fas fa-clock mr-2"></i>
-            <span>Mon-Sat: 8am-6pm</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="border-t border-gray-800 pt-6 text-center text-gray-400 text-sm">
-      © 2025 Buffer Bros. All rights reserved.
-      <br>
-      <a href="privacy.html" class="text-gray-400 hover:text-white underline">Privacy Policy</a>
-    </div>
+<!-- THE STANDARD DETAIL -->
+<section class="section" style="background:var(--surface-2)">
+  <div class="container max-w-4xl">
+    <div id="detail-card" class="card border-brand shadow-md overflow-hidden"></div>
+    <p class="text-center text-sm mt-6" style="color:var(--slate-soft)">
+      Prices assume a vehicle in average condition. Heavily soiled vehicles may be quoted higher. See our
+      <a href="terms.html" class="text-brand font-semibold hover:underline">terms</a>.
+    </p>
   </div>
-</footer>
+</section>
 
-<script src="js/main.js?v=20260209"></script>
+<!-- MAINTENANCE -->
+<section id="maintenance" class="section bg-white scroll-mt-24">
+  <div class="container max-w-4xl">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="eyebrow">Keep it that way</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-2">Maintenance plans</h2>
+      <p class="mt-3" style="color:var(--slate-soft)">A clean car should be the normal, not a once in a blue moon treat. A maintenance plan is the exact same Standard Detail on a schedule. Because we keep it up, each visit takes less and costs less. The more often we come, the lower your price per visit.</p>
+    </div>
+    <div id="maintenance-grid" class="grid gap-6 md:grid-cols-3"></div>
+    <p class="text-center text-sm mt-6" style="color:var(--slate-soft)">Per-visit price for your selected vehicle size. Cancel anytime.</p>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="section" style="background:var(--surface-2)">
+  <div class="container">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="eyebrow">Make it yours</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-2">Add-ons</h2>
+      <p class="mt-3" style="color:var(--slate-soft)">Everything above is already included. These are the extras for when your car needs a little more.</p>
+    </div>
+    <div id="addons-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="background:var(--ink)">
+  <div class="container text-center text-white max-w-2xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready for that showroom finish?</h2>
+    <p class="text-gray-300 mb-8">Book a one-time detail or start a maintenance plan, and pick a time that works for you.</p>
+    <a href="booking.html" class="btn btn-primary">Book an Appointment</a>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/services.js?v=20260531"></script>
+<script src="js/components.js?v=20260531"></script>
+<script>
+  (function () {
+    const S = window.BB_SERVICES;
+    const cur = S.currency;
+    let activeSize = S.sizes[0].id;
+
+    const fmtPrice = (n) => (n && n > 0) ? `${cur}${n}` : 'TBD';
+    const fmtDur = (min) => {
+      const h = Math.floor(min / 60), m = min % 60;
+      if (h && m) return `${h} hr ${m} min`;
+      if (h) return `${h} hr${h > 1 ? 's' : ''}`;
+      return `${m} min`;
+    };
+
+    function renderSizeToggle() {
+      document.getElementById('size-toggle').innerHTML = S.sizes.map((s) => `
+        <button type="button" data-size="${s.id}" class="choice text-left ${s.id === activeSize ? 'is-selected' : ''}">
+          <span class="block font-semibold text-ink">${s.label}</span>
+          <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${s.note}</span>
+        </button>`).join('');
+      document.querySelectorAll('#size-toggle [data-size]').forEach((b) =>
+        b.addEventListener('click', () => { activeSize = b.dataset.size; renderSizeToggle(); renderDetail(); renderMaintenance(); }));
+    }
+
+    function renderDetail() {
+      const d = S.detail;
+      const tier = d.pricing[activeSize] || {};
+      const half = Math.ceil(d.includes.length / 2);
+      const col = (arr) => `<ul class="space-y-2.5 text-sm" style="color:var(--slate)">${arr.map((i) => `<li class="flex gap-2.5"><i class="fas fa-check text-brand mt-1 text-xs"></i><span>${i}</span></li>`).join('')}</ul>`;
+      document.getElementById('detail-card').innerHTML = `
+        <div class="grid md:grid-cols-2">
+          <div class="p-7 sm:p-9 md:border-r border-gray-100">
+            <span class="inline-block text-[11px] font-bold tracking-wide text-brand bg-brand/10 px-3 py-1 rounded-full mb-3">EVERYTHING INCLUDED</span>
+            <h3 class="text-2xl font-extrabold">${d.name}</h3>
+            <p class="text-sm mt-2 mb-5" style="color:var(--slate-soft)">${d.tagline}</p>
+            <div class="flex items-end gap-2 mb-1">
+              <span class="text-4xl font-extrabold text-ink">${fmtPrice(tier.price)}</span>
+              <span class="text-sm mb-1" style="color:var(--slate-soft)">one-time</span>
+            </div>
+            <p class="text-xs mb-6" style="color:var(--slate-soft)"><i class="far fa-clock mr-1"></i>About ${fmtDur(tier.minutes || 0)} for your selected size</p>
+            <a href="booking.html?size=${activeSize}" class="btn btn-primary btn-block">Book this detail</a>
+            <p class="text-xs text-center mt-3" style="color:var(--slate-soft)">Want it kept this way? <a href="#maintenance" class="text-brand font-semibold">See maintenance plans</a></p>
+          </div>
+          <div class="p-7 sm:p-9 bg-[color:var(--surface-2)] md:bg-white">
+            <p class="font-semibold text-ink mb-4">What is included, inside and out</p>
+            <div class="grid sm:grid-cols-2 gap-x-6 gap-y-0">
+              ${col(d.includes.slice(0, half))}
+              ${col(d.includes.slice(half))}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderMaintenance() {
+      const d = S.detail;
+      document.getElementById('maintenance-grid').innerHTML = S.maintenance.map((m) => {
+        const p = (m.pricing[activeSize] || {}).price;
+        const badge = m.popular ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">Most popular</span>` : '';
+        const ring = m.popular ? 'border-brand shadow-md' : '';
+        return `
+        <div class="card card-hover relative p-7 text-center flex flex-col ${ring}">
+          ${badge}
+          <h3 class="text-xl font-bold">${m.name}</h3>
+          <p class="text-sm mb-4" style="color:var(--slate-soft)">${m.cadence}</p>
+          <div class="text-3xl font-extrabold text-ink mb-1">${fmtPrice(p)}<span class="text-base font-medium" style="color:var(--slate-soft)">/visit</span></div>
+          <p class="text-xs mb-5" style="color:var(--slate-soft)">${m.note || ''}</p>
+          <a href="booking.html?size=${activeSize}&freq=${m.id}" class="btn ${m.popular ? 'btn-primary' : 'btn-outline'} btn-block mt-auto">Start ${m.name.toLowerCase()}</a>
+        </div>`;
+      }).join('');
+    }
+
+    function renderAddons() {
+      document.getElementById('addons-grid').innerHTML = S.addons.map((a) => `
+        <div class="card p-5 flex items-center justify-between gap-4">
+          <div>
+            <div class="font-semibold text-ink">${a.name}</div>
+            <div class="text-xs mt-0.5" style="color:var(--slate-soft)">${a.note || ''}</div>
+          </div>
+          <div class="font-bold text-brand shrink-0">${a.price && a.price > 0 ? '+' + cur + a.price : 'TBD'}</div>
+        </div>`).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSizeToggle();
+      renderDetail();
+      renderMaintenance();
+      renderAddons();
+    });
+  })();
+</script>
 </body>
 </html>
