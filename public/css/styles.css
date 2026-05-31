@@ -151,3 +151,41 @@ h1, h2, h3, h4 { color: var(--ink); letter-spacing: -0.02em; line-height: 1.1; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* ---------- mobile polish ---------- */
+/* never let anything cause a sideways scroll on small screens */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+/* hide scrollbar on horizontal scrollers (date chips, etc.) */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* comfortable tap targets on touch devices */
+@media (max-width: 768px) {
+  .btn { padding: 1rem 1.5rem; }                 /* easier to tap */
+  .slot { padding-block: .75rem; }
+  .choice { padding: 1rem 1.1rem; }
+  /* date/time native inputs sized to avoid iOS zoom and feel native */
+  input[type="date"], input[type="time"] { min-height: 48px; }
+  /* tighten section rhythm a touch on phones */
+  .section { padding-block: clamp(2.5rem, 9vw, 4rem); }
+}
+
+/* slot grid buttons keep a minimum height for thumbs */
+.slot { min-height: 44px; }
+
+/* ---------- guided booking steps ---------- */
+.step { transition: opacity .2s ease; }
+.step.locked { opacity: .5; pointer-events: none; }
+.step-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.9rem; height: 1.9rem; border-radius: 9999px;
+  font-size: .8rem; font-weight: 700; flex: 0 0 auto;
+  background: var(--brand-soft); color: var(--brand);
+}
+.step-badge.done   { background: #16a34a; color: #fff; }
+.step-badge.locked { background: #eef1f5; color: #aab2bf; }
+.step-hint { color: var(--brand-dark); }
+/* offset auto-scroll targets so they clear the sticky nav */
+.step, #slots-area { scroll-margin-top: 5.5rem; }
+

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="css/styles.css?v=20260531d">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
@@ -65,7 +65,7 @@
       <h2 class="text-3xl sm:text-4xl font-bold mt-2">Maintenance plans</h2>
       <p class="mt-3" style="color:var(--slate-soft)">A clean car should be the normal, not a once in a blue moon treat. A maintenance plan is the exact same Standard Detail on a schedule. Because we keep it up, each visit takes less and costs less. The more often we come, the lower your price per visit.</p>
     </div>
-    <div id="maintenance-grid" class="grid gap-6 md:grid-cols-3"></div>
+    <div id="maintenance-grid" class="grid grid-cols-1 gap-6 md:grid-cols-3"></div>
     <p class="text-center text-sm mt-6" style="color:var(--slate-soft)">Per-visit price for your selected vehicle size. Cancel anytime.</p>
   </div>
 </section>
@@ -78,7 +78,7 @@
       <h2 class="text-3xl sm:text-4xl font-bold mt-2">Add-ons</h2>
       <p class="mt-3" style="color:var(--slate-soft)">Everything above is already included. These are the extras for when your car needs a little more.</p>
     </div>
-    <div id="addons-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"></div>
+    <div id="addons-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"></div>
   </div>
 </section>
 
@@ -93,8 +93,8 @@
 
 <footer id="site-footer"></footer>
 
-<script src="js/services.js?v=20260531"></script>
-<script src="js/components.js?v=20260531"></script>
+<script src="js/services.js?v=20260531d"></script>
+<script src="js/components.js?v=20260531d"></script>
 <script>
   (function () {
     const S = window.BB_SERVICES;
@@ -125,7 +125,7 @@
       const half = Math.ceil(d.includes.length / 2);
       const col = (arr) => `<ul class="space-y-2.5 text-sm" style="color:var(--slate)">${arr.map((i) => `<li class="flex gap-2.5"><i class="fas fa-check text-brand mt-1 text-xs"></i><span>${i}</span></li>`).join('')}</ul>`;
       document.getElementById('detail-card').innerHTML = `
-        <div class="grid md:grid-cols-2">
+        <div class="grid grid-cols-1 md:grid-cols-2">
           <div class="p-7 sm:p-9 md:border-r border-gray-100">
             <span class="inline-block text-[11px] font-bold tracking-wide text-brand bg-brand/10 px-3 py-1 rounded-full mb-3">EVERYTHING INCLUDED</span>
             <h3 class="text-2xl font-extrabold">${d.name}</h3>
@@ -135,12 +135,12 @@
               <span class="text-sm mb-1" style="color:var(--slate-soft)">one-time</span>
             </div>
             <p class="text-xs mb-6" style="color:var(--slate-soft)"><i class="far fa-clock mr-1"></i>About ${fmtDur(tier.minutes || 0)} for your selected size</p>
-            <a href="booking.html?size=${activeSize}" class="btn btn-primary btn-block">Book this detail</a>
+            <a href="booking.html?size=${activeSize}&freq=onetime" class="btn btn-primary btn-block">Book this detail</a>
             <p class="text-xs text-center mt-3" style="color:var(--slate-soft)">Want it kept this way? <a href="#maintenance" class="text-brand font-semibold">See maintenance plans</a></p>
           </div>
           <div class="p-7 sm:p-9 bg-[color:var(--surface-2)] md:bg-white">
             <p class="font-semibold text-ink mb-4">What is included, inside and out</p>
-            <div class="grid sm:grid-cols-2 gap-x-6 gap-y-0">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-0">
               ${col(d.includes.slice(0, half))}
               ${col(d.includes.slice(half))}
             </div>

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="css/styles.css?v=20260531d">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8"></script>
@@ -49,47 +49,72 @@
       <a href="index.html" class="btn btn-outline">Back to home</a>
     </div>
 
-    <form id="booking-form" class="grid lg:grid-cols-3 gap-8 items-start">
+    <form id="booking-form" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start pb-24 lg:pb-0">
       <!-- MAIN -->
-      <div class="lg:col-span-2 space-y-8">
+      <div class="lg:col-span-2 min-w-0 space-y-8">
 
         <!-- 1. Vehicle size -->
-        <div class="card p-6 sm:p-7">
-          <h2 class="text-lg font-bold mb-4"><span class="text-brand">1.</span> Your vehicle size</h2>
-          <div id="size-list" class="grid sm:grid-cols-3 gap-3"></div>
+        <div id="step-size" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-badge" data-badge data-n="1">1</span>
+            <h2 class="text-lg font-bold">Your vehicle size</h2>
+          </div>
+          <div id="size-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
         </div>
 
         <!-- 2. Frequency / plan -->
-        <div class="card p-6 sm:p-7">
-          <h2 class="text-lg font-bold mb-1"><span class="text-brand">2.</span> How often?</h2>
+        <div id="step-freq" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-1">
+            <span class="step-badge" data-badge data-n="2">2</span>
+            <h2 class="text-lg font-bold">How often?</h2>
+          </div>
+          <p class="step-hint text-sm font-medium mb-3 hidden"><i class="fas fa-arrow-up mr-1"></i> Choose your vehicle size first.</p>
           <p class="text-sm mb-4" style="color:var(--slate-soft)">Book a one-time detail, or save with a maintenance plan (the same detail on a schedule).</p>
-          <div id="freq-list" class="grid sm:grid-cols-2 gap-3"></div>
+          <div id="freq-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
           <div id="freq-note" class="hidden mt-4 text-sm rounded-xl p-3" style="background:var(--brand-soft);color:var(--brand-dark)">
             <i class="fas fa-circle-info mr-1"></i> We will book your first visit now and set up your recurring schedule with you when we arrive.
           </div>
         </div>
 
         <!-- 3. Add-ons -->
-        <div class="card p-6 sm:p-7">
-          <h2 class="text-lg font-bold mb-1"><span class="text-brand">3.</span> Add-ons <span class="font-normal text-sm" style="color:var(--slate-soft)">(optional)</span></h2>
+        <div id="step-addons" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-1">
+            <span class="step-badge" data-badge data-n="3">3</span>
+            <h2 class="text-lg font-bold">Add-ons <span class="font-normal text-sm" style="color:var(--slate-soft)">(optional)</span></h2>
+          </div>
+          <p class="step-hint text-sm font-medium mb-3 hidden"><i class="fas fa-arrow-up mr-1"></i> Choose how often first.</p>
           <p class="text-sm mb-4" style="color:var(--slate-soft)">Everything else is already included. These add a little time to your appointment.</p>
-          <div id="addon-list" class="grid sm:grid-cols-2 gap-3"></div>
+          <div id="addon-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
         </div>
 
         <!-- 4. Date & time -->
-        <div class="card p-6 sm:p-7">
-          <h2 class="text-lg font-bold mb-4"><span class="text-brand">4.</span> Pick a date and time</h2>
-          <label class="label" for="date-input">Date</label>
-          <input type="date" id="date-input" class="field mb-5" required>
+        <div id="step-date" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-badge" data-badge data-n="4">4</span>
+            <h2 class="text-lg font-bold">Pick a date and time</h2>
+          </div>
+          <p class="step-hint text-sm font-medium mb-4 hidden"><i class="fas fa-arrow-up mr-1"></i> Choose your vehicle size and how often first.</p>
+          <div id="date-chips" class="flex gap-2 overflow-x-auto no-scrollbar snap-x -mx-1 px-1 pb-2 mb-3"></div>
+          <div class="mb-5">
+            <span class="relative inline-flex items-center gap-1.5 text-sm font-medium text-brand cursor-pointer">
+              <i class="far fa-calendar"></i>
+              <span id="other-date-label">Pick another date</span>
+              <input type="date" id="date-input" class="absolute inset-0 opacity-0 cursor-pointer" aria-label="Pick another date">
+            </span>
+          </div>
           <div id="slots-area">
-            <p class="text-sm" style="color:var(--slate-soft)">Choose your vehicle size and a date to see open times.</p>
+            <p class="text-sm" style="color:var(--slate-soft)">Choose a date above to see open times.</p>
           </div>
         </div>
 
         <!-- 5. Details -->
-        <div class="card p-6 sm:p-7">
-          <h2 class="text-lg font-bold mb-4"><span class="text-brand">5.</span> Your details</h2>
-          <div class="grid sm:grid-cols-2 gap-4">
+        <div id="step-details" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-badge" data-badge data-n="5">5</span>
+            <h2 class="text-lg font-bold">Your details</h2>
+          </div>
+          <p class="step-hint text-sm font-medium mb-4 hidden"><i class="fas fa-arrow-up mr-1"></i> Pick a date and time first.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div><label class="label" for="f-name">Full name</label><input id="f-name" class="field" required></div>
             <div><label class="label" for="f-phone">Phone</label><input id="f-phone" type="tel" class="field" required></div>
             <div class="sm:col-span-2"><label class="label" for="f-email">Email</label><input id="f-email" type="email" class="field" required></div>
@@ -99,7 +124,12 @@
         </div>
 
         <!-- 6. Terms -->
-        <div class="card p-6 sm:p-7">
+        <div id="step-terms" class="card p-6 sm:p-7 step">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-badge" data-badge data-n="6">6</span>
+            <h2 class="text-lg font-bold">Agree &amp; confirm</h2>
+          </div>
+          <p class="step-hint text-sm font-medium mb-4 hidden"><i class="fas fa-arrow-up mr-1"></i> Pick a date and time first.</p>
           <label class="flex items-start gap-3 cursor-pointer">
             <input type="checkbox" id="f-terms" class="mt-1 h-5 w-5 accent-blue-600 shrink-0" required>
             <span class="text-sm" style="color:var(--slate)">I agree to the Buffer Bros <a href="terms.html" target="_blank" class="text-brand font-semibold hover:underline">Terms &amp; Conditions</a>. I understand pre and post service inspections are performed, that Buffer Bros is not liable for pre-existing conditions or damage not caused by their work, and that the final price may change if my vehicle needs more work than its package covers.</span>
@@ -109,8 +139,8 @@
         <div id="form-error" class="hidden text-sm text-red-600 font-medium"></div>
       </div>
 
-      <!-- SUMMARY -->
-      <aside class="lg:sticky lg:top-24">
+      <!-- SUMMARY (desktop) -->
+      <aside class="hidden lg:block lg:sticky lg:top-24">
         <div class="card p-6">
           <h3 class="font-bold text-lg mb-4">Your appointment</h3>
           <dl id="summary" class="space-y-3 text-sm"></dl>
@@ -128,6 +158,17 @@
   </div>
 </section>
 
+<!-- SUMMARY (mobile sticky bar) -->
+<div id="mobile-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200">
+  <div class="container flex items-center justify-between gap-3 py-3" style="padding-bottom:calc(0.75rem + env(safe-area-inset-bottom))">
+    <div class="leading-tight min-w-0">
+      <div class="text-[11px] truncate" style="color:var(--slate-soft)" id="mbar-label">Estimated total</div>
+      <div class="text-xl font-extrabold text-ink truncate" id="mbar-price">--</div>
+    </div>
+    <button type="button" id="mbar-confirm" class="btn btn-primary shrink-0 px-6">Confirm booking</button>
+  </div>
+</div>
+
 <footer id="site-footer"></footer>
 
 <!-- Loading overlay -->
@@ -138,8 +179,8 @@
   </div>
 </div>
 
-<script src="js/services.js?v=20260531"></script>
-<script src="js/components.js?v=20260531"></script>
+<script src="js/services.js?v=20260531d"></script>
+<script src="js/components.js?v=20260531d"></script>
 <script>
 (function () {
   const S = window.BB_SERVICES;
@@ -150,10 +191,19 @@
   const FREQS = [{ id: 'onetime', name: 'One-time', desc: 'Just this once', recurring: false }]
     .concat(S.maintenance.map((m) => ({ id: m.id, name: m.name, desc: m.cadence, note: m.note, recurring: true })));
 
-  const state = { sizeId: null, freq: 'onetime', addons: new Set(), date: null, startMin: null };
+  // freq starts unset so "How often?" is an explicit step (gates date/time).
+  const state = { sizeId: null, freq: null, addons: new Set(), date: null, startMin: null };
 
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
+
+  // On phones/tablets, glide to the next step after a choice for a seamless flow.
+  const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
+  function scrollToStep(id) {
+    if (!isMobile()) return;
+    const el = $(id); if (!el) return;
+    requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
 
   const fmtDur = (min) => {
     const h = Math.floor(min / 60), m = min % 60;
@@ -179,8 +229,8 @@
     state.addons.forEach((id) => { const a = S.addons.find((x) => x.id === id); if (a) { price += a.price || 0; minutes += a.minutes || 0; } });
     return { price, minutes };
   }
-  const planName = () => { const f = FREQS.find((x) => x.id === state.freq); return f ? f.name : 'One-time'; };
-  const isRecurring = () => state.freq !== 'onetime';
+  const planName = () => { const f = FREQS.find((x) => x.id === state.freq); return f ? f.name : '--'; };
+  const isRecurring = () => !!state.freq && state.freq !== 'onetime';
 
   /* ---------- renderers ---------- */
   function renderSizes() {
@@ -190,7 +240,7 @@
         <span class="font-semibold text-ink text-sm">${s.label}</span>
         <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${s.note}</span>
       </label>`).join('');
-    bindRadio('size-list', 'size', (v) => { state.sizeId = v; renderFreq(); refresh(); });
+    bindRadio('size-list', 'size', (v) => { state.sizeId = v; renderFreq(); refresh(); scrollToStep('step-freq'); });
   }
 
   function renderFreq() {
@@ -210,7 +260,7 @@
         </div>
         <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${f.desc}${f.note ? ' &middot; ' + f.note : ''}</span>
       </label>`).join('');
-    bindRadio('freq-list', 'freq', (v) => { state.freq = v; $('freq-note').classList.toggle('hidden', v === 'onetime'); refresh(); });
+    bindRadio('freq-list', 'freq', (v) => { state.freq = v; $('freq-note').classList.toggle('hidden', v === 'onetime'); refresh(); scrollToStep('step-addons'); });
   }
 
   function renderAddons() {
@@ -225,10 +275,15 @@
       </label>`).join('');
     $('addon-list').querySelectorAll('[data-addon]').forEach((el) => {
       const input = el.querySelector('input');
+      // drive the toggle from state and preventDefault so the label's implicit
+      // checkbox toggle doesn't cancel ours (which blocked multi-select)
       el.addEventListener('click', (e) => {
-        if (e.target !== input) input.checked = !input.checked;
-        input.checked ? state.addons.add(el.dataset.addon) : state.addons.delete(el.dataset.addon);
-        el.classList.toggle('is-selected', input.checked);
+        e.preventDefault();
+        const id = el.dataset.addon;
+        const on = !state.addons.has(id);
+        if (on) state.addons.add(id); else state.addons.delete(id);
+        input.checked = on;
+        el.classList.toggle('is-selected', on);
         refresh();
       });
     });
@@ -236,7 +291,8 @@
 
   function bindRadio(containerId, name, onPick) {
     $(containerId).querySelectorAll(`[data-${name}]`).forEach((el) => {
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
         $(containerId).querySelectorAll('.choice').forEach((c) => c.classList.remove('is-selected'));
         el.classList.add('is-selected');
         el.querySelector('input').checked = true;
@@ -258,18 +314,49 @@
     if (state.date) rows.push(row('Date', state.date));
     if (state.startMin != null) rows.push(row('Start', fmtTime(state.startMin)));
     $('summary').innerHTML = rows.join('');
-    $('price-label').textContent = isRecurring() ? 'Per visit' : 'Estimated total';
-    $('sum-price').textContent = (t.price && t.price > 0) ? cur + t.price : (t.minutes ? 'Confirmed on site' : '--');
+    const chosen = state.sizeId && state.freq;
+    const label = isRecurring() ? 'Per visit' : 'Estimated total';
+    const priceText = !chosen ? '--' : ((t.price && t.price > 0) ? cur + t.price : 'Confirmed on site');
+    $('price-label').textContent = label;
+    $('sum-price').textContent = priceText;
+    $('mbar-label').textContent = label;
+    $('mbar-price').textContent = priceText;
+    updateGates();
   }
   const row = (k, v) => `<div class="flex justify-between gap-3"><dt style="color:var(--slate-soft)">${k}</dt><dd class="font-semibold text-ink text-right">${v}</dd></div>`;
+
+  /* ---------- guided steps (lock/unlock + signals) ---------- */
+  function detailsFilled() {
+    return ['f-name', 'f-phone', 'f-email', 'f-address'].every((id) => $(id).value.trim());
+  }
+  function setStep(id, unlocked, done) {
+    const el = $(id); if (!el) return;
+    el.classList.toggle('locked', !unlocked);
+    const hint = el.querySelector('.step-hint'); if (hint) hint.classList.toggle('hidden', unlocked);
+    const badge = el.querySelector('[data-badge]'); if (!badge) return;
+    const isDone = unlocked && done;
+    badge.classList.toggle('done', isDone);
+    badge.classList.toggle('locked', !unlocked);
+    badge.innerHTML = !unlocked ? '<i class="fas fa-lock" style="font-size:.7rem"></i>'
+                                : (isDone ? '<i class="fas fa-check"></i>' : badge.dataset.n);
+  }
+  function updateGates() {
+    const sizeOk = !!state.sizeId, freqOk = !!state.freq, timeOk = state.startMin != null;
+    setStep('step-size', true, sizeOk);
+    setStep('step-freq', sizeOk, freqOk);
+    setStep('step-addons', freqOk, state.addons.size > 0);
+    setStep('step-date', freqOk, timeOk);
+    setStep('step-details', timeOk, detailsFilled());
+    setStep('step-terms', timeOk, $('f-terms').checked);
+  }
 
   /* ---------- availability ---------- */
   let slotLoadId = 0;
   async function loadSlots() {
     const area = $('slots-area');
     const t = totals();
-    if (!state.date || !state.sizeId) {
-      area.innerHTML = `<p class="text-sm" style="color:var(--slate-soft)">Choose your vehicle size and a date to see open times.</p>`;
+    if (!state.sizeId || !state.freq || !state.date) {
+      area.innerHTML = `<p class="text-sm" style="color:var(--slate-soft)">Choose a date above to see open times.</p>`;
       return;
     }
     const myId = ++slotLoadId;
@@ -292,6 +379,7 @@
         b.classList.add('is-selected');
         state.startMin = parseInt(b.dataset.min, 10);
         renderSummary();
+        scrollToStep('step-details');
       }));
     } catch (e) {
       if (myId !== slotLoadId) return;
@@ -312,6 +400,7 @@
     $('form-error').classList.add('hidden');
     const t = totals();
     if (!state.sizeId) return showError('Please choose your vehicle size.');
+    if (!state.freq) return showError('Please choose how often (one-time or a maintenance plan).');
     if (!state.date || state.startMin == null) return showError('Please pick a date and time.');
     if (!$('f-terms').checked) return showError('Please agree to the terms and conditions.');
 
@@ -340,6 +429,7 @@
       if (!data.ok) throw new Error(data.error || 'Something went wrong');
       gtag && gtag('event', 'conversion', { event_category: 'booking' });
       $('booking-form').classList.add('hidden');
+      $('mobile-bar').classList.add('hidden');
       $('confirm-text').textContent = `${pkgName} for your ${size.label.toLowerCase()} on ${data.when}.`;
       $('confirmation').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -351,6 +441,34 @@
     }
   });
 
+  // local YYYY-MM-DD (avoids UTC day-shift from toISOString)
+  const isoLocal = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  function renderDateChips() {
+    const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const base = new Date(); base.setHours(12, 0, 0, 0);
+    let html = '';
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(base); d.setDate(base.getDate() + i);
+      const iso = isoLocal(d);
+      const top = i === 0 ? 'Today' : (i === 1 ? 'Tmrw' : wd[d.getDay()]);
+      const sel = state.date === iso ? 'is-selected' : '';
+      html += `<button type="button" data-date="${iso}" class="slot ${sel} snap-start shrink-0 w-16 flex flex-col items-center gap-0.5 py-2">
+        <span class="text-[11px] font-medium">${top}</span>
+        <span class="text-lg font-bold leading-none">${d.getDate()}</span>
+        <span class="text-[10px] opacity-70">${mo[d.getMonth()]}</span>
+      </button>`;
+    }
+    $('date-chips').innerHTML = html;
+    $('date-chips').querySelectorAll('[data-date]').forEach((b) => b.addEventListener('click', () => {
+      state.date = b.dataset.date;
+      const di = $('date-input'); if (di) di.value = b.dataset.date;
+      const lbl = $('other-date-label'); if (lbl) lbl.textContent = 'Pick another date';
+      renderDateChips(); refresh(); scrollToStep('slots-area');
+    }));
+  }
+
   /* ---------- init ---------- */
   document.addEventListener('DOMContentLoaded', () => {
     const sz = params.get('size'); const fq = params.get('freq');
@@ -358,12 +476,29 @@
     if (fq && FREQS.some((f) => f.id === fq)) state.freq = fq;
 
     const di = $('date-input');
-    const today = new Date().toISOString().slice(0, 10);
-    di.min = today;
-    di.addEventListener('change', () => { state.date = di.value; refresh(); });
+    di.min = isoLocal(new Date());
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // listen to both input and change: iOS does not always fire 'change' on the
+    // first pick when the field starts empty.
+    const onNativeDate = () => {
+      if (!di.value) return;
+      state.date = di.value;
+      const [y, m, d] = di.value.split('-').map(Number);
+      $('other-date-label').textContent = `${MON[m - 1]} ${d}, ${y}`;
+      renderDateChips(); // clears chip highlight when the picked date is not a chip
+      refresh(); scrollToStep('slots-area');
+    };
+    di.addEventListener('change', onNativeDate);
+    di.addEventListener('input', onNativeDate);
 
-    renderSizes(); renderFreq(); renderAddons(); renderSummary();
-    if (state.freq !== 'onetime') $('freq-note').classList.remove('hidden');
+    $('mbar-confirm').addEventListener('click', () => $('booking-form').requestSubmit());
+
+    // keep the step badges live as details are filled / terms agreed
+    ['f-name', 'f-phone', 'f-email', 'f-address'].forEach((id) => $(id).addEventListener('input', updateGates));
+    $('f-terms').addEventListener('change', updateGates);
+
+    renderSizes(); renderFreq(); renderAddons(); renderDateChips(); renderSummary();
+    if (isRecurring()) $('freq-note').classList.remove('hidden');
   });
 })();
 </script>

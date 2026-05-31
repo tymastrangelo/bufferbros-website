@@ -3,7 +3,7 @@
    Single source of truth for navigation so every page stays in sync.
    =========================================================== */
 
-const SITE_VERSION = '2026-05-31';
+const SITE_VERSION = '2026-05-31d';
 const SITE_VERSION_KEY = 'bb_site_version';
 
 const BB = {
@@ -89,7 +89,7 @@ function renderFooter() {
   return `
   <footer class="bg-[color:var(--ink)] text-white pt-14 pb-8">
     <div class="container">
-      <div class="grid gap-10 md:grid-cols-4">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-4">
         <div class="md:col-span-1">
           <img src="images/transparent-logo.png" alt="Buffer Bros" class="h-12 w-auto mb-4">
           <p class="text-gray-400 text-sm leading-relaxed">Premium mobile detailing brought to your driveway in ${BB.area}.</p>

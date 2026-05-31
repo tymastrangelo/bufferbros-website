@@ -15,7 +15,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260531">
+  <link rel="stylesheet" href="css/styles.css?v=20260531d">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -61,14 +61,14 @@
     <div class="card p-6 sm:p-7">
       <h2 class="text-xl font-bold mb-1">Block off time</h2>
       <p class="text-sm mb-5" style="color:var(--slate-soft)">Block a single day or a range (vacation, personal time, already booked elsewhere).</p>
-      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div><label class="label" for="b-from">From date</label><input id="b-from" type="date" class="field"></div>
         <div><label class="label" for="b-to">To date <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="b-to" type="date" class="field"></div>
       </div>
       <label class="flex items-center gap-2 mb-4 text-sm font-medium">
         <input type="checkbox" id="b-allday" class="h-4 w-4 accent-blue-600" checked> Block the entire day
       </label>
-      <div id="b-times" class="grid sm:grid-cols-2 gap-4 mb-4 hidden">
+      <div id="b-times" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 hidden">
         <div><label class="label" for="b-start">Start time</label><input id="b-start" type="time" class="field" value="08:00"></div>
         <div><label class="label" for="b-end">End time</label><input id="b-end" type="time" class="field" value="18:00"></div>
       </div>
@@ -134,13 +134,15 @@
     $('hours-list').innerHTML = DOW.map((name, wd) => {
       const h = byDay[wd] || { enabled: 0, open_min: 480, close_min: 1080 };
       return `
-      <div class="flex flex-wrap items-center gap-3 py-2 border-b border-gray-100" data-wd="${wd}">
-        <label class="flex items-center gap-2 w-32 font-medium">
-          <input type="checkbox" class="h-4 w-4 accent-blue-600 wd-on" ${h.enabled ? 'checked' : ''}> ${name}
+      <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 border-b border-gray-100" data-wd="${wd}">
+        <label class="flex items-center gap-2 w-28 font-medium shrink-0">
+          <input type="checkbox" class="h-5 w-5 accent-blue-600 wd-on" ${h.enabled ? 'checked' : ''}> ${name}
         </label>
-        <input type="time" class="field wd-open" style="width:auto" value="${toHHMM(h.open_min)}">
-        <span style="color:var(--slate-soft)">to</span>
-        <input type="time" class="field wd-close" style="width:auto" value="${toHHMM(h.close_min)}">
+        <div class="flex items-center gap-2">
+          <input type="time" class="field wd-open" style="width:6.75rem" value="${toHHMM(h.open_min)}">
+          <span style="color:var(--slate-soft)">to</span>
+          <input type="time" class="field wd-close" style="width:6.75rem" value="${toHHMM(h.close_min)}">
+        </div>
       </div>`;
     }).join('');
   }
