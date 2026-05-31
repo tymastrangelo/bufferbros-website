@@ -1,16 +1,16 @@
 # Buffer Bros — deploy & operate guide
 
-The site is now a Cloudflare Pages project with a small booking backend
-(Cloudflare Functions + a D1 database). This guide covers first-time setup,
-where to put your secrets, and the day-to-day admin.
+The site is now a Cloudflare Worker: the static site is served from `public/`
+and a small booking backend (the Worker + a D1 database) handles availability
+and bookings. This guide covers first-time setup, secrets, and day-to-day admin.
 
 ---
 
 ## What changed
 
-- The static site (HTML/CSS/JS) is unchanged in spirit but redesigned.
-- New custom booking system lives in `/functions/api/*` (server) + `booking.html` (customer) + `admin.html` (you).
-- All pricing and durations live in **one file**: `js/services.js`. Edit prices/times there and both the Packages page and booking update automatically.
+- The static site (HTML/CSS/JS) was redesigned and now lives in `public/`.
+- The booking API lives in `src/index.js` + `functions/api/*` (handlers) and talks to a D1 database. The customer books at `public/booking.html`; you manage availability at `public/admin.html`.
+- All pricing and durations live in **one file**: `public/js/services.js`. Edit prices/times there and both the Packages page and booking update automatically.
 - `quote.html` now redirects to `booking.html` so old ad links keep working.
 
 ---
@@ -37,30 +37,33 @@ Copy the `database_id` it prints and paste it into `wrangler.toml`
 wrangler d1 execute bufferbros --remote --file=./schema.sql
 ```
 
-### 4. Create the Pages project and deploy
-Either connect this GitHub repo in the Cloudflare dashboard
-(**Workers & Pages → Create → Pages → Connect to Git**), or deploy from your machine:
+### 4. Deploy
+This project is a Cloudflare **Worker** (static site served from `public/`,
+booking API in `src/index.js`). The repo is connected to Git, so **every push
+to `main` triggers a deploy automatically**. To deploy manually instead:
 ```bash
-wrangler pages deploy . --project-name=bufferbros-website
+wrangler deploy
 ```
 
 ### 5. Set your secrets
-Run each of these once and paste the value when prompted:
+Easiest: in the dashboard, open the **bufferbros-website** Worker →
+**Settings → Variables and Secrets → Add** (type = Secret) for each of these.
+Or from the terminal (run each once, paste the value when prompted):
 ```bash
-wrangler pages secret put ADMIN_PASSWORD --project-name=bufferbros-website   # your admin login password
-wrangler pages secret put ADMIN_SECRET   --project-name=bufferbros-website   # any long random string
-wrangler pages secret put OWNER_EMAIL    --project-name=bufferbros-website   # where booking emails go
-wrangler pages secret put FROM_EMAIL     --project-name=bufferbros-website   # verified sender, e.g. bookings@bufferbros.org
-wrangler pages secret put RESEND_API_KEY --project-name=bufferbros-website   # from resend.com (free tier)
+wrangler secret put ADMIN_PASSWORD   # your admin login password
+wrangler secret put ADMIN_SECRET     # any long random string
+wrangler secret put OWNER_EMAIL      # where booking emails go
+wrangler secret put FROM_EMAIL       # verified sender, e.g. bookings@bufferbros.org
+wrangler secret put RESEND_API_KEY   # from resend.com (free tier)
 ```
 - **ADMIN_SECRET**: just mash the keyboard for a long random string. It signs your admin login session.
 - **Email** uses [Resend](https://resend.com). Create a free account, verify your `bufferbros.org` domain, create an API key, and use a `FROM_EMAIL` on that domain. If you skip email for now, bookings still save; they just won't email.
 
 ### 6. Point your domain at Cloudflare
 Your domain is `bufferbros.org` (currently on GitHub Pages via the `CNAME` file).
-- In the Cloudflare Pages project: **Custom domains → Set up a custom domain → `bufferbros.org`** (and `www`).
+- In the **bufferbros-website** Worker: **Settings → Domains & Routes → Add → Custom domain → `bufferbros.org`** (and `www`).
 - Update your domain's nameservers/DNS to Cloudflare as instructed.
-- Once live on Cloudflare, GitHub Pages is no longer used. The `CNAME` file is harmless to leave.
+- Once live on Cloudflare, GitHub Pages is no longer used.
 
 ---
 
@@ -81,12 +84,12 @@ the same time.
 
 ## Editing prices and packages
 
-Open `js/services.js`. Every price and duration is there with a `// PLACEHOLDER` comment.
+Open `public/js/services.js`. All prices and durations live there.
 - `minutes` controls how long a slot is held (this is what makes a Standard on a 4Runner take ~2.5 hrs).
 - `price` shows on the Packages page and in the booking summary.
-- You can add/remove packages, sizes, add-ons, and maintenance plans freely.
+- You can add/remove sizes, add-ons, and maintenance plans freely.
 
-After editing, redeploy (`wrangler pages deploy .`) or push to Git if you connected the repo.
+After editing, push to Git (auto-deploys) or run `wrangler deploy`.
 
 ---
 
@@ -106,8 +109,8 @@ wrangler d1 execute bufferbros --remote --command="UPDATE settings SET value='60
 
 ## Local development
 ```bash
-wrangler pages dev .
+wrangler dev
 ```
-This serves the static site and the `/functions` API together at `http://localhost:8788`,
+This serves the static site and the booking API together at `http://localhost:8787`,
 using a local D1 database. Apply the schema locally first with
 `wrangler d1 execute bufferbros --local --file=./schema.sql`.
