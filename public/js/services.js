@@ -19,7 +19,7 @@ window.BB_SERVICES = {
   /* Vehicle size tiers. Price and time scale off these. */
   sizes: [
     { id: 'sedan',   label: 'Car / Sedan / Coupe',  note: 'Sedans, coupes, small hatchbacks' },
-    { id: 'midsize', label: 'Midsize SUV / Truck',  note: '2-row SUVs, 4Runner, midsize trucks' },
+    { id: 'midsize', label: 'Midsize SUV / Truck',  note: '2-row SUVs, midsize trucks' },
     { id: 'large',   label: 'Large SUV / Truck',    note: '3-row SUVs, full-size trucks, vans' },
   ],
 
