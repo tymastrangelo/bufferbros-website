@@ -1,6 +1,6 @@
 import {
   ok, bad, getSettings, computeSlots, weekdayOf, isValidDate,
-  nowParts, fmtTime, sendEmail, escapeHtml, TZ_DEFAULT,
+  nowParts, fmtWhen, sendEmail, escapeHtml, TZ_DEFAULT,
 } from '../_shared/util.js';
 
 // POST /api/book  - create a booking after re-validating the slot is still open.
@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
   ).run();
 
   // --- emails (best effort; booking is saved regardless) ---
-  const when = `${date} at ${fmtTime(startMin)}`;
+  const when = fmtWhen(date, startMin);
   const addonList = (Array.isArray(addons) ? addons : []).map((a) => a.name).join(', ') || 'None';
   const ownerEmail = env.OWNER_EMAIL;
 
@@ -85,7 +85,7 @@ export async function onRequestPost(context) {
     <p>See you soon,<br>Buffer Bros</p>`;
 
   const emailResults = {};
-  if (ownerEmail) emailResults.owner = await sendEmail(env, { to: ownerEmail, subject: `New booking: ${name} on ${date}`, html: ownerHtml, replyTo: email });
+  if (ownerEmail) emailResults.owner = await sendEmail(env, { to: ownerEmail, subject: `New booking: ${name} on ${when}`, html: ownerHtml, replyTo: email });
   emailResults.customer = await sendEmail(env, { to: email, subject: 'Your Buffer Bros appointment is confirmed', html: customerHtml });
 
   return ok({ id: result.meta.last_row_id, when, emailResults });

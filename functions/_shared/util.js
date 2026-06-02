@@ -47,6 +47,20 @@ export function fmtTime(min) {
   return `${h}:${String(m).padStart(2, '0')} ${ap}`;
 }
 
+// "2026-06-06" -> "Wednesday, June 6, 2026" (computed at UTC noon to avoid DST/day shift)
+export function fmtDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d, 12));
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${days[dt.getUTCDay()]}, ${months[dt.getUTCMonth()]} ${dt.getUTCDate()}, ${y}`;
+}
+
+export function fmtWhen(dateStr, startMin) {
+  return `${fmtDate(dateStr)} at ${fmtTime(startMin)}`;
+}
+
 /* ---------- settings ---------- */
 export async function getSettings(env) {
   const def = { slot_granularity_min: 30, min_lead_min: 180, buffer_min: 30 };

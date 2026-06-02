@@ -1,6 +1,6 @@
 import {
   ok, bad, getSettings, makeToken,
-  cookieHeader, requireAdmin, isValidDate, fmtTime, sendEmail, escapeHtml,
+  cookieHeader, requireAdmin, isValidDate, fmtWhen, sendEmail, escapeHtml,
 } from '../../_shared/util.js';
 
 /* ---------- customer email templates ---------- */
@@ -27,7 +27,7 @@ function emailCancelled({ name, what, when }) {
     <p>Want to rebook? Visit bufferbros.org or call us and we will find a new time.</p>${footer}`;
 }
 const whatOf = (b) => `${b.package_name || 'Appointment'}${b.size_label ? ` (${b.size_label})` : ''}`;
-const whenOf = (date, startMin) => `${date} at ${fmtTime(startMin)}`;
+const whenOf = (date, startMin) => fmtWhen(date, startMin);
 
 export async function onRequest(context) {
   const { request, env, params } = context;
