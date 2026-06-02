@@ -81,16 +81,40 @@
       </div>
     </div>
 
+    <!-- ADD APPOINTMENT -->
+    <div class="card p-6 sm:p-7">
+      <h2 class="text-xl font-bold mb-1">Add an appointment</h2>
+      <p class="text-sm mb-5" style="color:var(--slate-soft)">Manually add a detail (for example, one booked by phone). It blocks that time from online booking, exactly like a regular booking.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="label" for="a-name">Customer name</label><input id="a-name" class="field"></div>
+        <div><label class="label" for="a-phone">Phone <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="a-phone" type="tel" class="field"></div>
+        <div class="sm:col-span-2"><label class="label" for="a-email">Email <span class="font-normal" style="color:var(--slate-soft)">(optional, for confirmation)</span></label><input id="a-email" type="email" class="field"></div>
+        <div class="sm:col-span-2"><label class="label" for="a-address">Address <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="a-address" class="field"></div>
+        <div><label class="label" for="a-size">Vehicle / service</label><select id="a-size" class="field"></select></div>
+        <div><label class="label" for="a-date">Date</label><input id="a-date" type="date" class="field"></div>
+        <div><label class="label" for="a-start">Start time</label><input id="a-start" type="time" class="field" value="09:00"></div>
+        <div><label class="label" for="a-duration">Duration (minutes)</label><input id="a-duration" type="number" min="15" step="15" class="field" value="120"></div>
+        <div class="sm:col-span-2"><label class="label" for="a-notes">Notes <span class="font-normal" style="color:var(--slate-soft)">(optional)</span></label><input id="a-notes" class="field"></div>
+      </div>
+      <label class="flex items-center gap-2 mt-4 text-sm font-medium">
+        <input type="checkbox" id="a-notify" class="h-4 w-4 accent-blue-600"> Email the customer a confirmation
+      </label>
+      <div id="appt-error" class="hidden text-sm text-red-600 mt-3"></div>
+      <button id="add-appt" class="btn btn-primary mt-4">Add appointment</button>
+      <span id="appt-saved" class="hidden text-sm text-green-600 ml-3"><i class="fas fa-check"></i> Added</span>
+    </div>
+
     <!-- BOOKINGS -->
     <div class="card p-6 sm:p-7">
       <h2 class="text-xl font-bold mb-1">Upcoming bookings</h2>
-      <p class="text-sm mb-5" style="color:var(--slate-soft)">Confirmed appointments from today forward.</p>
+      <p class="text-sm mb-5" style="color:var(--slate-soft)">Confirmed appointments from today forward. Edit to reschedule, or cancel. The customer is emailed automatically if they have an email on file.</p>
       <div id="bookings-list" class="space-y-3"></div>
     </div>
 
   </div>
 </section>
 
+<script src="js/services.js?v=20260531d"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -198,29 +222,113 @@
     }));
   }
 
+  /* ---- add appointment (manual) ---- */
+  const S = window.BB_SERVICES;
+  function fillSizeOptions() {
+    if (!S || !$('a-size')) return;
+    $('a-size').innerHTML = S.sizes.map((s) =>
+      `<option value="${s.id}" data-min="${(S.detail.pricing[s.id] || {}).minutes || 120}" data-label="${s.label}">${s.label}</option>`).join('');
+    syncDuration();
+    $('a-size').addEventListener('change', syncDuration);
+  }
+  function syncDuration() {
+    const opt = $('a-size').selectedOptions[0];
+    if (opt && opt.dataset.min) $('a-duration').value = opt.dataset.min;
+  }
+  function showApptError(msg) { $('appt-error').textContent = msg; $('appt-error').classList.remove('hidden'); }
+
+  $('add-appt').addEventListener('click', async () => {
+    $('appt-error').classList.add('hidden');
+    const name = $('a-name').value.trim();
+    const date = $('a-date').value;
+    const start = $('a-start').value;
+    const dur = parseInt($('a-duration').value, 10);
+    if (!name) return showApptError('Enter a customer name.');
+    if (!date) return showApptError('Pick a date.');
+    if (!start) return showApptError('Pick a start time.');
+    if (!dur || dur <= 0) return showApptError('Enter a valid duration.');
+    const opt = $('a-size').selectedOptions[0];
+    const body = {
+      name, phone: $('a-phone').value.trim(), email: $('a-email').value.trim(), address: $('a-address').value.trim(),
+      date, startMin: toMin(start), durationMin: dur,
+      sizeLabel: opt ? opt.dataset.label : '', packageName: S ? S.detail.name : 'Appointment',
+      notes: $('a-notes').value.trim(), notify: $('a-notify').checked,
+    };
+    const data = await api('create', { method: 'POST', body: JSON.stringify(body) });
+    if (data.ok) {
+      ['a-name', 'a-phone', 'a-email', 'a-address', 'a-notes'].forEach((id) => ($(id).value = ''));
+      $('a-notify').checked = false;
+      $('appt-saved').classList.remove('hidden'); setTimeout(() => $('appt-saved').classList.add('hidden'), 2500);
+      loadBookings();
+    } else showApptError(data.error || 'Could not add appointment.');
+  });
+
   /* ---- bookings ---- */
   function renderBookings(bookings) {
     if (!bookings.length) { $('bookings-list').innerHTML = `<p style="color:var(--slate-soft)">No upcoming bookings.</p>`; return; }
     $('bookings-list').innerHTML = bookings.map((b) => {
       let addons = []; try { addons = JSON.parse(b.addons || '[]'); } catch (_) {}
       const addonStr = addons.map((a) => a.name).join(', ');
-      return `<div class="card p-4">
+      const contact = [
+        b.phone ? `<a href="tel:${b.phone}" class="text-brand">${b.phone}</a>` : '',
+        b.email ? `<a href="mailto:${b.email}" class="text-brand">${b.email}</a>` : '',
+      ].filter(Boolean).join(' &middot; ');
+      return `<div class="card p-4" data-bk="${b.id}">
         <div class="flex items-start justify-between gap-3">
           <div>
             <div class="font-bold">${b.date} at ${fmtTime(b.start_min)} <span class="font-normal" style="color:var(--slate-soft)">(${b.duration_min} min)</span></div>
-            <div class="text-sm mt-1">${b.package_name} &middot; ${b.size_label}${b.price ? ' &middot; $' + b.price : ''}</div>
+            <div class="text-sm mt-1">${b.package_name}${b.size_label ? ' &middot; ' + b.size_label : ''}${b.price ? ' &middot; $' + b.price : ''}</div>
             ${addonStr ? `<div class="text-xs mt-0.5" style="color:var(--slate-soft)">Add-ons: ${addonStr}</div>` : ''}
-            <div class="text-sm mt-2">${b.name} &middot; <a href="tel:${b.phone}" class="text-brand">${b.phone}</a> &middot; <a href="mailto:${b.email}" class="text-brand">${b.email}</a></div>
-            <div class="text-sm" style="color:var(--slate-soft)">${b.address}</div>
+            <div class="text-sm mt-2">${b.name}${contact ? ' &middot; ' + contact : ''}</div>
+            ${b.address ? `<div class="text-sm" style="color:var(--slate-soft)">${b.address}</div>` : ''}
             ${b.notes ? `<div class="text-sm mt-1"><em>${b.notes}</em></div>` : ''}
           </div>
-          <button class="text-red-600 hover:text-red-700 text-sm font-medium cancel-bk shrink-0" data-id="${b.id}">Cancel</button>
+          <div class="flex flex-col items-end gap-2 shrink-0">
+            <button class="text-brand hover:underline text-sm font-medium edit-bk">Edit</button>
+            <button class="text-red-600 hover:text-red-700 text-sm font-medium cancel-bk" data-id="${b.id}">Cancel</button>
+          </div>
+        </div>
+        <div class="edit-form hidden mt-4 pt-4 border-t border-gray-100">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div><label class="label">Date</label><input type="date" class="field e-date" value="${b.date}"></div>
+            <div><label class="label">Start time</label><input type="time" class="field e-start" value="${toHHMM(b.start_min)}"></div>
+            <div><label class="label">Duration (min)</label><input type="number" min="15" step="15" class="field e-dur" value="${b.duration_min}"></div>
+          </div>
+          <label class="flex items-center gap-2 mt-3 text-sm font-medium ${b.email ? '' : 'opacity-50'}">
+            <input type="checkbox" class="h-4 w-4 accent-blue-600 e-notify" ${b.email ? 'checked' : 'disabled'}> Email the customer about this change${b.email ? '' : ' (no email on file)'}
+          </label>
+          <div class="flex gap-2 mt-3">
+            <button class="btn btn-primary py-2 px-4 text-sm save-bk" data-id="${b.id}">Save changes</button>
+            <button class="btn btn-outline py-2 px-4 text-sm cancel-edit">Close</button>
+          </div>
         </div>
       </div>`;
     }).join('');
+
+    $('bookings-list').querySelectorAll('.edit-bk').forEach((btn) => btn.addEventListener('click', () =>
+      btn.closest('[data-bk]').querySelector('.edit-form').classList.toggle('hidden')));
+    $('bookings-list').querySelectorAll('.cancel-edit').forEach((btn) => btn.addEventListener('click', () =>
+      btn.closest('[data-bk]').querySelector('.edit-form').classList.add('hidden')));
+
+    $('bookings-list').querySelectorAll('.save-bk').forEach((btn) => btn.addEventListener('click', async () => {
+      const card = btn.closest('[data-bk]');
+      const body = {
+        id: parseInt(btn.dataset.id, 10),
+        date: card.querySelector('.e-date').value,
+        startMin: toMin(card.querySelector('.e-start').value),
+        durationMin: parseInt(card.querySelector('.e-dur').value, 10),
+        notify: card.querySelector('.e-notify').checked,
+      };
+      if (!body.date || !body.durationMin) return;
+      btn.disabled = true;
+      const data = await api('update', { method: 'POST', body: JSON.stringify(body) });
+      btn.disabled = false;
+      if (data.ok) loadBookings();
+    }));
+
     $('bookings-list').querySelectorAll('.cancel-bk').forEach((btn) => btn.addEventListener('click', async () => {
-      if (!confirm('Cancel this booking? This frees up the time slot.')) return;
-      await api('cancel', { method: 'POST', body: JSON.stringify({ id: parseInt(btn.dataset.id, 10) }) });
+      if (!confirm('Cancel this booking? This frees up the time slot and emails the customer if they have an email on file.')) return;
+      await api('cancel', { method: 'POST', body: JSON.stringify({ id: parseInt(btn.dataset.id, 10), notify: true }) });
       loadBookings();
     }));
   }
@@ -244,6 +352,7 @@
   }
 
   // On load, try to fetch config; 401 falls back to the login view.
+  fillSizeOptions();
   boot();
 })();
 </script>
