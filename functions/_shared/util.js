@@ -98,46 +98,6 @@ export function computeSlots({ date, durationMin, hours, blocks, bookings, setti
   return slots;
 }
 
-/* ---------- admin auth (HMAC token in cookie) ---------- */
-const enc = new TextEncoder();
-
-async function hmac(secret, msg) {
-  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(msg));
-  return btoa(String.fromCharCode(...new Uint8Array(sig))).replace(/=+$/, '');
-}
-
-export async function makeToken(env, ttlSeconds = 60 * 60 * 12) {
-  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
-  const sig = await hmac(env.ADMIN_SECRET || 'dev-secret', String(exp));
-  return `${exp}.${sig}`;
-}
-
-export async function verifyToken(env, token) {
-  if (!token || !token.includes('.')) return false;
-  const [exp, sig] = token.split('.');
-  if (parseInt(exp, 10) < Math.floor(Date.now() / 1000)) return false;
-  const expected = await hmac(env.ADMIN_SECRET || 'dev-secret', exp);
-  return sig === expected;
-}
-
-export function readCookie(request, name) {
-  const cookie = request.headers.get('Cookie') || '';
-  const match = cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-export async function requireAdmin(context) {
-  const token = readCookie(context.request, 'bb_admin');
-  return verifyToken(context.env, token);
-}
-
-export function cookieHeader(token, maxAge = 60 * 60 * 12, secure = true) {
-  const sec = secure ? ' Secure;' : '';
-  const attrs = `Path=/; HttpOnly;${sec} SameSite=Lax; Max-Age=${maxAge}`;
-  return token ? `bb_admin=${token}; ${attrs}` : `bb_admin=; Path=/; HttpOnly;${sec} SameSite=Lax; Max-Age=0`;
-}
-
 /* ---------- email via Resend (optional) ---------- */
 export async function sendEmail(env, { to, subject, html, replyTo }) {
   if (!env.RESEND_API_KEY || !env.FROM_EMAIL) {

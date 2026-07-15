@@ -9,7 +9,7 @@ and bookings. This guide covers first-time setup, secrets, and day-to-day admin.
 ## What changed
 
 - The static site (HTML/CSS/JS) was redesigned and now lives in `public/`.
-- The booking API lives in `src/index.js` + `functions/api/*` (handlers) and talks to a D1 database. The customer books at `public/booking.html`; you manage availability at `public/admin.html`.
+- The booking API lives in `src/index.js` + `functions/api/*` (handlers) and talks to a D1 database. The customer books at `public/booking.html`; availability and bookings are managed in the admin dashboard at **admin.bufferbros.org**.
 - All pricing and durations live in **one file**: `public/js/services.js`. Edit prices/times there and both the Packages page and booking update automatically.
 - `quote.html` now redirects to `booking.html` so old ad links keep working.
 
@@ -50,13 +50,10 @@ Easiest: in the dashboard, open the **bufferbros-website** Worker →
 **Settings → Variables and Secrets → Add** (type = Secret) for each of these.
 Or from the terminal (run each once, paste the value when prompted):
 ```bash
-wrangler secret put ADMIN_PASSWORD   # your admin login password
-wrangler secret put ADMIN_SECRET     # any long random string
 wrangler secret put OWNER_EMAIL      # where booking emails go
 wrangler secret put FROM_EMAIL       # verified sender, e.g. bookings@bufferbros.org
 wrangler secret put RESEND_API_KEY   # from resend.com (free tier)
 ```
-- **ADMIN_SECRET**: just mash the keyboard for a long random string. It signs your admin login session.
 - **Email** uses [Resend](https://resend.com). Create a free account, verify your `bufferbros.org` domain, create an API key, and use a `FROM_EMAIL` on that domain. If you skip email for now, bookings still save; they just won't email.
 
 ### 6. Point your domain at Cloudflare
@@ -69,11 +66,9 @@ Your domain is `bufferbros.org` (currently on GitHub Pages via the `CNAME` file)
 
 ## Day-to-day: managing your calendar
 
-Go to **`bufferbros.org/admin.html`** and log in with your `ADMIN_PASSWORD`.
-
-- **Weekly hours** — set the times you're open each day. Uncheck a day to close it. These are the slots customers can book.
-- **Block off time** — block a single day or a date range (vacation), or a time window within a day. Blocked time disappears from customer booking instantly.
-- **Upcoming bookings** — see every confirmed appointment with contact info and address. Cancel one to free its slot.
+The old `admin.html` page was removed. Weekly hours, blocked time, and bookings are
+managed in the admin dashboard at **admin.bufferbros.org** (separate repo; build spec
+in `ADMIN_DASHBOARD_SPEC.md`).
 
 The booking page only ever offers times that fit the chosen package + vehicle size
 (plus a travel/cleanup buffer), and it never offers a slot that overlaps a block or
