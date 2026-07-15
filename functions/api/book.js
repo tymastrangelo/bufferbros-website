@@ -1,9 +1,8 @@
-import {
-  ok, bad, getSettings, computeSlots, weekdayOf, isValidDate,
-  nowParts, fmtWhen, sendEmail, escapeHtml, TZ_DEFAULT,
-} from '../_shared/util.js';
+import { ok, bad, isValidDate, fmtWhen, sendEmail, escapeHtml } from '../_shared/util.js';
 
-// POST /api/book  - create a booking after re-validating the slot is still open.
+// POST /api/book  - create a booking. Supabase (rpc/book_appointment) re-validates the
+// slot under an advisory lock, so double-booking is impossible even if the admin dashboard
+// books the same slot at the same moment. The web booking appears in the dashboard instantly.
 export async function onRequestPost(context) {
   const { request, env } = context;
   let body;
@@ -23,39 +22,44 @@ export async function onRequestPost(context) {
   if (!agreedTerms) return bad('You must agree to the terms and conditions');
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad('Invalid email address');
 
-  const tz = env.TIMEZONE || TZ_DEFAULT;
-  const settings = await getSettings(env);
-  const weekday = weekdayOf(date);
-
-  const hours = await env.DB.prepare('SELECT * FROM weekly_hours WHERE weekday = ?').bind(weekday).first();
-  const blocksRes = await env.DB.prepare('SELECT start_min, end_min FROM blocks WHERE date = ?').bind(date).all();
-  const bookingsRes = await env.DB.prepare(
-    "SELECT start_min, duration_min FROM bookings WHERE date = ? AND status = 'confirmed'"
-  ).bind(date).all();
-
-  // Re-check the chosen slot is genuinely still available (guards double-booking).
-  const validStarts = computeSlots({
-    date, durationMin, hours,
-    blocks: blocksRes.results || [],
-    bookings: bookingsRes.results || [],
-    settings, now: nowParts(tz),
+  // --- book via Supabase (transactional; re-validates the slot server-side) ---
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/rpc/book_appointment`, {
+    method: 'POST',
+    headers: {
+      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+      'content-type': 'application/json',
+    },
+    // Omitted params keep their defaults: p_source='web', p_mode='strict', status 'scheduled'.
+    body: JSON.stringify({
+      p_date: date,
+      p_start_min: startMin,
+      p_duration_min: durationMin,
+      p_name: name,
+      p_email: email,
+      p_phone: phone,
+      p_address: address,
+      p_size_id: sizeId,
+      p_size_label: sizeLabel || sizeId,
+      p_service_name: packageName || packageId,
+      p_addons: Array.isArray(addons) ? addons : [],
+      p_price: price | 0,
+      p_notes: notes,
+    }),
   });
-  if (!validStarts.includes(startMin)) {
-    return bad('Sorry, that time was just taken. Please pick another slot.', 409);
+
+  if (!res.ok) {
+    let message = '';
+    try { message = (await res.json()).message || ''; } catch { /* non-JSON error body */ }
+    if (message === 'slot_taken') {
+      return bad('Sorry, that time was just taken. Please pick another slot.', 409);
+    }
+    throw new Error(`book_appointment ${res.status} ${message}`); // -> generic 500 in the Worker
   }
 
-  const addonsJson = JSON.stringify(Array.isArray(addons) ? addons : []);
-  const created = Math.floor(Date.now() / 1000);
-
-  const result = await env.DB.prepare(
-    `INSERT INTO bookings
-       (created_ts, name, email, phone, address, package_id, package_name,
-        size_id, size_label, addons, date, start_min, duration_min, price, notes, status)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 'confirmed')`
-  ).bind(
-    created, name, email, phone, address, packageId, packageName || packageId,
-    sizeId, sizeLabel || sizeId, addonsJson, date, startMin, durationMin, price | 0, notes
-  ).run();
+  // PostgREST returns the inserted appointment row (has a uuid id).
+  const inserted = await res.json();
+  const row = Array.isArray(inserted) ? inserted[0] : inserted;
 
   // --- emails (best effort; booking is saved regardless) ---
   const when = fmtWhen(date, startMin);
@@ -88,5 +92,5 @@ export async function onRequestPost(context) {
   if (ownerEmail) emailResults.owner = await sendEmail(env, { to: ownerEmail, subject: `New booking: ${name} on ${when}`, html: ownerHtml, replyTo: email });
   emailResults.customer = await sendEmail(env, { to: email, subject: 'Your Buffer Bros appointment is confirmed', html: customerHtml });
 
-  return ok({ id: result.meta.last_row_id, when, emailResults });
+  return ok({ id: row.id, when, emailResults });
 }
