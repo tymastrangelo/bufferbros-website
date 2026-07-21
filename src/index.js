@@ -4,10 +4,21 @@
 
 import { onRequestGet as availabilityGet } from '../functions/api/availability.js';
 import { onRequestPost as bookPost } from '../functions/api/book.js';
+import { onRequestGet as servicesGet } from '../functions/api/services.js';
 
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
+
+    // Live pricing catalog, built from Supabase (edited in the admin dashboard).
+    // If Supabase is unreachable, serve the static snapshot so booking never breaks.
+    if (pathname === '/api/services.js') {
+      try {
+        return await servicesGet({ request, env });
+      } catch (err) {
+        return env.ASSETS.fetch(new Request(new URL('/js/services.js', request.url)));
+      }
+    }
 
     if (pathname.startsWith('/api/')) {
       try {

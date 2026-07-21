@@ -1,15 +1,13 @@
 /* ===========================================================
-   Buffer Bros - services, pricing & durations (SINGLE SOURCE OF TRUTH)
+   Buffer Bros - services, pricing & durations (FALLBACK SNAPSHOT)
    -----------------------------------------------------------
-   We offer ONE detail: the Standard Detail. Clean doesn't have tiers.
-   Maintenance is that same detail on a recurring schedule, which costs
-   less per visit because the car stays in showroom shape.
+   The live catalog is served by /api/services.js, built from Supabase —
+   prices are edited in the admin dashboard's Settings page, not here.
+   This file is only served if Supabase is unreachable (see src/index.js),
+   so keep it roughly in sync when prices change.
 
-   This one file drives the Packages page AND the booking page
-   (durations decide how long a slot is blocked off).
-
-   To change pricing: edit `price` values below. To change how long a
-   job blocks the calendar: edit `minutes`. A price of 0 shows as "TBD".
+   Add-ons may carry a per-size `pricing` map (like the detail does);
+   `price`/`minutes` are then the sedan fallback.
    =========================================================== */
 
 window.BB_SERVICES = {
@@ -32,7 +30,7 @@ window.BB_SERVICES = {
     includes: [
       'Full interior vacuum, seats, carpets and mats',
       'Hand wash with a double foam bath',
-      'Layer of protective wax',
+      'Layer of protective spray wax',
       'Wheels, tires and tire shine',
       'All interior surfaces wiped down',
       'Interior and exterior glass',
@@ -67,10 +65,11 @@ window.BB_SERVICES = {
 
   /* Optional add-ons. minutes add to the appointment length. */
   addons: [
-    { id: 'pet-hair',   name: 'Pet Hair Removal',      price: 40, minutes: 30, note: 'Heavy shedding and embedded hair' },
-    { id: 'engine-bay', name: 'Engine Bay Cleaning',   price: 35, minutes: 30, note: 'Cleaned and dressed' },
-    { id: 'ceramic',    name: 'Ceramic Spray Coating', price: 60, minutes: 45, note: 'Months of added protection' },
-    { id: 'headlights', name: 'Headlight Restoration', price: 50, minutes: 45, note: 'Clears yellowed, foggy lenses' },
-    { id: 'odor',       name: 'Odor / Ozone Treatment', price: 45, minutes: 30, note: 'Smoke and stubborn smells' },
+    { id: 'clay-bar',   name: 'Clay Bar + Hand Wax',   price: 100, minutes: 60, note: 'Deep paint decontamination, finished with a longer-lasting hand wax instead of the standard spray wax',
+      pricing: { sedan: { price: 100, minutes: 60 }, midsize: { price: 125, minutes: 75 }, large: { price: 150, minutes: 90 } } },
+    { id: 'pet-hair',   name: 'Pet Hair Removal',      price: 50, minutes: 30, note: 'Heavy shedding cases may be quoted up' },
+    { id: 'engine-bay', name: 'Engine Bay Cleaning',   price: 45, minutes: 30, note: 'Degreased and dressed' },
+    { id: 'headlights', name: 'Headlight Restoration', price: 100, minutes: 45, note: 'Per pair — clears yellowed, foggy lenses' },
+    { id: 'odor',       name: 'Odor / Ozone Treatment', price: 65, minutes: 45, note: 'Heavy smoke may be quoted up' },
   ],
 };

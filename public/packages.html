@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Detail &amp; Pricing | Buffer Bros Mobile Detailing</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
   <meta name="description" content="One detail, done right every time. Showroom finish inside and out, priced up front. Keep it that way with a maintenance plan.">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -93,11 +94,13 @@
 
 <footer id="site-footer"></footer>
 
-<script src="js/services.js?v=20260531d"></script>
+<script src="/api/services.js"></script>
 <script src="js/components.js?v=20260531d"></script>
 <script>
   (function () {
     const S = window.BB_SERVICES;
+    // Some add-ons are priced per vehicle size; fall back to the flat price.
+    const addonPrice = (a) => (a.pricing && a.pricing[activeSize]) ? a.pricing[activeSize].price : a.price;
     const cur = S.currency;
     let activeSize = S.sizes[0].id;
 
@@ -116,7 +119,7 @@
           <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${s.note}</span>
         </button>`).join('');
       document.querySelectorAll('#size-toggle [data-size]').forEach((b) =>
-        b.addEventListener('click', () => { activeSize = b.dataset.size; renderSizeToggle(); renderDetail(); renderMaintenance(); }));
+        b.addEventListener('click', () => { activeSize = b.dataset.size; renderSizeToggle(); renderDetail(); renderMaintenance(); renderAddons(); }));
     }
 
     function renderDetail() {
@@ -173,7 +176,7 @@
             <div class="font-semibold text-ink">${a.name}</div>
             <div class="text-xs mt-0.5" style="color:var(--slate-soft)">${a.note || ''}</div>
           </div>
-          <div class="font-bold text-brand shrink-0">${a.price && a.price > 0 ? '+' + cur + a.price : 'TBD'}</div>
+          <div class="font-bold text-brand shrink-0">${(() => { const p = addonPrice(a); return p && p > 0 ? '+' + cur + p : 'TBD'; })()}</div>
         </div>`).join('');
     }
 

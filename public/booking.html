@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Book an Appointment | Buffer Bros Mobile Detailing</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
   <meta name="description" content="Book your mobile detailing appointment with Buffer Bros. Pick your vehicle, choose a time, and we come to you.">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -179,11 +180,13 @@
   </div>
 </div>
 
-<script src="js/services.js?v=20260531d"></script>
+<script src="/api/services.js"></script>
 <script src="js/components.js?v=20260531d"></script>
 <script>
 (function () {
   const S = window.BB_SERVICES;
+  // Price/minutes for an add-on given the chosen size (some add-ons vary by size).
+  const addonQuote = (a) => (a.pricing && a.pricing[state.sizeId]) || a;
   const API_BASE = ''; // same origin (Cloudflare Pages Functions at /api/*)
   const cur = S.currency;
 
@@ -226,7 +229,7 @@
   }
   function totals() {
     let price = basePrice(), minutes = baseMinutes();
-    state.addons.forEach((id) => { const a = S.addons.find((x) => x.id === id); if (a) { price += a.price || 0; minutes += a.minutes || 0; } });
+    state.addons.forEach((id) => { const a = S.addons.find((x) => x.id === id); if (a) { const q = addonQuote(a); price += q.price || 0; minutes += q.minutes || 0; } });
     return { price, minutes };
   }
   const planName = () => { const f = FREQS.find((x) => x.id === state.freq); return f ? f.name : '--'; };
@@ -240,7 +243,7 @@
         <span class="font-semibold text-ink text-sm">${s.label}</span>
         <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${s.note}</span>
       </label>`).join('');
-    bindRadio('size-list', 'size', (v) => { state.sizeId = v; renderFreq(); refresh(); scrollToStep('step-freq'); });
+    bindRadio('size-list', 'size', (v) => { state.sizeId = v; renderFreq(); renderAddons(); refresh(); scrollToStep('step-freq'); });
   }
 
   function renderFreq() {
@@ -269,7 +272,7 @@
         <input type="checkbox" value="${a.id}" ${state.addons.has(a.id) ? 'checked' : ''}>
         <div class="flex items-center justify-between gap-2">
           <span class="font-semibold text-ink text-sm">${a.name}</span>
-          <span class="text-sm font-bold text-brand shrink-0">${a.price && a.price > 0 ? '+' + cur + a.price : ''}</span>
+          <span class="text-sm font-bold text-brand shrink-0">${(() => { const p = addonQuote(a).price; return p && p > 0 ? '+' + cur + p : ''; })()}</span>
         </div>
         <span class="block text-xs mt-0.5" style="color:var(--slate-soft)">${a.note || ''}</span>
       </label>`).join('');
@@ -414,7 +417,7 @@
       notes: $('f-notes').value.trim(),
       packageId: S.detail.id, packageName: pkgName,
       sizeId: size.id, sizeLabel: size.label,
-      addons: [...state.addons].map((id) => { const a = S.addons.find((x) => x.id === id); return { id: a.id, name: a.name, price: a.price || 0 }; }),
+      addons: [...state.addons].map((id) => { const a = S.addons.find((x) => x.id === id); return { id: a.id, name: a.name, price: addonQuote(a).price || 0 }; }),
       date: state.date, startMin: state.startMin,
       durationMin: t.minutes, price: t.price || 0,
       agreedTerms: true,
