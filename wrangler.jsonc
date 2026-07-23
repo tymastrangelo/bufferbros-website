@@ -1,0 +1,21 @@
+// Cloudflare Worker config for the Buffer Bros site (Next.js via OpenNext).
+// Deploy with `npm run deploy`. Secrets (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
+// RESEND_API_KEY, OWNER_EMAIL, FROM_EMAIL) are set in the dashboard or with
+// `wrangler secret put`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bufferbros-website",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "TIMEZONE": "America/New_York"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

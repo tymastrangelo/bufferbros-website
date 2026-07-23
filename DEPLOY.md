@@ -1,111 +1,104 @@
 # Buffer Bros — deploy & operate guide
 
-The site is now a Cloudflare Worker: the static site is served from `public/`
-and a small booking backend (the Worker + a D1 database) handles availability
-and bookings. This guide covers first-time setup, secrets, and day-to-day admin.
+The site is a **Next.js app** deployed to Cloudflare Workers via OpenNext.
+Pages live in `app/`, shared UI in `components/`, and the booking API in
+`app/api/*` (it talks to Supabase — the same database the admin dashboard at
+**admin.bufferbros.org** uses).
 
 ---
 
-## What changed
+## Local development
 
-- The static site (HTML/CSS/JS) was redesigned and now lives in `public/`.
-- The booking API lives in `src/index.js` + `functions/api/*` (handlers) and talks to a D1 database. The customer books at `public/booking.html`; availability and bookings are managed in the admin dashboard at **admin.bufferbros.org**.
-- All pricing and durations live in **one file**: `public/js/services.js`. Edit prices/times there and both the Packages page and booking update automatically.
-- `quote.html` now redirects to `booking.html` so old ad links keep working.
+```bash
+npm install
+cp .env.example .env.local   # fill in the Supabase values (see below)
+npm run dev                  # http://localhost:3000
+```
+
+Without `.env.local` the site still runs: pricing falls back to the snapshot
+in `lib/catalog.js`, but availability/booking calls will fail. For full local
+booking, set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (Supabase project
+→ Settings → API).
+
+To test the real Cloudflare Worker runtime locally:
+
+```bash
+npm run preview
+```
 
 ---
 
-## One-time setup
+## Deploying
 
-You'll need a free Cloudflare account and Node.js installed locally.
-
-### 1. Install the CLI and log in
 ```bash
-npm install -g wrangler        # or use npx wrangler ... everywhere
-wrangler login
+npm run deploy
 ```
 
-### 2. Create the D1 database
-```bash
-wrangler d1 create bufferbros
-```
-Copy the `database_id` it prints and paste it into `wrangler.toml`
-(replace `PASTE_YOUR_D1_DATABASE_ID_HERE`).
+This builds the Next.js app, adapts it with OpenNext, and deploys the
+`bufferbros-website` Worker using `wrangler.jsonc`. You need to be logged in
+(`npx wrangler login`).
 
-### 3. Create the tables
-```bash
-wrangler d1 execute bufferbros --remote --file=./schema.sql
-```
+> **⚠️ If the repo is connected to Cloudflare's Git auto-deploy (Workers
+> Builds):** update the build settings in the Cloudflare dashboard
+> (Worker → Settings → Build) so the **build command** is
+> `npx opennextjs-cloudflare build` and the **deploy command** is
+> `npx opennextjs-cloudflare deploy`. The old static-site deploy will fail
+> or serve nothing after this migration if the build command isn't updated.
 
-### 4. Deploy
-This project is a Cloudflare **Worker** (static site served from `public/`,
-booking API in `src/index.js`). The repo is connected to Git, so **every push
-to `main` triggers a deploy automatically**. To deploy manually instead:
-```bash
-wrangler deploy
-```
+### Secrets
 
-### 5. Set your secrets
-Easiest: in the dashboard, open the **bufferbros-website** Worker →
-**Settings → Variables and Secrets → Add** (type = Secret) for each of these.
-Or from the terminal (run each once, paste the value when prompted):
+Set once, in the dashboard (Worker → Settings → Variables and Secrets) or via
+terminal:
+
 ```bash
+wrangler secret put SUPABASE_URL
+wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 wrangler secret put OWNER_EMAIL      # where booking emails go
-wrangler secret put FROM_EMAIL       # verified sender, e.g. bookings@bufferbros.org
-wrangler secret put RESEND_API_KEY   # from resend.com (free tier)
+wrangler secret put FROM_EMAIL       # verified Resend sender
+wrangler secret put RESEND_API_KEY   # from resend.com
 ```
-- **Email** uses [Resend](https://resend.com). Create a free account, verify your `bufferbros.org` domain, create an API key, and use a `FROM_EMAIL` on that domain. If you skip email for now, bookings still save; they just won't email.
 
-### 6. Point your domain at Cloudflare
-Your domain is `bufferbros.org` (currently on GitHub Pages via the `CNAME` file).
-- In the **bufferbros-website** Worker: **Settings → Domains & Routes → Add → Custom domain → `bufferbros.org`** (and `www`).
-- Update your domain's nameservers/DNS to Cloudflare as instructed.
-- Once live on Cloudflare, GitHub Pages is no longer used.
+Email is best-effort: bookings still save without Resend configured.
+
+---
+
+## Editing prices, services and plans
+
+All live pricing comes from **Supabase**, edited in the admin dashboard's
+Settings page (admin.bufferbros.org). The site picks changes up within
+5 minutes — no deploy needed.
+
+- **Maintenance plan per-visit rates are intentionally not shown on the
+  site.** Plans book a first visit (a full Standard Detail at the sign-up
+  discount, `plan_initial_discount_pct` in Supabase `settings`); you agree
+  the recurring rate with the customer in person.
+- Marketing copy (taglines, the what's-included list, size labels) lives in
+  `lib/catalog.js` (`COPY`), which also holds the offline fallback snapshot —
+  keep the fallback prices roughly in sync when you change prices in the
+  dashboard.
+
+## Boats
+
+The packages page has a **Boats** tab (no set rates yet) that funnels
+inquiries to call/text. When boat pricing is ready, it can be added to the
+catalog like the other services.
+
+---
+
+## SEO
+
+- Per-page titles/descriptions: exported `metadata` in each `app/*/page.js`.
+- Structured data (LocalBusiness/AutoWash JSON-LD): `app/layout.js`.
+- `sitemap.xml` and `robots.txt` are generated from `app/sitemap.js` and
+  `app/robots.js`.
+- Old `.html` URLs (ads, QR codes, bookmarks) 301-redirect in
+  `next.config.mjs`.
 
 ---
 
 ## Day-to-day: managing your calendar
 
-The old `admin.html` page was removed. Weekly hours, blocked time, and bookings are
-managed in the admin dashboard at **admin.bufferbros.org** (separate repo; build spec
-in `ADMIN_DASHBOARD_SPEC.md`).
-
-The booking page only ever offers times that fit the chosen package + vehicle size
-(plus a travel/cleanup buffer), and it never offers a slot that overlaps a block or
-another booking. A booked slot is re-checked at submit time, so two people can't grab
-the same time.
-
----
-
-## Editing prices and packages
-
-Open `public/js/services.js`. All prices and durations live there.
-- `minutes` controls how long a slot is held (this is what makes a Standard on a 4Runner take ~2.5 hrs).
-- `price` shows on the Packages page and in the booking summary.
-- You can add/remove sizes, add-ons, and maintenance plans freely.
-
-After editing, push to Git (auto-deploys) or run `wrangler deploy`.
-
----
-
-## Tuning behavior
-
-Defaults live in `schema.sql` under `settings` (already applied):
-- `slot_granularity_min` (30) — start times shown every 30 min.
-- `min_lead_min` (180) — earliest a customer can book is 3 hours out.
-- `buffer_min` (30) — pack-up/travel time held after each job.
-
-Change them anytime:
-```bash
-wrangler d1 execute bufferbros --remote --command="UPDATE settings SET value='60' WHERE key='min_lead_min'"
-```
-
----
-
-## Local development
-```bash
-wrangler dev
-```
-This serves the static site and the booking API together at `http://localhost:8787`,
-using a local D1 database. Apply the schema locally first with
-`wrangler d1 execute bufferbros --local --file=./schema.sql`.
+Weekly hours, blocked time, and bookings are managed in the admin dashboard
+at **admin.bufferbros.org**. The booking page only offers times that fit the
+chosen vehicle + add-ons (Supabase `get_available_slots`), and the slot is
+re-validated at submit (`book_appointment`), so double-booking is impossible.

@@ -1,0 +1,27 @@
+'use client';
+
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+
+/* Fades .reveal elements in as they enter the viewport. Re-runs on route change. */
+export default function RevealObserver() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal:not(.in)');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [pathname]);
+
+  return null;
+}
