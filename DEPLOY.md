@@ -34,16 +34,24 @@ npm run preview
 npm run deploy
 ```
 
-This builds the Next.js app, adapts it with OpenNext, and deploys the
-`bufferbros-website` Worker using `wrangler.jsonc`. You need to be logged in
-(`npx wrangler login`).
+This runs `wrangler deploy`, which (via the `build.command` in
+`wrangler.jsonc`) builds the Next.js app with OpenNext and then deploys the
+`bufferbros-website` Worker. You need to be logged in (`npx wrangler login`).
 
-> **⚠️ If the repo is connected to Cloudflare's Git auto-deploy (Workers
-> Builds):** update the build settings in the Cloudflare dashboard
-> (Worker → Settings → Build) so the **build command** is
-> `npx opennextjs-cloudflare build` and the **deploy command** is
-> `npx opennextjs-cloudflare deploy`. The old static-site deploy will fail
-> or serve nothing after this migration if the build command isn't updated.
+### Auto-deploy on push (one-time setup)
+
+Pushing to GitHub does nothing until the repo is connected in the Cloudflare
+dashboard — every deploy so far has been manual. To connect it:
+
+1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages →
+   bufferbros-website → Settings → Build** (may say "Builds" or "Git
+   repository") → **Connect** and pick `tymastrangelo/bufferbros-website`,
+   branch `main`.
+2. When it asks for commands, set **deploy command** to `npx wrangler deploy`
+   (a separate build command isn't needed — `wrangler.jsonc` runs the OpenNext
+   build automatically).
+
+After that, every push to `main` builds and deploys on Cloudflare's side.
 
 ### Secrets
 

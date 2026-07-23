@@ -6,6 +6,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "bufferbros-website",
   "main": ".open-next/worker.js",
+  // Any `wrangler deploy` (local or Cloudflare git auto-deploy) builds the
+  // Next.js app via OpenNext first, so a bare deploy always works.
+  "build": {
+    "command": "npx opennextjs-cloudflare build"
+  },
   "compatibility_date": "2025-03-25",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
