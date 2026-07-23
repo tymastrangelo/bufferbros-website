@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function ThankYouPage() {
   return (
-    <section className="section flex items-center justify-center min-h-[70svh]" style={{ background: 'var(--surface-2)' }}>
+    <section className="section section-tint flex items-center justify-center min-h-[70svh]">
       <div className="card text-center p-10 max-w-md mx-4">
         <div className="h-16 w-16 mx-auto rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mb-4"><i className="fas fa-check" aria-hidden /></div>
         <h1 className="text-3xl font-bold mb-3">Thank you</h1>

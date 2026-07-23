@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <section className="section bg-white">
+    <section className="section section-light">
       <div className="container max-w-3xl">
         <span className="eyebrow">Legal</span>
         <h1 className="text-4xl font-extrabold mt-3 mb-2">Terms &amp; Conditions</h1>

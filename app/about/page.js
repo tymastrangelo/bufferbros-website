@@ -20,7 +20,7 @@ const COMMITMENTS = [
 export default function AboutPage() {
   return (
     <>
-      <section className="section bg-white pb-12">
+      <section className="section section-light pb-12">
         <div className="container max-w-3xl text-center">
           <span className="eyebrow">About us</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-5">Two locals who love clean cars</h1>
@@ -31,7 +31,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section" style={{ background: 'var(--surface-2)' }}>
+      <section className="section section-tint">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center mb-20">
             <div className="reveal">
@@ -79,7 +79,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section bg-white">
+      <section className="section section-light">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-12 reveal">
             <span className="eyebrow">What you can count on</span>

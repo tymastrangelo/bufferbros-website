@@ -36,7 +36,7 @@ export default function PackagesClient({ catalog: S }) {
   return (
     <>
       {/* HEADER + TABS */}
-      <section className="section bg-white pb-8 sm:pb-10">
+      <section className="section section-light pb-8 sm:pb-10">
         <div className="container max-w-3xl text-center">
           <span className="eyebrow">The detail</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-4 sm:mb-5">One detail. Done right.</h1>
@@ -68,7 +68,7 @@ export default function PackagesClient({ catalog: S }) {
 
       {tab === 'boat' ? (
         /* ============ BOATS ============ */
-        <section className="section" style={{ background: 'var(--surface-2)' }}>
+        <section className="section section-tint">
           <div className="container max-w-3xl">
             <div className="card overflow-hidden">
               <div className="section-dark p-8 sm:p-10 text-center">
@@ -133,7 +133,7 @@ export default function PackagesClient({ catalog: S }) {
           </section>
 
           {/* THE STANDARD DETAIL */}
-          <section className="section" style={{ background: 'var(--surface-2)' }}>
+          <section className="section section-tint">
             <div className="container max-w-4xl">
               <div className="card overflow-hidden" style={{ borderColor: 'var(--brand)', boxShadow: 'var(--shadow-md)' }}>
                 <div className="grid grid-cols-1 md:grid-cols-2">
@@ -170,7 +170,7 @@ export default function PackagesClient({ catalog: S }) {
           </section>
 
           {/* MAINTENANCE — plans without prices; rates are set in person */}
-          <section id="maintenance" className="section bg-white scroll-mt-24">
+          <section id="maintenance" className="section section-light scroll-mt-24">
             <div className="container max-w-5xl">
               <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
                 <span className="eyebrow">Keep it that way</span>
@@ -210,7 +210,7 @@ export default function PackagesClient({ catalog: S }) {
           </section>
 
           {/* ADD-ONS */}
-          <section className="section" style={{ background: 'var(--surface-2)' }}>
+          <section className="section section-tint">
             <div className="container">
               <div className="text-center max-w-2xl mx-auto mb-12">
                 <span className="eyebrow">Make it yours</span>

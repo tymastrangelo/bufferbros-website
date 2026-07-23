@@ -85,7 +85,7 @@ export default function HomePage() {
       </section>
 
       {/* HOW IT WORKS — asymmetric split, no card grid */}
-      <section className="section bg-white">
+      <section className="section section-light">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20">
             <div className="lg:col-span-2 reveal">
@@ -118,7 +118,7 @@ export default function HomePage() {
       </section>
 
       {/* WHY — image split with checklist */}
-      <section className="section" style={{ background: 'var(--surface-2)' }}>
+      <section className="section section-tint">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="relative reveal order-2 md:order-1">
@@ -168,7 +168,7 @@ export default function HomePage() {
       </section>
 
       {/* REVIEWS */}
-      <section className="section bg-white">
+      <section className="section section-light">
         <div className="container">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 max-w-5xl mx-auto mb-12 reveal">
             <div>

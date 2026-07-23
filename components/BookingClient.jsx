@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BB } from '@/lib/site';
+import Wheel from '@/components/Wheel';
 
 /* ---------- pure helpers ---------- */
 const fmtDur = (min) => {
@@ -190,7 +191,7 @@ export default function BookingClient({ catalog: S }) {
   /* ---------- confirmation state ---------- */
   if (confirmed) {
     return (
-      <section className="section" style={{ background: 'var(--surface-2)' }}>
+      <section className="section section-tint">
         <div className="container max-w-xl">
           <div className="card p-8 sm:p-10 text-center">
             <div className="h-16 w-16 mx-auto rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mb-4"><i className="fas fa-check" aria-hidden /></div>
@@ -219,7 +220,7 @@ export default function BookingClient({ catalog: S }) {
 
   return (
     <>
-      <section className="section" style={{ background: 'var(--surface-2)' }}>
+      <section className="section section-tint">
         <div className="container max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="eyebrow">Book online</span>
@@ -354,7 +355,7 @@ export default function BookingClient({ catalog: S }) {
                   {slots === null && <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>Choose a date above to see open times.</p>}
                   {slots === 'loading' && (
                     <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--slate-soft)' }}>
-                      <div className="spinner spinner-dark" style={{ width: 24, height: 24, borderWidth: 3 }} /> Loading open times...
+                      <Wheel size={24} /> Loading open times...
                     </div>
                   )}
                   {slots === 'error' && (
@@ -482,7 +483,7 @@ export default function BookingClient({ catalog: S }) {
       {submitting && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-60">
           <div className="bg-white rounded-2xl px-8 py-7 flex items-center gap-4 shadow-xl">
-            <div className="spinner spinner-dark" />
+            <Wheel size={42} />
             <p className="font-semibold text-ink">Booking your appointment...</p>
           </div>
         </div>
