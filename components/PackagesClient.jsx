@@ -181,23 +181,6 @@ export default function PackagesClient({ catalog: S }) {
                 </p>
               </div>
 
-              {/* how starting a plan works — the click books a discounted first detail */}
-              <ol className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto mb-8 sm:mb-12">
-                {[
-                  ['Book your first detail', <>Starting a plan books a full Standard Detail at <strong className="text-ink">{disc}% off</strong> — that&apos;s what you&apos;re booking today.</>],
-                  ['We set your plan rate', 'At that first visit, based on your car and how often we come.'],
-                  ['We keep it that way', 'The same complete detail every visit, at your locked-in rate.'],
-                ].map(([title, body], i) => (
-                  <li key={i} className="flex items-start gap-3.5 rounded-2xl p-4 sm:p-5" style={{ background: 'var(--brand-soft)' }}>
-                    <span className="step-badge bg-white" style={{ boxShadow: 'var(--shadow-sm)' }}>{i + 1}</span>
-                    <div>
-                      <p className="font-semibold text-ink text-sm mb-1">{title}</p>
-                      <p className="text-xs leading-relaxed" style={{ color: 'var(--slate)' }}>{body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-
               <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3">
                 {S.maintenance.map((m) => (
                   <div key={m.id} className="card card-hover relative p-6 sm:p-7 text-center flex flex-col"
@@ -212,12 +195,17 @@ export default function PackagesClient({ catalog: S }) {
                     <Link href={`/booking?size=${size}&freq=${m.id}`} className={`btn ${m.popular ? 'btn-primary' : 'btn-outline'} btn-block mt-auto`}>
                       Start {m.name.toLowerCase()}
                     </Link>
-                    <p className="text-xs mt-3" style={{ color: 'var(--slate-soft)' }}>
-                      Books your first detail at <span className="font-semibold text-ink">{disc}% off</span>
+                    <p className="text-xs mt-3 leading-relaxed" style={{ color: 'var(--slate-soft)' }}>
+                      Books your first detail at <span className="font-semibold text-ink">{disc}% off</span> —
+                      every visit after costs less
                     </p>
                   </div>
                 ))}
               </div>
+              <p className="text-center text-sm mt-7 max-w-lg mx-auto" style={{ color: 'var(--slate-soft)' }}>
+                We set your exact per-visit rate with you at that first detail — it depends on your car and how
+                often we come.
+              </p>
             </div>
           </section>
 

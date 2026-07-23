@@ -280,8 +280,8 @@ export default function BookingClient({ catalog: S }) {
                 {isRecurring && (
                   <div className="mt-4 text-sm rounded-xl p-3" style={{ background: 'var(--brand-soft)', color: 'var(--brand-dark)' }}>
                     <i className="fas fa-circle-info mr-1" aria-hidden /> We book your first visit now — a full Standard
-                    Detail at {disc}% off to get your car to maintenance shape. Your recurring per-visit price and
-                    schedule are set with you at that visit.
+                    Detail at {disc}% off. Every visit after that costs less than a one-time detail; we set your exact
+                    recurring rate and schedule with you at that first visit.
                   </div>
                 )}
               </div>
