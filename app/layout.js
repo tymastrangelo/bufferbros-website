@@ -17,7 +17,7 @@ const JSON_LD = {
   url: 'https://bufferbros.org',
   logo: 'https://bufferbros.org/images/black-logo.png',
   image: 'https://bufferbros.org/images/about-team.jpg',
-  description: 'Mobile car, truck and boat detailing serving Marco Island and Naples, FL. One complete detail with a showroom finish, priced up front — we come to your driveway with our own water and power.',
+  description: 'Mobile car, truck and boat detailing serving Marco Island and Naples, FL. One complete detail with a showroom finish, priced up front. We come to your driveway with our own water and power.',
   telephone: '+1-239-293-8511',
   priceRange: '$$',
   areaServed: [
@@ -41,7 +41,7 @@ const JSON_LD = {
     itemListElement: [
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'The Standard Detail', description: 'Complete interior and exterior mobile detail with a showroom finish.' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Maintenance detailing plans', description: 'Weekly, bi-weekly or monthly recurring details at a lower per-visit rate.' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Boat detailing', description: 'Mobile boat detailing at your dock, lift or trailer — quoted individually.' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Boat detailing', description: 'Mobile boat detailing at your dock, lift or trailer, quoted individually.' } },
     ],
   },
   potentialAction: {
@@ -57,7 +57,7 @@ export const metadata = {
     default: 'Buffer Bros | Mobile Car Detailing in Marco Island & Naples',
     template: '%s | Buffer Bros Mobile Detailing',
   },
-  description: 'Buffer Bros brings premium car detailing to your driveway in Marco Island and Naples, FL. One complete detail, priced up front — book online in about a minute.',
+  description: 'Buffer Bros brings car detailing to your driveway in Marco Island and Naples, FL. One complete detail, priced up front. Book online in about a minute.',
   icons: { icon: '/images/favicon.png' },
   openGraph: {
     siteName: 'Buffer Bros Mobile Detailing',

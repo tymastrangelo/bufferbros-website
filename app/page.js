@@ -3,7 +3,7 @@ import { BB } from '@/lib/site';
 
 export const metadata = {
   title: 'Buffer Bros | Mobile Car Detailing in Marco Island & Naples, FL',
-  description: 'Premium mobile car detailing in Marco Island and Naples, FL. One complete detail — showroom finish inside and out, priced up front. We come to your driveway. Book online in about a minute.',
+  description: 'Mobile car detailing in Marco Island and Naples, FL. One complete detail, priced up front. We come to your driveway. Book online in about a minute.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Buffer Bros | Mobile Car Detailing in Marco Island & Naples, FL',
@@ -31,7 +31,7 @@ const STEPS = [
   {
     n: '01',
     title: 'Tell us your car',
-    body: 'Pick your vehicle size and how often you want it done. Pricing is set up front — no surprise quotes, no phone tag.',
+    body: 'Pick your vehicle size and how often you want it done. The price is right on the page, so you know the cost before you book.',
   },
   {
     n: '02',
@@ -69,7 +69,7 @@ export default function HomePage() {
               Your car, detailed in your driveway.
             </h1>
             <p className="text-lg sm:text-xl text-gray-200 mb-9 max-w-xl">
-              One complete detail, done right every time. We bring the water, the power, and the standards — you just pick a time.
+              One complete detail, done right every time. We bring our own water and power. You just pick a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/booking" className="btn btn-primary text-base sm:px-8">Book an Appointment</Link>
@@ -203,14 +203,14 @@ export default function HomePage() {
         <div className="container text-center max-w-2xl mx-auto reveal">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to get your car detailed?</h2>
           <p className="text-gray-300 mb-9">
-            Grab the next open time and we bring the rest to your driveway — anywhere in Marco Island and Naples.
+            Grab the next open time and we handle the rest, anywhere in Marco Island and Naples.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link href="/booking" className="btn btn-primary sm:px-8">Book Now</Link>
             <a href={BB.smsHref} className="btn btn-ghost">Text us a question</a>
           </div>
           <p className="text-sm text-gray-400 mt-8">
-            Prefer to talk? Call or text <a href={BB.phoneHref} className="text-white font-semibold hover:underline">{BB.phone}</a> — {BB.hours.toLowerCase()}.
+            Prefer to talk? Call or text <a href={BB.phoneHref} className="text-white font-semibold hover:underline">{BB.phone}</a>, {BB.hours.toLowerCase()}.
           </p>
         </div>
       </section>

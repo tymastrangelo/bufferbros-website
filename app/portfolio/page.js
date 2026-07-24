@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { BB } from '@/lib/site';
 
 export const metadata = {
-  title: 'Our Work — Detailing Before & Afters',
+  title: 'Our Work | Detailing Before & Afters',
   description: 'See the cars Buffer Bros details in Marco Island and Naples, FL. Fresh before-and-after transformations posted on Instagram @bufferbros.fl.',
   alternates: { canonical: '/portfolio' },
   openGraph: {
@@ -30,10 +30,10 @@ export default function PortfolioPage() {
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
           <span className="eyebrow justify-center">Our work</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-5">Real cars, real driveways</h1>
+          <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-5">Straight from our camera roll</h1>
           <p className="text-lg" style={{ color: 'var(--slate-soft)' }}>
-            A look at the details we&apos;ve been doing around Marco Island and Naples —
-            and where to catch the freshest ones the day we finish them.
+            Cars we&apos;ve detailed around Marco Island and Naples, and where to
+            catch new ones the day we finish them.
           </p>
           <a
             href={BB.instagram}
@@ -56,7 +56,7 @@ export default function PortfolioPage() {
             />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" aria-hidden />
             <figcaption className="absolute bottom-4 left-5">
-              <TileLabel light>Aston Martin DB11 — fresh finish</TileLabel>
+              <TileLabel light>Aston Martin DB11 · fresh finish</TileLabel>
             </figcaption>
           </figure>
 
@@ -77,7 +77,7 @@ export default function PortfolioPage() {
               <i className="fab fa-tiktok" />
             </span>
             <span className="absolute bottom-4 left-5">
-              <TileLabel light>Range Rover HSE — watch on TikTok</TileLabel>
+              <TileLabel light>Range Rover HSE · watch on TikTok</TileLabel>
             </span>
           </a>
 
@@ -97,7 +97,7 @@ export default function PortfolioPage() {
               <i className="fab fa-tiktok" />
             </span>
             <span className="absolute bottom-4 left-5">
-              <TileLabel light>Two new Toyotas — watch on TikTok</TileLabel>
+              <TileLabel light>Two new Toyotas · watch on TikTok</TileLabel>
             </span>
           </a>
 
@@ -132,7 +132,7 @@ export default function PortfolioPage() {
             />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" aria-hidden />
             <figcaption className="absolute bottom-4 left-5">
-              <TileLabel light>Audi Q8 — foam bath</TileLabel>
+              <TileLabel light>Audi Q8 · foam bath</TileLabel>
             </figcaption>
           </figure>
 
@@ -143,7 +143,7 @@ export default function PortfolioPage() {
             </video>
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" aria-hidden />
             <div className="absolute bottom-4 left-5">
-              <TileLabel light>On the job — filmed on location</TileLabel>
+              <TileLabel light>On the job · filmed on location</TileLabel>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export default function PortfolioPage() {
             />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" aria-hidden />
             <figcaption className="absolute bottom-4 left-5">
-              <TileLabel light>Mercedes S-Class — interior detail</TileLabel>
+              <TileLabel light>Mercedes S-Class · interior detail</TileLabel>
             </figcaption>
           </figure>
 
@@ -169,7 +169,7 @@ export default function PortfolioPage() {
             />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" aria-hidden />
             <figcaption className="absolute bottom-4 left-5">
-              <TileLabel light>DB11 — interior detail</TileLabel>
+              <TileLabel light>DB11 · interior detail</TileLabel>
             </figcaption>
           </figure>
         </div>

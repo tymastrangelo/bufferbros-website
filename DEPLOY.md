@@ -34,24 +34,22 @@ npm run preview
 npm run deploy
 ```
 
-This runs `wrangler deploy`, which (via the `build.command` in
-`wrangler.jsonc`) builds the Next.js app with OpenNext and then deploys the
-`bufferbros-website` Worker. You need to be logged in (`npx wrangler login`).
+This runs `opennextjs-cloudflare build` (the OpenNext build) and then
+`opennextjs-cloudflare deploy` to push the `bufferbros-website` Worker.
+You need to be logged in (`npx wrangler login`).
 
-### Auto-deploy on push (one-time setup)
+Don't use a bare `wrangler deploy`: wrangler hands off to
+`opennextjs-cloudflare deploy` without building, which fails on a clean
+checkout (this is exactly how build #188a995e failed in CI).
 
-Pushing to GitHub does nothing until the repo is connected in the Cloudflare
-dashboard — every deploy so far has been manual. To connect it:
+### Auto-deploy on push
 
-1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages →
-   bufferbros-website → Settings → Build** (may say "Builds" or "Git
-   repository") → **Connect** and pick `tymastrangelo/bufferbros-website`,
-   branch `main`.
-2. When it asks for commands, set **deploy command** to `npx wrangler deploy`
-   (a separate build command isn't needed — `wrangler.jsonc` runs the OpenNext
-   build automatically).
+The repo is connected in the Cloudflare dashboard (Workers & Pages →
+bufferbros-website → Settings → Build), so every push to `main` deploys.
+The commands there must be:
 
-After that, every push to `main` builds and deploys on Cloudflare's side.
+- **Build command:** `npx opennextjs-cloudflare build`
+- **Deploy command:** `npx opennextjs-cloudflare deploy`
 
 ### Secrets
 

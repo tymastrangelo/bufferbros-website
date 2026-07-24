@@ -41,8 +41,8 @@ export default function PackagesClient({ catalog: S }) {
           <span className="eyebrow">The detail</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-4 sm:mb-5">One detail. Done right.</h1>
           <p className="text-base sm:text-lg" style={{ color: 'var(--slate-soft)' }}>
-            We don&apos;t do bronze, silver and gold. Clean doesn&apos;t have tiers. Every vehicle we touch gets the same
-            complete detail and the same showroom finish.
+            No bronze, silver, or gold packages here. Every car gets the same complete detail,
+            and the price just depends on your vehicle size.
           </p>
 
           {/* vehicle-type tabs */}
@@ -77,8 +77,8 @@ export default function PackagesClient({ catalog: S }) {
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Boat detailing</h2>
                 <p className="text-gray-300 max-w-xl mx-auto">
-                  We&apos;re bringing the Buffer Bros standard to the water. Boat detailing is brand new for us,
-                  so we&apos;re quoting each boat individually — no set rates yet, just the same care we give every car.
+                  Boat detailing is brand new for us, so we&apos;re quoting each boat individually.
+                  No set rates yet, just the same care we give every car.
                 </p>
               </div>
               <div className="p-8 sm:p-10">
@@ -104,7 +104,7 @@ export default function PackagesClient({ catalog: S }) {
                   <a href={BB.phoneHref} className="btn btn-outline"><i className="fas fa-phone-alt" aria-hidden /> Call {BB.phone}</a>
                 </div>
                 <p className="text-center text-xs mt-5" style={{ color: 'var(--slate-soft)' }}>
-                  First boats on the water get founding-customer treatment — honest pricing while we dial in our rates.
+                  We&apos;re still working out our boat rates, so the first boats get a great deal.
                 </p>
               </div>
             </div>
@@ -176,7 +176,7 @@ export default function PackagesClient({ catalog: S }) {
                 <span className="eyebrow">Keep it that way</span>
                 <h2 className="text-3xl sm:text-4xl font-bold mt-3">Maintenance plans</h2>
                 <p className="mt-4" style={{ color: 'var(--slate-soft)' }}>
-                  The exact same Standard Detail, on a schedule — at a lower per-visit rate than booking one-off.
+                  The exact same Standard Detail on a schedule, at a lower per-visit rate than booking one-off.
                   Cancel or change anytime.
                 </p>
               </div>
@@ -196,14 +196,14 @@ export default function PackagesClient({ catalog: S }) {
                       Start {m.name.toLowerCase()}
                     </Link>
                     <p className="text-xs mt-3 leading-relaxed" style={{ color: 'var(--slate-soft)' }}>
-                      Books your first detail at <span className="font-semibold text-ink">{disc}% off</span> —
-                      every visit after costs less
+                      Books your first detail at <span className="font-semibold text-ink">{disc}% off</span>,
+                      and every visit after costs less
                     </p>
                   </div>
                 ))}
               </div>
               <p className="text-center text-sm mt-7 max-w-lg mx-auto" style={{ color: 'var(--slate-soft)' }}>
-                We set your exact per-visit rate with you at that first detail — it depends on your car and how
+                We set your exact per-visit rate with you at that first detail. It depends on your car and how
                 often we come.
               </p>
             </div>

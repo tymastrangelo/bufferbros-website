@@ -226,8 +226,8 @@ export default function BookingClient({ catalog: S }) {
             <span className="eyebrow">Book online</span>
             <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-4">Book your detail</h1>
             <p style={{ color: 'var(--slate-soft)' }}>
-              Every booking is our complete Standard Detail — a full showroom finish inside and out.
-              Just tell us about your car and pick a time.
+              Every booking is our complete Standard Detail, inside and out.
+              Tell us about your car and pick a time.
             </p>
           </div>
 
@@ -260,7 +260,7 @@ export default function BookingClient({ catalog: S }) {
                 </div>
                 <Hint gate={gates.freq}>Choose your vehicle size first.</Hint>
                 <p className="text-sm mb-4" style={{ color: 'var(--slate-soft)' }}>
-                  Book a one-time detail, or start a maintenance plan — a plan books your first detail at {disc}% off,
+                  Book a one-time detail, or start a maintenance plan. A plan books your first detail at {disc}% off,
                   and we set your recurring rate at that visit.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -280,8 +280,8 @@ export default function BookingClient({ catalog: S }) {
                 </div>
                 {isRecurring && (
                   <div className="mt-4 text-sm rounded-xl p-3" style={{ background: 'var(--brand-soft)', color: 'var(--brand-dark)' }}>
-                    <i className="fas fa-circle-info mr-1" aria-hidden /> We book your first visit now — a full Standard
-                    Detail at {disc}% off. Every visit after that costs less than a one-time detail; we set your exact
+                    <i className="fas fa-circle-info mr-1" aria-hidden /> We book your first visit now: a full Standard
+                    Detail at {disc}% off. Every visit after that costs less than a one-time detail. We set your exact
                     recurring rate and schedule with you at that first visit.
                   </div>
                 )}

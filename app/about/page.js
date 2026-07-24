@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'About — Local Mobile Detailers in Marco Island & Naples',
-  description: 'Buffer Bros is a local mobile detailing team serving Marco Island and Naples, FL. Meet the two guys behind the work — fully equipped, insured, and hands-on since 2023.',
+  title: 'About Us | Local Mobile Detailers in Marco Island & Naples',
+  description: 'Buffer Bros is a local mobile detailing team serving Marco Island and Naples, FL. Meet the two guys behind the work. Fully equipped, insured, and hands-on since 2023.',
   alternates: { canonical: '/about' },
   openGraph: {
     title: 'About | Buffer Bros Mobile Detailing',

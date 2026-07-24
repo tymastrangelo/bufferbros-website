@@ -3,7 +3,7 @@ import { BB } from '@/lib/site';
 
 export const metadata = {
   title: 'Connect with Buffer Bros',
-  description: 'Book, call, text, or follow Buffer Bros Mobile Detailing — Marco Island and Naples, FL.',
+  description: 'Book, call, text, or follow Buffer Bros Mobile Detailing in Marco Island and Naples, FL.',
   alternates: { canonical: '/connect' },
   robots: { index: false },
 };
