@@ -58,7 +58,7 @@ export const metadata = {
     template: '%s | Buffer Bros Mobile Detailing',
   },
   description: 'Buffer Bros brings car detailing to your driveway in Marco Island and Naples, FL. One complete detail, priced up front. Book online in about a minute.',
-  icons: { icon: '/images/favicon.png' },
+  icons: { icon: '/images/favicon.png', apple: '/images/apple-touch-icon.png' },
   openGraph: {
     siteName: 'Buffer Bros Mobile Detailing',
     images: ['/images/about-team.jpg'],

@@ -180,26 +180,39 @@
   }
   .card-hover:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: #d5deee; }
 
-  /* ---------- navigation ---------- */
-  .site-nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(255, 255, 255, .82);
-    backdrop-filter: saturate(180%) blur(14px);
-    border-bottom: 1px solid rgba(15, 32, 68, .07);
+  /* ---------- navigation: floating glass pill ---------- */
+  .site-nav { position: sticky; top: .75rem; z-index: 50; }
+  .nav-shell {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 4rem; padding-left: 1.25rem; padding-right: .625rem;
+    background: #fff;
+    border: 1px solid rgba(15, 32, 68, .08);
+    border-radius: 9999px;
+    box-shadow: 0 10px 34px rgba(15, 32, 68, .1);
   }
-  .nav-link { position: relative; color: var(--ink); font-weight: 500; font-size: .95rem; padding: .25rem 0; }
-  .nav-link::after {
-    content: ''; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0;
-    background: var(--brand); transition: width .25s ease; border-radius: 2px;
+  .nav-link {
+    position: relative; z-index: 1;
+    color: var(--ink); font-weight: 500; font-size: .95rem;
+    padding: .5rem 1rem; border-radius: 9999px;
+    transition: background .2s ease, color .2s ease;
   }
-  .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-  .nav-link.active { color: var(--brand); }
+  .nav-link:hover:not(.active) { background: var(--surface-2); }
+  .nav-link.active { color: var(--brand-dark); }
+  /* the highlight that slides between links on navigation */
+  .nav-pill {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    height: 2.4rem; border-radius: 9999px;
+    background: var(--brand-soft);
+    transition: left .35s cubic-bezier(.22, .61, .36, 1), width .35s cubic-bezier(.22, .61, .36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) { .nav-pill { transition: none; } }
 
   .mobile-menu {
-    position: absolute; left: 0; right: 0; top: 100%;
+    position: absolute; left: 1rem; right: 1rem; top: calc(100% + .5rem);
     transform-origin: top;
     transition: opacity .22s ease, transform .22s ease;
     box-shadow: var(--shadow-md);
+    border-radius: 1.25rem; overflow: hidden;
   }
   .mobile-menu.is-hidden { opacity: 0; transform: scaleY(.96); pointer-events: none; }
 
@@ -245,10 +258,49 @@
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
     .btn, .card, .choice { transition: none; }
+    .marquee-track { animation: none; }
+    .marquee { overflow-x: auto; }
+    .page-enter { animation: none; }
+    .addon-img { transition: none; }
   }
 
+  /* ---------- page transitions ---------- */
+  .page-enter { animation: page-in .4s ease both; }
+
+  /* The floating nav already adds ~4.75rem of headroom, so the first section of a
+     page needs far less of its own top padding. Dark heroes handle it themselves. */
+  .page-enter > .section:first-child:not(.section-dark) { padding-top: 2.75rem; }
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ---------- add-on hover photo (slanted slide-in) ---------- */
+  .addon-card { position: relative; overflow: hidden; }
+  .addon-img {
+    position: absolute; top: 0; bottom: 0; right: 0; width: 50%;
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+    transform: translateX(103%);
+    transition: transform .45s cubic-bezier(.22, .61, .36, 1);
+    pointer-events: none;
+  }
+  .addon-img img { height: 100%; width: 100%; object-fit: cover; }
+  .addon-card:hover .addon-img, .addon-card:focus-within .addon-img { transform: translateX(0); }
+
+  /* ---------- recent-work photo marquee ---------- */
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+  .marquee-track > * { margin-right: 1rem; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
   /* ---------- mobile polish ---------- */
-  html, body { max-width: 100%; overflow-x: hidden; }
+  /* clip (not hidden): overflow-x hidden creates a scroll container and breaks position: sticky */
+  html, body { max-width: 100%; overflow-x: clip; }
 
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }

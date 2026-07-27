@@ -2,7 +2,24 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { BB } from '@/lib/site';
+import BoatInquiry from '@/components/BoatInquiry';
+
+/* Card banner follows the selected size so buyers see their kind of vehicle. */
+const DETAIL_IMG = {
+  sedan:   { src: '/images/aston-db11.jpg',   alt: 'Freshly detailed light-blue Aston Martin DB11 in a Naples driveway' },
+  midsize: { src: '/images/audi-q8-foam.jpg', alt: 'Audi Q8 covered in a thick foam bath during a mobile detail' },
+  large:   { src: '/images/detail-large.jpg', alt: 'Large black SUV being washed, paint glossy with water', pos: 'center 72%' },
+};
+
+/* Add-on cards reveal a matching photo on hover. Keyed by backend service id;
+   add-ons without an entry just stay plain cards. */
+const ADDON_IMG = {
+  'clay-bar':   '/images/addon-clay-bar.jpg',
+  'pet-hair':   '/images/addon-pet-hair.jpg',
+  'engine-bay': '/images/addon-engine-bay.jpg',
+  headlights:   '/images/addon-headlights.jpg',
+  odor:         '/images/mercedes-s-interior.jpg',
+};
 
 const fmtDur = (min) => {
   const h = Math.floor(min / 60), m = min % 60;
@@ -69,43 +86,58 @@ export default function PackagesClient({ catalog: S }) {
       {tab === 'boat' ? (
         /* ============ BOATS ============ */
         <section className="section section-tint">
-          <div className="container max-w-3xl">
+          <div className="container max-w-4xl">
             <div className="card overflow-hidden">
-              <div className="section-dark p-8 sm:p-10 text-center">
-                <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white bg-white/10 border border-white/20 px-3 py-1.5 rounded-full mb-4">
-                  <i className="fas fa-anchor" aria-hidden /> Now taking inquiries
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Boat detailing</h2>
-                <p className="text-gray-300 max-w-xl mx-auto">
-                  Boat detailing is brand new for us, so we&apos;re quoting each boat individually.
-                  No set rates yet, just the same care we give every car.
-                </p>
+              <div className="relative p-8 sm:p-10 text-center overflow-hidden">
+                <img
+                  src="/images/boat-marina.jpg"
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/70" aria-hidden />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white bg-white/10 border border-white/20 px-3 py-1.5 rounded-full mb-4">
+                    <i className="fas fa-anchor" aria-hidden /> Every boat quoted personally
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Boat detailing</h2>
+                  <p className="text-gray-200 max-w-xl mx-auto">
+                    No two boats need the same work, so we quote every boat personally.
+                    Send us a few photos and we&apos;ll get you a number, usually within the day.
+                  </p>
+                </div>
               </div>
-              <div className="p-8 sm:p-10">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center mb-9">
-                  <div>
-                    <div className="h-11 w-11 mx-auto rounded-xl bg-brand/10 text-brand grid place-items-center text-lg mb-3"><i className="fas fa-comments" aria-hidden /></div>
-                    <p className="text-sm font-semibold text-ink mb-1">Tell us about your boat</p>
-                    <p className="text-xs" style={{ color: 'var(--slate-soft)' }}>Size, condition, and what you want done.</p>
-                  </div>
-                  <div>
-                    <div className="h-11 w-11 mx-auto rounded-xl bg-brand/10 text-brand grid place-items-center text-lg mb-3"><i className="fas fa-file-invoice-dollar" aria-hidden /></div>
-                    <p className="text-sm font-semibold text-ink mb-1">Get a personal quote</p>
-                    <p className="text-xs" style={{ color: 'var(--slate-soft)' }}>We&apos;ll price it fairly for the work it needs.</p>
-                  </div>
-                  <div>
-                    <div className="h-11 w-11 mx-auto rounded-xl bg-brand/10 text-brand grid place-items-center text-lg mb-3"><i className="fas fa-water" aria-hidden /></div>
-                    <p className="text-sm font-semibold text-ink mb-1">We come to your dock</p>
-                    <p className="text-xs" style={{ color: 'var(--slate-soft)' }}>At your dock, lift, or trailer in Marco &amp; Naples.</p>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-5">
+                {/* rate guide — live from the backend */}
+                <div className="md:col-span-2 p-7 sm:p-9 md:border-r border-gray-100">
+                  <p className="font-semibold text-ink mb-1">Starting rates, per foot</p>
+                  <p className="text-xs mb-5" style={{ color: 'var(--slate-soft)' }}>
+                    A guide, not a menu price. Condition, hull size, and dock vs trailer all factor in.
+                  </p>
+                  <ul className="space-y-2.5 text-sm">
+                    {(S.boat || []).map((b) => (
+                      <li key={b.id} className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2" style={{ borderColor: 'var(--line)' }}>
+                        <span style={{ color: 'var(--slate)' }}>{b.name}{b.id === 'maintenance-ft' && '*'}</span>
+                        <span className="font-bold text-ink whitespace-nowrap">{cur}{b.perFt}<span className="font-normal text-xs" style={{ color: 'var(--slate-soft)' }}>/ft</span></span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-xs mt-4" style={{ color: 'var(--slate-soft)' }}>
+                    *Maintenance wash is an estimate. It depends on the boat and the schedule, and could be more or less.
+                  </p>
+                  <p className="text-xs mt-2" style={{ color: 'var(--slate-soft)' }}>
+                    We come to your dock, lift, or trailer anywhere in Marco &amp; Naples.
+                  </p>
                 </div>
-                <div className="flex flex-col sm:flex-row justify-center gap-3">
-                  <a href={BB.smsHref} className="btn btn-primary"><i className="fas fa-message" aria-hidden /> Text us about your boat</a>
-                  <a href={BB.phoneHref} className="btn btn-outline"><i className="fas fa-phone-alt" aria-hidden /> Call {BB.phone}</a>
+                {/* quote request */}
+                <div className="md:col-span-3 p-7 sm:p-9">
+                  <p className="font-semibold text-ink mb-1">Get your quote</p>
+                  <p className="text-xs mb-5" style={{ color: 'var(--slate-soft)' }}>
+                    Tell us about the boat and add photos, especially of any oxidation or trouble spots.
+                  </p>
+                  <BoatInquiry />
                 </div>
-                <p className="text-center text-xs mt-5" style={{ color: 'var(--slate-soft)' }}>
-                  We&apos;re still working out our boat rates, so the first boats get a great deal.
-                </p>
               </div>
             </div>
           </div>
@@ -136,6 +168,14 @@ export default function PackagesClient({ catalog: S }) {
           <section className="section section-tint">
             <div className="container max-w-4xl">
               <div className="card overflow-hidden" style={{ borderColor: 'var(--brand)', boxShadow: 'var(--shadow-md)' }}>
+                <img
+                  key={size}
+                  src={(DETAIL_IMG[size] || DETAIL_IMG.sedan).src}
+                  alt={(DETAIL_IMG[size] || DETAIL_IMG.sedan).alt}
+                  className="w-full h-44 sm:h-56 object-cover page-enter"
+                  style={{ objectPosition: (DETAIL_IMG[size] || DETAIL_IMG.sedan).pos }}
+                  loading="lazy"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   <div className="p-7 sm:p-9 md:border-r border-gray-100">
                     <span className="inline-block text-[11px] font-bold tracking-wide text-brand bg-brand/10 px-3 py-1 rounded-full mb-3">EVERYTHING INCLUDED</span>
@@ -221,13 +261,18 @@ export default function PackagesClient({ catalog: S }) {
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
                 {S.addons.map((a) => (
-                  <div key={a.id} className="card card-hover p-5 flex items-center justify-between gap-4">
-                    <div>
+                  <div key={a.id} className="card card-hover addon-card p-5">
+                    {ADDON_IMG[a.id] && (
+                      <div className="addon-img" aria-hidden>
+                        <img src={ADDON_IMG[a.id]} alt="" loading="lazy" />
+                      </div>
+                    )}
+                    <div className={ADDON_IMG[a.id] ? 'max-w-[46%]' : ''}>
                       <div className="font-semibold text-ink">{a.name}</div>
                       <div className="text-xs mt-0.5" style={{ color: 'var(--slate-soft)' }}>{a.note || ''}</div>
-                    </div>
-                    <div className="font-bold text-brand shrink-0">
-                      {addonPrice(a) > 0 ? `+${cur}${addonPrice(a)}` : 'TBD'}
+                      <div className="font-bold text-brand mt-2">
+                        {addonPrice(a) > 0 ? `+${cur}${addonPrice(a)}` : 'TBD'}
+                      </div>
                     </div>
                   </div>
                 ))}

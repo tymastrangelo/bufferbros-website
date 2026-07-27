@@ -45,11 +45,22 @@ const STEPS = [
   },
 ];
 
+const WORK = [
+  { src: '/images/aston-db11.jpg', alt: 'Freshly detailed light-blue Aston Martin DB11 Volante in a Naples driveway' },
+  { src: '/images/philosophy.jpg', alt: 'Pressure rinsing a white Toyota 4Runner during a mobile detail' },
+  { src: '/images/mercedes-s-interior.jpg', alt: 'Detailed Mercedes-Benz S-Class interior with cream leather' },
+  { src: '/images/audi-q8-foam.jpg', alt: 'Audi Q8 covered in a thick foam bath' },
+  { src: '/images/aston-db11-interior.jpg', alt: 'Detailed Aston Martin DB11 interior with blue and white leather' },
+];
+
 export default function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="section-dark relative min-h-[92svh] flex items-center overflow-hidden">
+      {/* -mt-16 pulls the video up behind the floating nav pill; pt-16 keeps the
+          content centered in the space below the header. Full 100svh so the next
+          section never peeks into the first screen. */}
+      <section className="section-dark relative min-h-[100svh] -mt-16 pt-16 flex items-center overflow-hidden">
         <video
           autoPlay muted loop playsInline
           className="absolute inset-0 w-full h-full object-cover"
@@ -58,7 +69,7 @@ export default function HomePage() {
           <source src="/videos/broll.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/70 to-black/40" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
 
         <div className="container relative z-10 py-28">
           <div className="max-w-2xl text-white" style={{ textShadow: '0 2px 16px rgba(0,0,0,.55)' }}>
@@ -163,6 +174,33 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RECENT WORK — scrolling strip of real jobs */}
+      <section className="section section-dark overflow-hidden">
+        <div className="container flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 reveal">
+          <div>
+            <span className="eyebrow">Recent work</span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">Cars we&apos;ve detailed around town</h2>
+          </div>
+          <Link href="/portfolio" className="text-sm font-semibold text-brand hover:underline shrink-0">
+            See all our work <i className="fas fa-arrow-right ml-1 text-xs" aria-hidden />
+          </Link>
+        </div>
+        <div className="marquee reveal">
+          <div className="marquee-track">
+            {[...WORK, ...WORK].map((w, i) => (
+              <img
+                key={i}
+                src={w.src}
+                alt={i < WORK.length ? w.alt : ''}
+                aria-hidden={i >= WORK.length}
+                className="h-52 sm:h-72 w-auto rounded-2xl object-cover"
+                loading="lazy"
+              />
+            ))}
           </div>
         </div>
       </section>
