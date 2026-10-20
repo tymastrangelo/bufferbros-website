@@ -1,12 +1,13 @@
-import { Inter, Sora } from 'next/font/google';
+import { Archivo } from 'next/font/google';
 import Script from 'next/script';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import RevealObserver from '@/components/RevealObserver';
+import Attribution from '@/components/Attribution';
+import ActionBar from '@/components/ActionBar';
+import OfferPopup from '@/components/OfferPopup';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const sora = Sora({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-sora', display: 'swap' });
+const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], variable: '--font-archivo', display: 'swap' });
 
 /* LocalBusiness structured data — feeds Google's local results and knowledge panel. */
 const JSON_LD = {
@@ -16,8 +17,8 @@ const JSON_LD = {
   name: 'Buffer Bros Mobile Detailing',
   url: 'https://bufferbros.org',
   logo: 'https://bufferbros.org/images/black-logo.png',
-  image: 'https://bufferbros.org/images/about-team.jpg',
-  description: 'Mobile car, truck and boat detailing serving Marco Island and Naples, FL. One complete detail with a showroom finish, priced up front. We come to your driveway with our own water and power.',
+  image: 'https://bufferbros.org/images/aston-db11.jpg',
+  description: 'Mobile car, truck and boat detailing serving Marco Island and Naples, FL. One complete detail with a showroom finish, priced up front. We come to your driveway, garage or dock.',
   telephone: '+1-239-293-8511',
   priceRange: '$$',
   areaServed: [
@@ -61,18 +62,14 @@ export const metadata = {
   icons: { icon: '/images/favicon.png', apple: '/images/apple-touch-icon.png' },
   openGraph: {
     siteName: 'Buffer Bros Mobile Detailing',
-    images: ['/images/about-team.jpg'],
+    images: ['/images/aston-db11.jpg'],
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${sora.variable}`}>
+    <html lang="en" className={archivo.variable}>
       <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
@@ -82,7 +79,9 @@ export default function RootLayout({ children }) {
         <Nav />
         <main>{children}</main>
         <Footer />
-        <RevealObserver />
+        <ActionBar />
+        <Attribution />
+        <OfferPopup />
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-WG9M9W3RL8" strategy="afterInteractive" />
         <Script id="gtag-init" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];

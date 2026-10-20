@@ -1,12 +1,18 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+/* Booking in three steps: 1 · your car (size, how often, extras) → 2 · a real open
+   time → 3 · your details. Arriving from the homepage quote (?size&freq&date&start)
+   skips straight to the details. A sticky price bar (phone) / summary card (desktop)
+   keeps the total and the Confirm button in reach the whole time. */
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BB } from '@/lib/site';
+import { getAttribution, trackBooking } from '@/lib/track';
+import { getClaim } from '@/lib/offer';
 import Wheel from '@/components/Wheel';
+import { IconCalendarBlank, IconCheck, IconCheckCircle, IconInfo, IconPlus } from '@/components/Icons';
 
-/* ---------- pure helpers ---------- */
 const fmtDur = (min) => {
   const h = Math.floor(min / 60), m = min % 60;
   if (h && m) return `${h} hr ${m} min`;
@@ -20,111 +26,156 @@ const fmtTime = (min) => {
   h = h % 12 || 12;
   return `${h}:${String(m).padStart(2, '0')} ${ap}`;
 };
-// local YYYY-MM-DD (avoids UTC day-shift from toISOString)
 const isoLocal = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const prettyDate = (iso) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${WD[new Date(y, m - 1, d, 12).getDay()]}, ${MON[m - 1]} ${d}`;
+};
+const HEARD = ['Google', 'Instagram', 'Facebook', 'Nextdoor', 'A friend or neighbor', 'Saw the truck', 'Other'];
+
+function Step({ n, title, done, children, id }) {
+  return (
+    <section id={id} className="card p-5 sm:p-7 scroll-mt-24">
+      <div className="flex items-center gap-3 mb-5">
+        <span className={`h-8 w-8 shrink-0 rounded-full grid place-items-center text-sm font-bold transition-colors ${done ? 'bg-brand text-white' : 'bg-[color:var(--surface-2)] text-ink'}`}>
+          {done ? <IconCheck size={16} weight="bold" /> : n}
+        </span>
+        <h2 className="text-xl">{title}</h2>
+      </div>
+      {children}
+    </section>
+  );
+}
 
 export default function BookingClient({ catalog: S }) {
   const params = useSearchParams();
   const cur = S.currency;
-
-  // Plans book their first visit here: the full Standard Detail at the sign-up
-  // discount. Per-visit plan pricing is quoted in person at that visit.
   const disc = (S.plan && S.plan.firstVisitDiscountPct) || 10;
-  const firstVisitPrice = (detailPrice) => Math.round(detailPrice * (1 - disc / 100));
+  const firstVisitPrice = (p) => Math.round(p * (1 - disc / 100));
 
-  const FREQS = useMemo(() => (
-    [{ id: 'onetime', name: 'One-time', desc: 'Just this once', recurring: false }]
-      .concat(S.maintenance.map((m) => ({ id: m.id, name: m.name, desc: m.cadence, note: m.note, recurring: true })))
-  ), [S]);
+  const FREQS = useMemo(
+    () => [{ id: 'onetime', name: 'One-time', desc: 'Just this once' }].concat(S.maintenance.map((m) => ({ id: m.id, name: m.name, desc: m.cadence, note: m.note }))),
+    [S]
+  );
 
-  /* ---------- state ---------- */
-  const [sizeId, setSizeId] = useState(() => {
-    const sz = params.get('size');
-    return S.sizes.some((s) => s.id === sz) ? sz : null;
-  });
-  const [freq, setFreq] = useState(() => {
-    const fq = params.get('freq');
-    return ['onetime', ...S.maintenance.map((m) => m.id)].includes(fq) ? fq : null;
-  });
+  const [sizeId, setSizeId] = useState(() => (S.sizes.some((s) => s.id === params.get('size')) ? params.get('size') : null));
+  const [freq, setFreq] = useState(() => (FREQS.some((f) => f.id === params.get('freq')) ? params.get('freq') : 'onetime'));
   const [addons, setAddons] = useState([]);
-  const [date, setDate] = useState(null);
+  const [showAddons, setShowAddons] = useState(false);
+  const [date, setDate] = useState(() => (/^\d{4}-\d{2}-\d{2}$/.test(params.get('date') || '') ? params.get('date') : null));
+  const prefillStart = useRef(params.get('start') != null ? Number(params.get('start')) : null);
   const [startMin, setStartMin] = useState(null);
-  const [slots, setSlots] = useState(null);        // null = idle, 'loading', 'error', or []
+  const [slots, setSlots] = useState(null);
   const [contact, setContact] = useState({ name: '', phone: '', email: '', address: '', notes: '' });
+  const [noWater, setNoWater] = useState(false); // we use the client's spigot; water has to be planned ahead
+  const [away, setAway] = useState(false); // not home: access and payment get planned ahead
+  const [heard, setHeard] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [confirmed, setConfirmed] = useState(null); // { text }
-  const [pickedOther, setPickedOther] = useState(null); // label for the native date input
+  const [confirmed, setConfirmed] = useState(null);
+  const [offer, setOffer] = useState(null); // welcome offer claimed via the email popup
+  useEffect(() => {
+    const sync = () => setOffer(getClaim());
+    sync();
+    window.addEventListener('bb:offer-claimed', sync);
+    return () => window.removeEventListener('bb:offer-claimed', sync);
+  }, []);
+  const slotLoad = useRef(0);
 
-  const slotLoadId = useRef(0);
-
-  /* ---------- derived ---------- */
   const addonQuote = useCallback((a) => (a.pricing && a.pricing[sizeId]) || a, [sizeId]);
-  const isRecurring = !!freq && freq !== 'onetime';
+  const isPlan = freq !== 'onetime';
   const size = S.sizes.find((s) => s.id === sizeId);
-  const planName = (FREQS.find((f) => f.id === freq) || {}).name || '--';
+  const planName = (FREQS.find((f) => f.id === freq) || {}).name;
 
   const totals = useMemo(() => {
-    const detail = sizeId ? (S.detail.pricing[sizeId] || {}) : {};
-    let price = !sizeId || !freq ? 0 : (freq === 'onetime' ? detail.price || 0 : firstVisitPrice(detail.price || 0));
+    const detail = sizeId ? S.detail.pricing[sizeId] || {} : {};
+    let price = !sizeId ? 0 : isPlan ? firstVisitPrice(detail.price || 0) : detail.price || 0;
     let minutes = detail.minutes || 0;
-    addons.forEach((id) => {
+    for (const id of addons) {
       const a = S.addons.find((x) => x.id === id);
-      if (a) { const q = addonQuote(a); price += q.price || 0; minutes += q.minutes || 0; }
-    });
-    return { price, minutes };
-  }, [S, sizeId, freq, addons, addonQuote]);
+      if (a) {
+        const q = addonQuote(a);
+        price += q.price || 0;
+        minutes += q.minutes || 0;
+      }
+    }
+    const discount = offer ? Math.round((price * offer.pct) / 100) : 0;
+    return { price: price - discount, minutes, discount };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [S, sizeId, isPlan, addons, addonQuote, offer]);
 
-  const detailsFilled = ['name', 'phone', 'email', 'address'].every((k) => contact[k].trim());
-  const priceLabel = isRecurring ? 'First visit' : 'Estimated total';
-  const priceText = !(sizeId && freq) ? '--' : (totals.price > 0 ? cur + totals.price : 'Confirmed on site');
-
-  /* ---------- availability ---------- */
+  /* open times for the chosen day */
   useEffect(() => {
     setStartMin(null);
-    if (!sizeId || !freq || !date) { setSlots(null); return; }
-    const myId = ++slotLoadId.current;
+    if (!sizeId || !date) return setSlots(null);
+    const my = ++slotLoad.current;
     setSlots('loading');
     fetch(`/api/availability?date=${date}&duration=${totals.minutes}`)
       .then((r) => r.json())
-      .then((data) => {
-        if (myId !== slotLoadId.current) return;
-        if (!data.ok) throw new Error(data.error);
-        setSlots(data.slots);
+      .then((d) => {
+        if (my !== slotLoad.current) return;
+        if (!d.ok) throw new Error(d.error);
+        setSlots(d.slots);
+        // honor the time picked on the homepage, if it's still open
+        if (prefillStart.current != null && d.slots.some((s) => s.min === prefillStart.current)) setStartMin(prefillStart.current);
+        prefillStart.current = null;
       })
-      .catch(() => { if (myId === slotLoadId.current) setSlots('error'); });
-    // totals.minutes covers size + addons; date/freq gate the fetch
-  }, [sizeId, freq, date, totals.minutes]);
+      .catch(() => my === slotLoad.current && setSlots('error'));
+  }, [sizeId, date, totals.minutes]);
 
-  /* ---------- mobile flow: glide to the next step ---------- */
-  const scrollToStep = (id) => {
-    if (!window.matchMedia('(max-width: 1023px)').matches) return;
-    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-  };
+  const dateChips = useMemo(() => {
+    const base = new Date();
+    base.setHours(12, 0, 0, 0);
+    return Array.from({ length: 14 }, (_, i) => {
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      return { iso: isoLocal(d), top: i === 0 ? 'Today' : i === 1 ? 'Tmrw' : WD[d.getDay()], day: d.getDate(), mon: MON[d.getMonth()] };
+    });
+  }, []);
 
-  /* ---------- submit ---------- */
+  const scrollTo = (id) => requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  const detailsFilled = ['name', 'phone', 'email', 'address'].every((k) => contact[k].trim());
+  const ready = sizeId && date && startMin != null && detailsFilled && agreed;
+  const priceText = sizeId ? (totals.price > 0 ? `${cur}${totals.price}` : 'Quoted on site') : 'Pick a size';
+
+  function fail(msg, at) {
+    setError(msg);
+    if (at) scrollTo(at);
+  }
+
   async function submit(e) {
     e?.preventDefault();
     setError('');
-    if (!sizeId) return showError('Please choose your vehicle size.');
-    if (!freq) return showError('Please choose how often (one-time or a maintenance plan).');
-    if (!date || startMin == null) return showError('Please pick a date and time.');
-    if (!detailsFilled) return showError('Please fill in your name, phone, email and address.');
-    if (!agreed) return showError('Please agree to the terms and conditions.');
+    if (!sizeId) return fail('Choose your vehicle size.', 'step-car');
+    if (!date || startMin == null) return fail('Pick a date and time.', 'step-time');
+    if (!detailsFilled) return fail('Add your name, phone, email and address.', 'step-you');
+    if (!agreed) return fail('Please agree to the terms to confirm.', 'step-you');
 
-    const pkgName = S.detail.name + (isRecurring ? ` (${planName} plan)` : '');
+    const packageName = S.detail.name + (isPlan ? ` (${planName} plan)` : '');
     const payload = {
-      name: contact.name.trim(), email: contact.email.trim(), phone: contact.phone.trim(),
-      address: contact.address.trim(), notes: contact.notes.trim(),
-      packageId: S.detail.id, packageName: pkgName,
-      sizeId: size.id, sizeLabel: size.label,
-      addons: addons.map((id) => { const a = S.addons.find((x) => x.id === id); return { id: a.id, name: a.name, price: addonQuote(a).price || 0 }; }),
-      date, startMin,
-      durationMin: totals.minutes, price: totals.price || 0,
+      name: contact.name.trim(),
+      email: contact.email.trim(),
+      phone: contact.phone.trim(),
+      address: contact.address.trim(),
+      notes: [noWater && 'No water spigot on site: bring water.', away && 'Customer will not be home: plan access and payment ahead.', contact.notes.trim()].filter(Boolean).join('\n'),
+      packageId: S.detail.id,
+      packageName,
+      sizeId: size.id,
+      sizeLabel: size.label,
+      addons: addons.map((id) => {
+        const a = S.addons.find((x) => x.id === id);
+        return { id: a.id, name: a.name, price: addonQuote(a).price || 0 };
+      }),
+      date,
+      startMin,
+      durationMin: totals.minutes,
+      price: totals.price || 0,
       agreedTerms: true,
+      attribution: { ...(getAttribution() || {}), heard },
+      offerCode: offer && totals.discount > 0 ? offer.code : null,
     };
 
     setSubmitting(true);
@@ -132,362 +183,266 @@ export default function BookingClient({ catalog: S }) {
       const res = await fetch('/api/book', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || 'Something went wrong');
-      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { event_category: 'booking' });
-      setConfirmed({ text: `${pkgName} for your ${size.label.toLowerCase()} on ${data.when}.` });
+      trackBooking({ value: totals.price || 0, id: data.id });
+      setConfirmed({ when: data.when, packageName });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
-      showError(err.message || `We could not complete the booking. Please call ${BB.phone}.`);
+      fail(err.message || `We could not complete the booking. Please call ${BB.phone}.`);
     } finally {
       setSubmitting(false);
     }
   }
-  function showError(msg) {
-    setError(msg);
-    requestAnimationFrame(() => document.getElementById('form-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
-  }
 
-  /* ---------- step gating ---------- */
-  const gates = {
-    size: { unlocked: true, done: !!sizeId },
-    freq: { unlocked: !!sizeId, done: !!freq },
-    addons: { unlocked: !!freq, done: addons.length > 0 },
-    date: { unlocked: !!freq, done: startMin != null },
-    details: { unlocked: startMin != null, done: detailsFilled },
-    terms: { unlocked: startMin != null, done: agreed },
-  };
-
-  const Badge = ({ gate, n }) => (
-    <span className={`step-badge ${!gate.unlocked ? 'locked' : gate.done ? 'done' : ''}`}>
-      {!gate.unlocked ? <i className="fas fa-lock" style={{ fontSize: '.7rem' }} aria-hidden />
-        : gate.done ? <i className="fas fa-check" aria-hidden /> : n}
-    </span>
-  );
-  const Hint = ({ gate, children }) => gate.unlocked ? null : (
-    <p className="step-hint text-sm font-medium mb-3"><i className="fas fa-arrow-up mr-1" aria-hidden /> {children}</p>
-  );
-
-  const freqPriceTag = (id) => {
-    if (!sizeId) return null;
-    const detail = (S.detail.pricing[sizeId] || {}).price;
-    if (!detail || detail <= 0) return <span className="text-xs" style={{ color: 'var(--slate-soft)' }}>TBD</span>;
-    if (id === 'onetime') return <span className="font-bold text-brand">{cur}{detail}</span>;
-    return (
-      <>
-        <span className="font-bold text-brand">{cur}{firstVisitPrice(detail)}</span>
-        <span className="block text-[11px]" style={{ color: 'var(--slate-soft)' }}>first visit · {disc}% off</span>
-      </>
-    );
-  };
-
-  /* ---------- date chips ---------- */
-  const dateChips = useMemo(() => {
-    const base = new Date(); base.setHours(12, 0, 0, 0);
-    return Array.from({ length: 14 }, (_, i) => {
-      const d = new Date(base); d.setDate(base.getDate() + i);
-      return { iso: isoLocal(d), top: i === 0 ? 'Today' : i === 1 ? 'Tmrw' : WD[d.getDay()], day: d.getDate(), mon: MON[d.getMonth()] };
-    });
-  }, []);
-
-  /* ---------- confirmation state ---------- */
   if (confirmed) {
     return (
-      <section className="section section-tint">
-        <div className="container max-w-xl">
-          <div className="card p-8 sm:p-10 text-center">
-            <div className="h-16 w-16 mx-auto rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mb-4"><i className="fas fa-check" aria-hidden /></div>
-            <h1 className="text-2xl font-bold mb-2">You are booked!</h1>
-            <p className="mb-6" style={{ color: 'var(--slate)' }}>{confirmed.text}</p>
-            <p className="text-sm mb-6" style={{ color: 'var(--slate-soft)' }}>
-              We sent a confirmation to your email. The time may be an arrival window, and final pricing is confirmed
-              on site. Need to change something? Call or text {BB.phone}.
+      <section className="section section-sand min-h-[70svh]">
+        <div className="container max-w-lg">
+          <div className="card p-8 sm:p-10 text-center rise">
+            <IconCheckCircle size={56} weight="fill" className="mx-auto text-[color:var(--color-ok)]" />
+            <h1 className="text-3xl mt-4">You are booked</h1>
+            <p className="mt-3 text-ink">
+              {confirmed.packageName} for your {size.label.toLowerCase()}, {confirmed.when}.
             </p>
-            <Link href="/" className="btn btn-outline">Back to home</Link>
+            <p className="mt-4 text-sm" style={{ color: 'var(--slate-soft)' }}>
+              A confirmation is on its way to {contact.email}. The time is an arrival window, and you pay after the detail.
+              Need to change something? Text {BB.phone}.
+            </p>
+            <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3">
+              <a href={BB.smsHref} className="btn btn-outline">Text us</a>
+              <Link href="/" className="btn btn-dark">Back to home</Link>
+            </div>
           </div>
         </div>
       </section>
     );
   }
 
-  const summaryRows = [
-    ['Service', S.detail.name],
-    ['Vehicle', size ? size.label : '--'],
-    ['Plan', planName],
-    ...(addons.length ? [['Add-ons', addons.map((id) => (S.addons.find((a) => a.id === id) || {}).name).filter(Boolean).join(', ')]] : []),
-    ...(totals.minutes ? [['Time', 'About ' + fmtDur(totals.minutes)]] : []),
-    ...(date ? [['Date', date]] : []),
-    ...(startMin != null ? [['Start', fmtTime(startMin)]] : []),
-  ];
-
   return (
     <>
-      <section className="section section-tint">
+      <section className="section section-sand pt-10 sm:pt-14">
         <div className="container max-w-6xl">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="eyebrow">Book online</span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-4">Book your detail</h1>
-            <p style={{ color: 'var(--slate-soft)' }}>
-              Every booking is our complete Standard Detail, inside and out.
-              Tell us about your car and pick a time.
-            </p>
+          <div className="max-w-2xl mb-8">
+            <h1 className="text-4xl sm:text-5xl">Book your detail</h1>
+            <p className="lede mt-3">Three quick steps. Nothing is charged until the work is done.</p>
           </div>
 
-          <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start pb-24 lg:pb-0">
-            <div className="lg:col-span-2 min-w-0 space-y-8">
-
-              {/* 1. Vehicle size */}
-              <div id="step-size" className="card p-6 sm:p-7 step">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge gate={gates.size} n="1" />
-                  <h2 className="text-lg font-bold">Your vehicle size</h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {S.sizes.map((s) => (
-                    <label key={s.id} className={`choice ${s.id === sizeId ? 'is-selected' : ''}`}>
-                      <input type="radio" name="size" value={s.id} checked={s.id === sizeId}
-                             onChange={() => { setSizeId(s.id); scrollToStep('step-freq'); }} />
-                      <span className="font-semibold text-ink text-sm">{s.label}</span>
-                      <span className="block text-xs mt-0.5" style={{ color: 'var(--slate-soft)' }}>{s.note}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Frequency */}
-              <div id="step-freq" className={`card p-6 sm:p-7 step ${gates.freq.unlocked ? '' : 'locked'}`}>
-                <div className="flex items-center gap-3 mb-1">
-                  <Badge gate={gates.freq} n="2" />
-                  <h2 className="text-lg font-bold">How often?</h2>
-                </div>
-                <Hint gate={gates.freq}>Choose your vehicle size first.</Hint>
-                <p className="text-sm mb-4" style={{ color: 'var(--slate-soft)' }}>
-                  Book a one-time detail, or start a maintenance plan. A plan books your first detail at {disc}% off,
-                  and we set your recurring rate at that visit.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {FREQS.map((f) => (
-                    <label key={f.id} className={`choice ${f.id === freq ? 'is-selected' : ''}`}>
-                      <input type="radio" name="freq" value={f.id} checked={f.id === freq}
-                             onChange={() => { setFreq(f.id); scrollToStep('step-addons'); }} />
-                      <span className="flex items-center justify-between gap-2">
-                        <span className="font-semibold text-ink text-sm">{f.name}</span>
-                        <span className="shrink-0 text-right">{freqPriceTag(f.id)}</span>
-                      </span>
-                      <span className="block text-xs mt-0.5" style={{ color: 'var(--slate-soft)' }}>
-                        {f.desc}{f.note ? ` · ${f.note}` : ''}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                {isRecurring && (
-                  <div className="mt-4 text-sm rounded-xl p-3" style={{ background: 'var(--brand-soft)', color: 'var(--brand-dark)' }}>
-                    <i className="fas fa-circle-info mr-1" aria-hidden /> We book your first visit now: a full Standard
-                    Detail at {disc}% off. Every visit after that costs less than a one-time detail. We set your exact
-                    recurring rate and schedule with you at that first visit.
-                  </div>
-                )}
-              </div>
-
-              {/* 3. Add-ons */}
-              <div id="step-addons" className={`card p-6 sm:p-7 step ${gates.addons.unlocked ? '' : 'locked'}`}>
-                <div className="flex items-center gap-3 mb-1">
-                  <Badge gate={gates.addons} n="3" />
-                  <h2 className="text-lg font-bold">Add-ons <span className="font-normal text-sm" style={{ color: 'var(--slate-soft)' }}>(optional)</span></h2>
-                </div>
-                <Hint gate={gates.addons}>Choose how often first.</Hint>
-                <p className="text-sm mb-4" style={{ color: 'var(--slate-soft)' }}>
-                  Everything else is already included. These add a little time to your appointment.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {S.addons.map((a) => {
-                    const on = addons.includes(a.id);
-                    const p = addonQuote(a).price;
+          <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-[1fr_22rem] gap-6 lg:gap-8 items-start pb-28 lg:pb-0">
+            <div className="min-w-0 space-y-5">
+              {/* 1 · CAR */}
+              <Step n="1" id="step-car" title="Your car" done={!!sizeId}>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5" role="radiogroup" aria-label="Vehicle size">
+                  {S.sizes.map((s) => {
+                    const p = (S.detail.pricing[s.id] || {}).price;
                     return (
-                      <label key={a.id} className={`choice ${on ? 'is-selected' : ''}`}>
-                        <input type="checkbox" checked={on}
-                               onChange={() => setAddons(on ? addons.filter((x) => x !== a.id) : [...addons, a.id])} />
-                        <span className="flex items-center justify-between gap-2">
-                          <span className="font-semibold text-ink text-sm">{a.name}</span>
-                          <span className="text-sm font-bold text-brand shrink-0">{p > 0 ? `+${cur}${p}` : ''}</span>
+                      <label key={s.id} className={`choice ${s.id === sizeId ? 'is-selected' : ''}`}>
+                        <input type="radio" name="size" checked={s.id === sizeId} onChange={() => { setSizeId(s.id); if (!date) scrollTo('step-time'); }} />
+                        <span className="flex items-baseline justify-between gap-2">
+                          <span className="font-semibold text-ink text-[0.95rem]">{s.label}</span>
+                          <span className="font-bold text-ink num">{cur}{isPlan ? firstVisitPrice(p) : p}</span>
                         </span>
-                        <span className="block text-xs mt-0.5" style={{ color: 'var(--slate-soft)' }}>{a.note || ''}</span>
+                        <span className="block text-xs mt-1" style={{ color: 'var(--slate-soft)' }}>{s.note}</span>
                       </label>
                     );
                   })}
                 </div>
-              </div>
 
-              {/* 4. Date & time */}
-              <div id="step-date" className={`card p-6 sm:p-7 step ${gates.date.unlocked ? '' : 'locked'}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge gate={gates.date} n="4" />
-                  <h2 className="text-lg font-bold">Pick a date and time</h2>
-                </div>
-                <Hint gate={gates.date}>Choose your vehicle size and how often first.</Hint>
-                <div className="flex gap-2 overflow-x-auto no-scrollbar snap-x -mx-1 px-1 pb-2 mb-3">
-                  {dateChips.map((c) => (
-                    <button key={c.iso} type="button"
-                            className={`slot ${date === c.iso ? 'is-selected' : ''} snap-start shrink-0 w-16 flex flex-col items-center gap-0.5 py-2`}
-                            onClick={() => { setDate(c.iso); setPickedOther(null); scrollToStep('slots-area'); }}>
-                      <span className="text-[11px] font-medium">{c.top}</span>
-                      <span className="text-lg font-bold leading-none">{c.day}</span>
-                      <span className="text-[10px] opacity-70">{c.mon}</span>
-                    </button>
+                <p className="label mt-6">How often</p>
+                <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="How often">
+                  {FREQS.map((f) => (
+                    <label key={f.id} className={`choice py-2.5 px-4 ${f.id === freq ? 'is-selected' : ''}`}>
+                      <input type="radio" name="freq" checked={f.id === freq} onChange={() => setFreq(f.id)} />
+                      <span className="text-sm font-semibold text-ink">{f.name}</span>
+                      {f.note && <span className="ml-1.5 text-xs" style={{ color: 'var(--slate-soft)' }}>{f.note}</span>}
+                    </label>
                   ))}
                 </div>
-                <div className="mb-5">
-                  <span className="relative inline-flex items-center gap-1.5 text-sm font-medium text-brand cursor-pointer">
-                    <i className="far fa-calendar" aria-hidden />
-                    <span>{pickedOther || 'Pick another date'}</span>
-                    <input
-                      type="date" min={isoLocal(new Date())} aria-label="Pick another date"
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      onChange={(e) => {
-                        if (!e.target.value) return;
-                        const [y, m, d] = e.target.value.split('-').map(Number);
-                        setDate(e.target.value);
-                        setPickedOther(`${MON[m - 1]} ${d}, ${y}`);
-                        scrollToStep('slots-area');
-                      }}
-                    />
-                  </span>
+                {isPlan && (
+                  <p className="mt-3 text-sm flex gap-2 rounded-xl p-3 rise" style={{ background: 'var(--brand-soft)', color: 'var(--brand-dark)' }}>
+                    <IconInfo size={18} className="shrink-0 mt-0.5" />
+                    Your first visit is a full detail at {disc}% off. Every visit after costs less than a one-time detail, and we set the exact rate with you that day.
+                  </p>
+                )}
+
+                <div className="mt-6">
+                  {!showAddons && addons.length === 0 ? (
+                    <button type="button" className="link inline-flex items-center gap-1.5 text-sm" onClick={() => setShowAddons(true)}>
+                      <IconPlus size={16} weight="bold" /> Add extras (pet hair, headlights, clay bar…)
+                    </button>
+                  ) : (
+                    <>
+                      <p className="label">Extras <span className="font-normal" style={{ color: 'var(--slate-soft)' }}>(optional)</span></p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 rise">
+                        {S.addons.map((a) => {
+                          const on = addons.includes(a.id);
+                          const p = addonQuote(a).price;
+                          return (
+                            <label key={a.id} className={`choice ${on ? 'is-selected' : ''}`}>
+                              <input type="checkbox" checked={on} onChange={() => setAddons(on ? addons.filter((x) => x !== a.id) : [...addons, a.id])} />
+                              <span className="flex items-baseline justify-between gap-2">
+                                <span className="font-semibold text-ink text-sm">{a.name}</span>
+                                <span className="text-sm font-bold text-ink num shrink-0">{p > 0 ? `+${cur}${p}` : ''}</span>
+                              </span>
+                              {a.note && <span className="block text-xs mt-0.5" style={{ color: 'var(--slate-soft)' }}>{a.note}</span>}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div id="slots-area">
-                  {slots === null && <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>Choose a date above to see open times.</p>}
-                  {slots === 'loading' && (
-                    <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--slate-soft)' }}>
-                      <Wheel size={24} /> Loading open times...
-                    </div>
-                  )}
-                  {slots === 'error' && (
-                    <p className="text-sm text-red-600">
-                      We could not load open times right now. Please call or text{' '}
-                      <a href={BB.phoneHref} className="font-semibold underline">{BB.phone}</a> to book.
-                    </p>
-                  )}
-                  {Array.isArray(slots) && slots.length === 0 && (
-                    <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>
-                      No open times that day. Try another date, or call us at{' '}
-                      <a href={BB.phoneHref} className="text-brand font-semibold">{BB.phone}</a>.
-                    </p>
-                  )}
-                  {Array.isArray(slots) && slots.length > 0 && (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {slots.map((s) => (
-                        <button key={s.min} type="button"
-                                className={`slot ${startMin === s.min ? 'is-selected' : ''}`}
-                                onClick={() => { setStartMin(s.min); scrollToStep('step-details'); }}>
-                          {s.label}
+              </Step>
+
+              {/* 2 · TIME */}
+              <Step n="2" id="step-time" title="Pick a time" done={startMin != null}>
+                {!sizeId ? (
+                  <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>Choose your car above and open times show up here.</p>
+                ) : (
+                  <>
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar snap-x -mx-1 px-1 pb-1">
+                      {dateChips.map((c) => (
+                        <button key={c.iso} type="button" onClick={() => setDate(c.iso)}
+                                className={`slot snap-start shrink-0 w-[4.25rem] flex flex-col items-center gap-0.5 py-2 ${date === c.iso ? 'is-selected' : ''}`}>
+                          <span className="text-[0.7rem] font-medium opacity-80">{c.top}</span>
+                          <span className="text-lg leading-none">{c.day}</span>
+                          <span className="text-[0.7rem] font-medium opacity-70">{c.mon}</span>
                         </button>
                       ))}
                     </div>
-                  )}
-                </div>
-              </div>
+                    <label className="relative mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand cursor-pointer">
+                      <IconCalendarBlank size={16} />
+                      {date && !dateChips.some((c) => c.iso === date) ? prettyDate(date) : 'Pick a later date'}
+                      <input type="date" min={isoLocal(new Date())} aria-label="Pick a later date" className="absolute inset-0 opacity-0 cursor-pointer"
+                             onChange={(e) => e.target.value && setDate(e.target.value)} />
+                    </label>
 
-              {/* 5. Details */}
-              <div id="step-details" className={`card p-6 sm:p-7 step ${gates.details.unlocked ? '' : 'locked'}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge gate={gates.details} n="5" />
-                  <h2 className="text-lg font-bold">Your details</h2>
-                </div>
-                <Hint gate={gates.details}>Pick a date and time first.</Hint>
+                    <div className="mt-5 min-h-[3rem]" aria-live="polite">
+                      {!date && <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>Choose a day to see open times. This visit takes about {fmtDur(totals.minutes)}.</p>}
+                      {slots === 'loading' && <p className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--slate-soft)' }}><Wheel size={22} /> Checking the schedule…</p>}
+                      {slots === 'error' && (
+                        <p className="text-sm text-red-700">Open times would not load. Text <a href={BB.smsHref} className="font-semibold underline">{BB.phone}</a> and we will book you.</p>
+                      )}
+                      {Array.isArray(slots) && slots.length === 0 && (
+                        <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>That day is full. Try the next one, or text <a href={BB.smsHref} className="link">{BB.phone}</a>.</p>
+                      )}
+                      {Array.isArray(slots) && slots.length > 0 && (
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 rise">
+                          {slots.map((s) => (
+                            <button key={s.min} type="button" onClick={() => { setStartMin(s.min); scrollTo('step-you'); }}
+                                    className={`slot ${startMin === s.min ? 'is-selected' : ''}`}>
+                              {s.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </Step>
+
+              {/* 3 · YOU */}
+              <Step n="3" id="step-you" title="Your details" done={detailsFilled && agreed}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="label" htmlFor="f-name">Full name</label>
-                    <input id="f-name" className="field" required autoComplete="name"
-                           value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} />
+                    <input id="f-name" className="field" autoComplete="name" value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} />
                   </div>
                   <div>
-                    <label className="label" htmlFor="f-phone">Phone</label>
-                    <input id="f-phone" type="tel" className="field" required autoComplete="tel"
-                           value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} />
+                    <label className="label" htmlFor="f-phone">Mobile number</label>
+                    <input id="f-phone" type="tel" inputMode="tel" className="field" autoComplete="tel" value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="label" htmlFor="f-email">Email</label>
-                    <input id="f-email" type="email" className="field" required autoComplete="email"
-                           value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} />
+                    <label className="label" htmlFor="f-email">Email <span className="font-normal" style={{ color: 'var(--slate-soft)' }}>for your confirmation</span></label>
+                    <input id="f-email" type="email" inputMode="email" className="field" autoComplete="email" value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="label" htmlFor="f-address">Service address</label>
-                    <input id="f-address" className="field" placeholder="Where should we meet your vehicle?" required autoComplete="street-address"
-                           value={contact.address} onChange={(e) => setContact({ ...contact, address: e.target.value })} />
+                    <label className="label" htmlFor="f-address">Where is the car?</label>
+                    <input id="f-address" className="field" autoComplete="street-address" placeholder="Street address, city" value={contact.address} onChange={(e) => setContact({ ...contact, address: e.target.value })} />
+                    <label className="mt-3 flex items-start gap-3 cursor-pointer">
+                      <input type="checkbox" checked={noWater} onChange={(e) => setNoWater(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[color:var(--brand)]" />
+                      <span className="text-sm" style={{ color: 'var(--slate)' }}>
+                        No outdoor water spigot we can use here. We will bring water. <span style={{ color: 'var(--slate-soft)' }}>We use your spigot and an outlet when you have them, and can bring our own power.</span>
+                      </span>
+                    </label>
+                    <label className="mt-3 flex items-start gap-3 cursor-pointer">
+                      <input type="checkbox" checked={away} onChange={(e) => setAway(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[color:var(--brand)]" />
+                      <span className="text-sm" style={{ color: 'var(--slate)' }}>
+                        I will not be home. <span style={{ color: 'var(--slate-soft)' }}>No problem. We will text you to plan access and payment ahead of time.</span>
+                      </span>
+                    </label>
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="label" htmlFor="f-notes">Notes <span className="font-normal" style={{ color: 'var(--slate-soft)' }}>(optional)</span></label>
-                    <textarea id="f-notes" className="field" rows={3} placeholder="Vehicle make/model, gate codes, anything we should know"
-                              value={contact.notes} onChange={(e) => setContact({ ...contact, notes: e.target.value })} />
+                    <label className="label" htmlFor="f-notes">Anything we should know? <span className="font-normal" style={{ color: 'var(--slate-soft)' }}>(optional)</span></label>
+                    <textarea id="f-notes" className="field" rows={2} placeholder="Make and model, gate code, where to park" value={contact.notes} onChange={(e) => setContact({ ...contact, notes: e.target.value })} />
                   </div>
                 </div>
-              </div>
 
-              {/* 6. Terms */}
-              <div id="step-terms" className={`card p-6 sm:p-7 step ${gates.terms.unlocked ? '' : 'locked'}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge gate={gates.terms} n="6" />
-                  <h2 className="text-lg font-bold">Agree &amp; confirm</h2>
+                <p className="label mt-6">How did you hear about us? <span className="font-normal" style={{ color: 'var(--slate-soft)' }}>(optional)</span></p>
+                <div className="flex flex-wrap gap-2">
+                  {HEARD.map((h) => (
+                    <button key={h} type="button" onClick={() => setHeard(heard === h ? null : h)} aria-pressed={heard === h}
+                            className={`choice py-2 px-3.5 text-sm font-medium text-ink ${heard === h ? 'is-selected' : ''}`}>
+                      {h}
+                    </button>
+                  ))}
                 </div>
-                <Hint gate={gates.terms}>Pick a date and time first.</Hint>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)}
-                         className="mt-1 h-5 w-5 accent-blue-600 shrink-0" required />
+
+                <label className="mt-6 flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[color:var(--brand)]" />
                   <span className="text-sm" style={{ color: 'var(--slate)' }}>
-                    I agree to the Buffer Bros <Link href="/terms" target="_blank" className="text-brand font-semibold hover:underline">Terms &amp; Conditions</Link>.
-                    I understand pre and post service inspections are performed, that Buffer Bros is not liable for
-                    pre-existing conditions or damage not caused by their work, and that the final price may change if
-                    my vehicle needs more work than its package covers.
+                    I agree to the <Link href="/terms" target="_blank" className="link">terms</Link>. We inspect the car before and after, we are not liable for damage that was already there, and the price can change if the car needs more than the detail covers.
                   </span>
                 </label>
-              </div>
+              </Step>
 
-              {error && <div id="form-error" className="text-sm text-red-600 font-medium">{error}</div>}
+              {error && <p role="alert" className="text-sm font-medium text-red-700 rise">{error}</p>}
             </div>
 
             {/* SUMMARY (desktop) */}
             <aside className="hidden lg:block lg:sticky lg:top-24">
               <div className="card p-6">
-                <h3 className="font-bold text-lg mb-4">Your appointment</h3>
-                <dl className="space-y-3 text-sm">
-                  {summaryRows.map(([k, v]) => (
-                    <div key={k} className="flex justify-between gap-3">
+                <h3 className="text-lg">Your appointment</h3>
+                <dl className="mt-4 space-y-2.5 text-sm">
+                  {[
+                    ['Detail', S.detail.name],
+                    ['Vehicle', size ? size.label : 'Not picked yet'],
+                    ['How often', planName],
+                    ...(addons.length ? [['Extras', addons.map((id) => (S.addons.find((a) => a.id === id) || {}).name).join(', ')]] : []),
+                    ...(totals.minutes ? [['Takes about', fmtDur(totals.minutes)]] : []),
+                    ...(totals.discount ? [[`Welcome offer (${offer.pct}% off)`, `-${cur}${totals.discount}`]] : []),
+                    ['When', date && startMin != null ? `${prettyDate(date)} at ${fmtTime(startMin)}` : date ? prettyDate(date) : 'Not picked yet'],
+                  ].map(([k, v]) => (
+                    <div key={k} className="flex justify-between gap-4">
                       <dt style={{ color: 'var(--slate-soft)' }}>{k}</dt>
                       <dd className="font-semibold text-ink text-right">{v}</dd>
                     </div>
                   ))}
                 </dl>
-                <div className="border-t border-gray-100 mt-4 pt-4">
-                  <div className="flex items-baseline justify-between">
-                    <span className="font-semibold">{priceLabel}</span>
-                    <span className="text-2xl font-extrabold text-ink">{priceText}</span>
-                  </div>
-                  <p className="text-xs mt-1" style={{ color: 'var(--slate-soft)' }}>Confirmed on site. May vary by condition.</p>
+                <div className="border-t border-line mt-5 pt-4 flex items-baseline justify-between">
+                  <span className="font-semibold text-ink">{isPlan ? 'First visit' : 'Total'}</span>
+                  <span className="text-3xl font-bold text-ink num">{priceText}</span>
                 </div>
-                <button type="submit" disabled={submitting} className="btn btn-primary btn-block mt-5">Confirm booking</button>
+                <p className="text-xs mt-1" style={{ color: 'var(--slate-soft)' }}>Pay after the detail. Confirmed on site.</p>
+                <button type="submit" disabled={submitting} className={`btn btn-block mt-5 ${ready ? 'btn-primary' : 'btn-dark'}`}>
+                  {submitting ? <><Wheel size={18} /> Booking…</> : 'Confirm booking'}
+                </button>
               </div>
             </aside>
           </form>
         </div>
       </section>
 
-      {/* SUMMARY (mobile sticky bar) */}
-      <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200">
-        <div className="container flex items-center justify-between gap-3 py-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-          <div className="leading-tight min-w-0">
-            <div className="text-[11px] truncate" style={{ color: 'var(--slate-soft)' }}>{priceLabel}</div>
-            <div className="text-xl font-extrabold text-ink truncate">{priceText}</div>
-          </div>
-          <button type="button" disabled={submitting} onClick={submit} className="btn btn-primary shrink-0 px-6">Confirm booking</button>
+      {/* PRICE BAR (phone) */}
+      <div className="lg:hidden action-bar flex items-center justify-between gap-3">
+        <div className="leading-tight min-w-0">
+          <p className="text-xs truncate" style={{ color: 'var(--slate-soft)' }}>
+            {date && startMin != null ? `${prettyDate(date)} at ${fmtTime(startMin)}` : isPlan ? 'First visit' : 'Total'}
+          </p>
+          <p className="text-xl font-bold text-ink num truncate">{priceText}</p>
         </div>
+        <button type="button" disabled={submitting} onClick={submit} className={`btn shrink-0 px-6 ${ready ? 'btn-primary' : 'btn-dark'}`}>
+          {submitting ? <><Wheel size={18} /> Booking…</> : 'Confirm'}
+        </button>
       </div>
-
-      {/* Loading overlay */}
-      {submitting && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-60">
-          <div className="bg-white rounded-2xl px-8 py-7 flex items-center gap-4 shadow-xl">
-            <Wheel size={42} />
-            <p className="font-semibold text-ink">Booking your appointment...</p>
-          </div>
-        </div>
-      )}
     </>
   );
 }

@@ -1,18 +1,16 @@
 import Link from 'next/link';
+import { IconCheckCircle } from '@/components/Icons';
 
-export const metadata = {
-  title: 'Thank You',
-  robots: { index: false },
-};
+export const metadata = { title: 'Thank You', robots: { index: false } };
 
 export default function ThankYouPage() {
   return (
-    <section className="section section-tint flex items-center justify-center min-h-[70svh]">
-      <div className="card text-center p-10 max-w-md mx-4">
-        <div className="h-16 w-16 mx-auto rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mb-4"><i className="fas fa-check" aria-hidden /></div>
-        <h1 className="text-3xl font-bold mb-3">Thank you</h1>
-        <p className="mb-6" style={{ color: 'var(--slate)' }}>We have received your request and will be in touch shortly.</p>
-        <Link href="/" className="btn btn-primary">Return Home</Link>
+    <section className="section section-sand min-h-[70svh] grid place-items-center">
+      <div className="card text-center p-10 max-w-md mx-4 rise">
+        <IconCheckCircle size={56} weight="fill" className="mx-auto text-[color:var(--color-ok)]" />
+        <h1 className="text-3xl mt-4">Thank you</h1>
+        <p className="mt-3">We have your request and will be in touch shortly.</p>
+        <Link href="/" className="btn btn-dark mt-7">Back to home</Link>
       </div>
     </section>
   );

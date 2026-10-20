@@ -10,6 +10,7 @@ export default function sitemap() {
     page('', 1, 'weekly'),
     page('/booking', 0.9, 'weekly'),
     page('/packages', 0.9, 'weekly'),
+    page('/boats', 0.8),
     page('/about', 0.7),
     page('/portfolio', 0.6),
     page('/terms', 0.2, 'yearly'),

@@ -2,14 +2,12 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <section className="section section-tint flex items-center justify-center min-h-[70svh]">
+    <section className="section section-sand min-h-[70svh] grid place-items-center">
       <div className="card text-center p-10 max-w-md mx-4">
-        <p className="eyebrow justify-center">404</p>
-        <h1 className="text-3xl font-bold mt-3 mb-3">That page took a wrong turn</h1>
-        <p className="mb-6" style={{ color: 'var(--slate)' }}>
-          The page you are looking for does not exist. Your car can still get detailed, though.
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-3">
+        <p className="kicker">404</p>
+        <h1 className="text-3xl mt-2">That page took a wrong turn</h1>
+        <p className="mt-3">The page you were looking for is not here. Your car can still get detailed, though.</p>
+        <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3">
           <Link href="/" className="btn btn-outline">Back to home</Link>
           <Link href="/booking" className="btn btn-primary">Book a detail</Link>
         </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BB } from '@/lib/site';
+import { IconCalendar, IconCar, IconInstagram, IconPhone, IconStar, IconText } from '@/components/Icons';
 
 export const metadata = {
   title: 'Connect with Buffer Bros',
@@ -8,28 +9,33 @@ export const metadata = {
   robots: { index: false },
 };
 
+const LINKS = [
+  { href: '/booking', label: 'Book a detail', icon: IconCalendar, primary: true },
+  { href: BB.smsHref, label: 'Text us', icon: IconText },
+  { href: BB.phoneHref, label: 'Call us', icon: IconPhone },
+  { href: '/packages', label: 'The Detail and pricing', icon: IconCar },
+  { href: BB.reviewLink, label: 'Leave a Google review', icon: IconStar, external: true },
+  { href: BB.instagram, label: 'Instagram', icon: IconInstagram, external: true },
+];
+
+/* Link-in-bio page: no nav, no footer, one column of big taps. */
 export default function ConnectPage() {
   return (
-    <section className="section-dark flex flex-col items-center justify-center min-h-[100svh] px-6 text-center text-white">
-      <Link href="/"><img src="/images/transparent-logo.png" alt="Buffer Bros logo" className="w-56 mb-5" /></Link>
-      <h1 className="text-3xl font-bold text-white mb-2">Buffer Bros Detailing</h1>
-      <p className="text-gray-400 mb-8">Mobile detailing in Marco Island and Naples</p>
-
-      <div className="flex flex-col gap-3 w-full max-w-sm">
-        <Link href="/booking" className="btn btn-primary btn-block"><i className="fas fa-calendar-check" aria-hidden /> Book an Appointment</Link>
-        <a href={BB.phoneHref} className="btn btn-block" style={{ background: '#16a34a', color: '#fff' }}><i className="fas fa-phone-alt" aria-hidden /> Call Us</a>
-        <a href={BB.smsHref} className="btn btn-block" style={{ background: '#0ea5e9', color: '#fff' }}><i className="fas fa-message" aria-hidden /> Text Us</a>
-        <a href={BB.instagram} target="_blank" rel="noopener noreferrer" className="btn btn-block"
-           style={{ background: 'linear-gradient(135deg,#feda75,#d62976 45%,#962fbf 75%,#4f5bd5)', color: '#fff' }}>
-          <i className="fab fa-instagram" aria-hidden /> Instagram
-        </a>
-        <a href={BB.reviewLink} target="_blank" rel="noopener noreferrer" className="btn btn-block" style={{ background: '#eab308', color: '#0a0e14' }}>
-          <i className="fas fa-star" aria-hidden /> Leave a Google Review
-        </a>
-        <Link href="/packages" className="btn btn-block" style={{ background: 'rgba(255,255,255,.12)', color: '#fff' }}>View the Detail &amp; Pricing</Link>
+    <section className="section-ink min-h-[100svh] flex flex-col items-center justify-center px-6 py-14 text-center">
+      <Link href="/"><img src="/images/transparent-logo.png" alt="Buffer Bros" className="w-52" /></Link>
+      <p className="mt-4 text-white/70">Mobile detailing in Marco Island and Naples</p>
+      <div className="mt-9 flex flex-col gap-3 w-full max-w-sm">
+        {LINKS.map(({ href, label, icon: Icon, primary, external }) => {
+          const cls = `btn btn-block justify-start px-5 ${primary ? 'btn-primary' : 'btn-glass'}`;
+          const body = <><Icon size={20} /> <span className="grow text-center -ml-5">{label}</span></>;
+          return href.startsWith('/') ? (
+            <Link key={label} href={href} className={cls}>{body}</Link>
+          ) : (
+            <a key={label} href={href} className={cls} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{body}</a>
+          );
+        })}
       </div>
-
-      <p className="text-gray-500 text-xs mt-10">&copy; 2026 Buffer Bros Detailing</p>
+      <p className="text-white/40 text-xs mt-10">&copy; {new Date().getFullYear()} Buffer Bros Detailing</p>
     </section>
   );
 }

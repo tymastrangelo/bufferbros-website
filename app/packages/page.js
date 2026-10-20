@@ -4,8 +4,8 @@ import PackagesClient from '@/components/PackagesClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'The Detail & Pricing | Car, Truck & Boat Detailing',
-  description: 'One complete detail, priced up front by vehicle size, for cars, trucks and SUVs in Marco Island & Naples, FL. Maintenance plans keep it that way. Now taking boat detailing inquiries.',
+  title: 'The Detail & Pricing | Mobile Car Detailing',
+  description: 'One complete detail, priced up front by vehicle size, for cars, trucks and SUVs in Marco Island and Naples, FL. Add-ons and maintenance plans that keep it clean.',
   alternates: { canonical: '/packages' },
   openGraph: {
     title: 'The Detail & Pricing | Buffer Bros Mobile Detailing',

@@ -1,109 +1,91 @@
 import Link from 'next/link';
+import { BB } from '@/lib/site';
+import Reveal from '@/components/Reveal';
 
 export const metadata = {
   title: 'About Us | Local Mobile Detailers in Marco Island & Naples',
-  description: 'Buffer Bros is a local mobile detailing team serving Marco Island and Naples, FL. Meet the two guys behind the work. Fully equipped, insured, and hands-on since 2023.',
+  description: 'Buffer Bros is a local mobile detailing team serving Marco Island and Naples, FL. The same two people who book your appointment do the work. Fully equipped and insured.',
   alternates: { canonical: '/about' },
-  openGraph: {
-    title: 'About | Buffer Bros Mobile Detailing',
-    description: 'Two locals who love clean cars, serving Marco Island and Naples.',
-    url: '/about',
-  },
+  openGraph: { title: 'About | Buffer Bros Mobile Detailing', description: 'Two locals who love clean cars, serving Marco Island and Naples.', url: '/about' },
 };
 
-const COMMITMENTS = [
-  { icon: 'fa-circle-check', title: 'We stand behind the work', body: 'If you are not happy with something, let us know and we will fix it.' },
-  { icon: 'fa-magnifying-glass', title: 'Pre and post inspection', body: 'We document the car before and after every detail so nothing is a surprise.' },
-  { icon: 'fa-shield-halved', title: 'Insured and local', body: 'A real local business you can call, not a faceless franchise.' },
+// Stills from our own job videos. No stock, no AI.
+const PHOTOS = [
+  { src: '/images/job-4runner-wash.jpg', alt: 'Pressure washing a white Toyota 4Runner in a driveway', cls: 'col-span-2' },
+  { src: '/images/job-rangerover-rinse.jpg', alt: 'Rinsing a foamed Range Rover on a paver driveway in Naples', cls: '' },
+  { src: '/images/job-toyota-trunk.jpg', alt: 'Cleaning the cargo area of a new Toyota', cls: '' },
+];
+
+const FACTS = [
+  ['Started', '2023'],
+  ['Where', 'Marco Island and Naples'],
+  ['Insurance', 'Fully insured'],
+];
+
+const PROMISES = [
+  ['We walk the car with you', 'Before we start and again when we finish. Not home? We plan it with you ahead of time.'],
+  ['We make it right', 'If something is not right, tell us and we fix it. That is the point of hiring locals.'],
+  ['We answer our own phone', 'Text or call and you get Tyler or Gabe, not a call center or a franchise.'],
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <section className="section section-light pb-12">
-        <div className="container max-w-3xl text-center">
-          <span className="eyebrow">About us</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-5">Two locals who love clean cars</h1>
-          <p className="text-lg" style={{ color: 'var(--slate-soft)' }}>
-            Buffer Bros is a mobile detailing team serving Marco Island and Naples. We bring the shop to your
-            driveway and treat every car like it is our own.
-          </p>
-        </div>
-      </section>
-
-      <section className="section section-tint">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center mb-20">
-            <div className="reveal">
-              <span className="eyebrow">Since 2023</span>
-              <h2 className="text-3xl font-bold mt-3 mb-5">Our story</h2>
-              <p className="mb-4" style={{ color: 'var(--slate)' }}>
-                Buffer Bros started in 2023 with two friends, a few buckets, and a habit of never leaving a car half
-                done. Word got around fast, and a weekend side project turned into a full mobile detailing setup.
-              </p>
-              <p className="mb-4" style={{ color: 'var(--slate)' }}>
-                Today we run a fully equipped mobile rig that carries its own water and power, so we can detail your
-                car anywhere in the Marco and Naples area without plugging into anything of yours.
-              </p>
-              <p style={{ color: 'var(--slate)' }}>
-                We still answer the phone ourselves, and the same two people who book your appointment are the ones
-                who show up to do the work.
-              </p>
-            </div>
-            <img src="/images/about-team.jpg" alt="Tyler and Gabe, the Buffer Bros mobile detailing team"
-                 className="w-full h-80 lg:h-96 object-cover rounded-3xl reveal" loading="lazy"
-                 style={{ boxShadow: 'var(--shadow-lg)' }} />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <img src="/images/about-action.jpg" alt="Buffer Bros detailing a Porsche 911 on site"
-                 className="w-full h-80 lg:h-96 object-cover rounded-3xl order-2 md:order-1 reveal" loading="lazy"
-                 style={{ boxShadow: 'var(--shadow-lg)' }} />
-            <div className="order-1 md:order-2 reveal">
-              <span className="eyebrow">The craft</span>
-              <h2 className="text-3xl font-bold mt-3 mb-5">How we work</h2>
-              <p className="mb-4" style={{ color: 'var(--slate)' }}>
-                Good detailing is not about rushing through a checklist. It is about doing the small things well:
-                the door jambs, the seams, the spots most people skip.
-              </p>
-              <p className="mb-4" style={{ color: 'var(--slate)' }}>
-                We walk the car with you before we start and again when we finish, so you know exactly what was done
-                and your car goes back to you in better shape than we found it.
-              </p>
-              <p style={{ color: 'var(--slate)' }}>
-                If something is not right, tell us and we will make it right. That is the whole point of hiring a
-                local team.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="section section-light">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-12 reveal">
-            <span className="eyebrow">What you can count on</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-3">Our commitments</h2>
+        <div className="container max-w-5xl">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:items-end">
+            <div className="load">
+              <p className="kicker">About us</p>
+              <h1 className="display mt-2">Two locals who love clean cars.</h1>
+            </div>
+            <p className="load [--i:1] lede">
+              Buffer Bros started in 2023 with two friends, a few buckets and a habit of never leaving a car half done. Today it is a fully equipped mobile setup, and the same two people who book your appointment are the ones who show up to do it.
+            </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-            {COMMITMENTS.map((c) => (
-              <div key={c.title} className="card card-hover p-7 text-center reveal">
-                <div className="h-14 w-14 mx-auto rounded-2xl bg-brand/10 text-brand grid place-items-center text-2xl mb-4"><i className={`fas ${c.icon}`} aria-hidden /></div>
-                <h3 className="text-lg font-semibold mb-2">{c.title}</h3>
-                <p className="text-sm" style={{ color: 'var(--slate-soft)' }}>{c.body}</p>
-              </div>
+
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {PHOTOS.map((p, i) => (
+              <img key={p.src} src={p.src} alt={p.alt} style={{ '--i': i + 2 }} className={`load-media ${p.cls} h-44 sm:h-56 md:h-72 w-full object-cover rounded-2xl`} />
             ))}
           </div>
+
+          <dl className="mt-10 grid sm:grid-cols-3 gap-y-5">
+            {FACTS.map(([k, v], i) => (
+              <Reveal key={k} i={i} className="border-t border-[color:var(--line)] pt-4 sm:pr-6">
+                <dt className="text-sm text-ink-2">{k}</dt>
+                <dd className="mt-1 font-semibold text-ink">{v}</dd>
+              </Reveal>
+            ))}
+          </dl>
         </div>
       </section>
 
-      <section className="section section-dark">
-        <div className="container text-center max-w-2xl mx-auto reveal">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Let us take care of your car</h2>
-          <p className="text-gray-300 mb-9">Book online in about a minute and pick a time that works for you.</p>
-          <Link href="/booking" className="btn btn-primary sm:px-8">Book an Appointment</Link>
+      <section className="section section-sand">
+        <div className="container max-w-5xl">
+          <h2 className="h2">How we work</h2>
+          <p className="lede mt-4 max-w-2xl">
+            Good detailing is not rushing through a checklist. It is the small things done well: the door jambs, the seams, the spots most people skip.
+          </p>
+          <dl className="mt-10 grid gap-8 md:grid-cols-3">
+            {PROMISES.map(([t, b], i) => (
+              <Reveal key={t} i={i} className="border-l-2 border-brand pl-5">
+                <dt className="font-semibold text-ink">{t}</dt>
+                <dd className="mt-1 text-ink-2">{b}</dd>
+              </Reveal>
+            ))}
+          </dl>
         </div>
       </section>
+
+      <Reveal as="section" className="section section-photo" style={{ '--photo': 'url(/images/posters/broll.jpg)' }}>
+        <Reveal className="container max-w-5xl flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+          <h2 className="h2 max-w-lg">Let us take care of your car.</h2>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/booking" className="btn btn-primary">See open times</Link>
+            <a href={BB.smsHref} className="btn btn-glass num">Text {BB.phone}</a>
+          </div>
+        </Reveal>
+      </Reveal>
     </>
   );
 }

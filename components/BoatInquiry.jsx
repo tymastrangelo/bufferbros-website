@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { BB } from '@/lib/site';
+import { IconCamera, IconCheck, IconPlus, IconX } from '@/components/Icons';
 
 const MAX_PHOTOS = 6;
 
@@ -81,7 +82,7 @@ export default function BoatInquiry() {
     return (
       <div className="text-center py-10">
         <div className="h-14 w-14 mx-auto rounded-full grid place-items-center text-2xl text-white mb-4" style={{ background: '#16a34a' }}>
-          <i className="fas fa-check" aria-hidden />
+          <IconCheck size={32} weight="bold" />
         </div>
         <h3 className="text-xl font-bold mb-2">Got it, we&apos;ll be in touch</h3>
         <p className="text-sm max-w-sm mx-auto" style={{ color: 'var(--slate-soft)' }}>
@@ -149,7 +150,7 @@ export default function BoatInquiry() {
       {boats.length < MAX_BOATS && (
         <button type="button" onClick={() => setBoats((bs) => [...bs, { ...EMPTY_BOAT }])}
                 className="text-sm font-semibold text-brand hover:underline">
-          <i className="fas fa-plus mr-1.5 text-xs" aria-hidden />Add another boat
+          <IconPlus size={14} weight="bold" className="inline mr-1.5 -mt-0.5" />Add another boat
         </button>
       )}
       <div>
@@ -169,14 +170,14 @@ export default function BoatInquiry() {
               <button type="button" onClick={() => setPhotos((ps) => ps.filter((_, j) => j !== i))}
                 className="absolute top-1 right-1 h-5 w-5 grid place-items-center rounded-full bg-black/60 text-white text-[10px]"
                 aria-label="Remove photo">
-                <i className="fas fa-xmark" aria-hidden />
+                <IconX size={14} weight="bold" />
               </button>
             </div>
           ))}
           {photos.length < MAX_PHOTOS && (
             <label className="h-20 w-20 rounded-xl border-2 border-dashed grid place-items-center cursor-pointer text-lg transition-colors hover:border-[color:var(--brand)] hover:text-[color:var(--brand)]"
                    style={{ borderColor: 'var(--line)', color: 'var(--slate-soft)' }}>
-              <i className="fas fa-camera" aria-hidden />
+              <IconCamera size={22} />
               <span className="sr-only">Add photos</span>
               <input type="file" accept="image/*" multiple className="hidden" onChange={addPhotos} />
             </label>

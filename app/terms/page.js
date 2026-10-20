@@ -12,7 +12,7 @@ export default function TermsPage() {
       <div className="container max-w-3xl">
         <span className="eyebrow">Legal</span>
         <h1 className="text-4xl font-extrabold mt-3 mb-2">Terms &amp; Conditions</h1>
-        <p className="text-sm mb-10" style={{ color: 'var(--slate-soft)' }}>Last updated: May 31, 2026</p>
+        <p className="text-sm mb-10" style={{ color: 'var(--slate-soft)' }}>Last updated: October 20, 2026</p>
 
         <div className="prose-legal">
           <p>These Terms and Conditions (&ldquo;Terms&rdquo;) apply to all detailing services provided by Buffer Bros Mobile Detailing (&ldquo;Buffer Bros,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;). By booking an appointment, paying for, or receiving our services, you (&ldquo;the Customer&rdquo;) agree to these Terms. Please read them carefully.</p>
@@ -30,6 +30,7 @@ export default function TermsPage() {
           <ul>
             <li>We perform a walkaround inspection of your vehicle before we begin and again after we finish. We may photograph or video the vehicle as part of this inspection.</li>
             <li>These inspections document the condition of the vehicle and protect both you and us. By booking, you consent to this documentation.</li>
+            <li>You do not need to be present. If you will not be, we do the inspections without you, and our photos and notes are the record of the vehicle&apos;s condition.</li>
             <li>Any pre-existing damage, wear, defects, or conditions noted during the pre-service inspection are not the responsibility of Buffer Bros.</li>
           </ul>
 
@@ -44,8 +45,8 @@ export default function TermsPage() {
 
           <h2>4. Vehicle access, location, and water/power</h2>
           <ul>
-            <li>As a mobile service, we need safe, legal, and reasonable access to your vehicle and enough space to work around it.</li>
-            <li>We carry our own water and power. If you ask us to use your water or electricity, you do so at your own risk.</li>
+            <li>As a mobile service, we need safe, legal, and reasonable access to your vehicle and enough space to work around it. If you will not be home, tell us when you book so we can plan access ahead of time.</li>
+            <li>We use an outdoor water spigot and electrical outlet at the service location when one is available, and you agree to let us use them. If there is no outlet, we can bring our own power. If there is no water we can use, tell us when you book so we can bring water. Without that notice we may need to reschedule.</li>
             <li>You are responsible for ensuring the work location complies with any HOA, building, or municipal rules.</li>
           </ul>
 

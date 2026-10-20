@@ -18,7 +18,7 @@ When Tyler says the changes are done / he's happy with them, commit and push to 
 
 ## Working in this repo
 
-- Don't run Playwright or other browser checks unless Tyler asks; he tests locally himself. Verifying with `next build` is enough.
+- Use Playwright only for aesthetic changes (layout, styling, images, motion): screenshot to check how it looks before calling it done. Copy, logic and data changes never get a browser run; verify those with `BUILD_DIR=.next-verify npm run build` (keeps the running dev server's `.next` intact).
 - Never commit test artifacts (screenshots, scratch scripts, downloaded photo candidates). Only commit files the site needs to run.
 - Use the graphify skill for codebase/architecture questions to save context space.
 
