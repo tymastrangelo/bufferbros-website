@@ -84,13 +84,15 @@ export default function RootLayout({ children }) {
         <ActionBar />
         <Attribution />
         <OfferPopup />
-        {/* Load the tag off the Ads ID — the GA4 id G-WG9M9W3RL8 404s (dead property), which broke the whole tag. */}
+        {/* Load the library off the Ads ID: the GA4 id's loader (gtag/js?id=G-WG9M9W3RL8) 404s, which
+            broke the whole tag. The GA4 destination config still serves, so both are configured below. */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=AW-17448688864" strategy="afterInteractive" />
         <Script id="gtag-init" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'AW-17448688864');
+          gtag('config', 'G-WG9M9W3RL8');
         `}</Script>
       </body>
     </html>
