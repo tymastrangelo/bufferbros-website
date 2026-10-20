@@ -35,6 +35,7 @@ const JSON_LD = {
   sameAs: [
     'https://www.instagram.com/bufferbros.fl',
     'https://www.facebook.com/profile.php?id=61560055724078',
+    'https://maps.app.goo.gl/y6Ws2vG7vtHUXxGX7',
   ],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -42,6 +43,7 @@ const JSON_LD = {
     itemListElement: [
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'The Standard Detail', description: 'Complete interior and exterior mobile detail with a showroom finish.' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Maintenance detailing plans', description: 'Weekly, bi-weekly or monthly recurring details at a lower per-visit rate.' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ceramic coating', description: 'Ceramic paint protection applied at your home.' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Boat detailing', description: 'Mobile boat detailing at your dock, lift or trailer, quoted individually.' } },
     ],
   },

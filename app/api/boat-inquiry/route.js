@@ -1,4 +1,4 @@
-import { ok, bad, sendEmail, escapeHtml } from '@/lib/server/util';
+import { ok, bad, sendEmail, escapeHtml, sbInsert, cleanAttribution } from '@/lib/server/util';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,7 @@ export async function POST(request) {
   let body;
   try { body = await request.json(); } catch { return bad('Invalid request body'); }
 
-  const { name, phone, email = '', boats = [], notes = '', photos = [] } = body || {};
+  const { name, phone, email = '', boats = [], notes = '', photos = [], attribution } = body || {};
 
   if (!name || !phone) return bad('Please include your name and phone number');
   if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad('Invalid email address');
@@ -27,6 +27,29 @@ export async function POST(request) {
     if (total > MAX_TOTAL_B64) return bad('Photos are too large altogether. Try fewer photos.');
     const safeName = String(p.name || 'photo.jpg').replace(/[^\w.-]/g, '_').slice(0, 80);
     attachments.push({ filename: safeName, content: p.data });
+  }
+
+  // Every quote request is a lead on the dashboard's Marketing page (best effort: the
+  // email below is what reaches Tyler, so a failed insert never blocks the inquiry).
+  const digits = String(phone).replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+  const boatLine = boats
+    .map((b) => [b?.makeModel, b?.length && `${b.length} ft`, b?.location].filter(Boolean).map(String).join(', '))
+    .filter(Boolean)
+    .join('; ');
+  try {
+    const res = await sbInsert('leads', {
+      kind: 'boat_inquiry',
+      name: String(name).slice(0, 120),
+      phone: digits.length === 10 ? `+1${digits}` : String(phone).slice(0, 40),
+      email: email ? String(email).trim().toLowerCase().slice(0, 200) : null,
+      attribution: cleanAttribution(attribution),
+      notes: [boatLine && `Boat: ${boatLine}`.slice(0, 600), notes && String(notes).slice(0, 1500), photos.length && `${photos.length} photo${photos.length === 1 ? '' : 's'} in the email`]
+        .filter(Boolean)
+        .join('\n') || null,
+    });
+    if (!res.ok) console.error('boat-inquiry lead:', res.status, await res.text());
+  } catch (err) {
+    console.error('boat-inquiry lead:', err.message);
   }
 
   const ownerEmail = process.env.OWNER_EMAIL;

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { BB } from '@/lib/site';
+import { getAttribution } from '@/lib/track';
 import { IconCamera, IconCheck, IconPlus, IconX } from '@/components/Icons';
 
 const MAX_PHOTOS = 6;
@@ -67,6 +68,7 @@ export default function BoatInquiry() {
           name: f.get('name'), phone: f.get('phone'), email: f.get('email'),
           boats, notes: f.get('notes'),
           photos: photos.map(({ name, data }) => ({ name, data })),
+          attribution: getAttribution(),
         }),
       });
       const out = await res.json();

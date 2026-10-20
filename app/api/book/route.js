@@ -1,4 +1,4 @@
-import { ok, bad, isValidDate, fmtWhen, sbRpc, sbPatch, sendEmail, escapeHtml } from '@/lib/server/util';
+import { ok, bad, isValidDate, fmtWhen, sbRpc, sbPatch, sendEmail, escapeHtml, cleanAttribution } from '@/lib/server/util';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,20 +106,6 @@ export async function POST(request) {
   emailResults.customer = await sendEmail({ to: email, subject: 'Your Buffer Bros appointment is confirmed', html: customerHtml });
 
   return ok({ id: row.id, when, emailResults });
-}
-
-/* Keep only the fields we track, short strings only — this is visitor-supplied. */
-function cleanAttribution(a) {
-  if (!a || typeof a !== 'object') return null;
-  const KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'gbraid', 'wbraid', 'fbclid', 'ref', 'referrer', 'landing', 'at'];
-  const touch = (t) => {
-    if (!t || typeof t !== 'object') return null;
-    const out = {};
-    for (const k of KEYS) if (typeof t[k] === 'string' && t[k]) out[k] = t[k].slice(0, 300);
-    return Object.keys(out).length ? out : null;
-  };
-  const out = { first: touch(a.first), last: touch(a.last), heard: typeof a.heard === 'string' ? a.heard.slice(0, 60) : null };
-  return out.first || out.last || out.heard ? out : null;
 }
 
 /* "Google Ads (summer-promo)", "Instagram", "Referral code JANET", "They said: A friend". */
